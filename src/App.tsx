@@ -1,58 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import ThemeBtn from './components/ThemeBtn';
+import { useAppSelector } from './app/hooks';
+import { lightTheme, darkTheme } from './theme';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+
+export default function App() {
+
+    const currentTheme = useAppSelector(({ ui }) => ui.theme) === 'light';
+
+    useEffect(() => {
+        if (currentTheme) {
+            document.body.classList.remove('darkTheme');
+        } else {
+            document.body.classList.add('darkTheme');
+        }
+    }, [currentTheme]);
+
+    return (
+        <ThemeProvider theme={currentTheme ? lightTheme : darkTheme}>
+            <SideBarWrapper>sidebar(folder)</SideBarWrapper>
+            <ContentsWrapper>
+                <section>menubar</section>
+                <section>memo</section>
+            </ContentsWrapper>
+            <ThemeBtnWrapper><ThemeBtn /></ThemeBtnWrapper>
+        </ThemeProvider>
+    );
 }
 
-export default App;
+const SideBarWrapper = styled.section`
+    display: block;
+    width: 200px;
+    height: 100%;
+    padding: 12px;
+`;
+
+const ContentsWrapper = styled.article`
+    flex: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: ${({ theme }) => theme.grayScale000};
+    transition: background 0.3s;
+`;
+
+const ThemeBtnWrapper = styled.div`
+    position: absolute;
+    z-index: 999;
+    bottom: 12px;
+    right: 12px;
+    display: inline-block;
+    width: auto;
+    height: auto;
+    font-size: 0px;
+`;
