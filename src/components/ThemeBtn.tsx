@@ -20,6 +20,7 @@ export default function ThemeBtn() {
     );
 }
 
+// styled components
 const ThemeButton = styled.button<{ $theme: boolean }>`
     position: relative;
     display: flex;

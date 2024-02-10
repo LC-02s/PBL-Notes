@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import ThemeBtn from './components/ThemeBtn';
 import { useAppSelector } from './app/hooks';
-import { lightTheme, darkTheme } from './theme';
+import { lightTheme, darkTheme } from './App.theme';
+import FolderList from './components/folder/FolderList';
+import FolderAddBtn from './components/folder/FolderAddBtn';
 
 
 export default function App() {
@@ -19,7 +21,10 @@ export default function App() {
 
     return (
         <ThemeProvider theme={currentTheme ? lightTheme : darkTheme}>
-            <SideBarWrapper>sidebar(folder)</SideBarWrapper>
+            <SideBarWrapper>
+                <div><FolderList /></div>
+                <div><FolderAddBtn /></div>
+            </SideBarWrapper>
             <ContentsWrapper>
                 <section>menubar</section>
                 <section>memo</section>
@@ -29,11 +34,22 @@ export default function App() {
     );
 }
 
+// styled components
 const SideBarWrapper = styled.section`
-    display: block;
-    width: 200px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 240px;
     height: 100%;
-    padding: 12px;
+
+    & > div {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    & > div:first-of-type {flex: 1; overflow-y: auto;}
+    & > div:last-of-type {padding: 12px;}
 `;
 
 const ContentsWrapper = styled.article`

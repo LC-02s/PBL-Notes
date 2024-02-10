@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-type UI = {
-    theme:  String | 'light' | 'dark',
+export type UI = {
+    theme:  'light' | 'dark' | String,
+    menu: {},
+    sidebar: {},
 }
 
 const initialState: UI = {
     theme: localStorage.getItem('theme') ?? 'light',
+    menu: {},
+    sidebar: {},
 }
 
 const ui = createSlice({
