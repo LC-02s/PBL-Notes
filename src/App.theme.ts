@@ -15,7 +15,7 @@ export const lightTheme = {
 export const darkTheme = {
     current: 'dark',
     grayScale000: '#232629',
-    grayScale100: '#232629',
+    grayScale100: '#323539',
     grayScale200: '#323539',
     grayScale300: '#54595B',
     grayScale400: '#727E84',

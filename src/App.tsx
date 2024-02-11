@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import ThemeBtn from './components/ThemeBtn';
 import { useAppSelector } from './app/hooks';
 import { lightTheme, darkTheme } from './App.theme';
 import FolderList from './components/folder/FolderList';
 import FolderAddBtn from './components/folder/FolderAddBtn';
 import MemoEditor from './components/memo/MemoEditor';
+import MenuBar from './components/menu/MenuBar';
 
 
 export default function App() {
@@ -27,12 +27,9 @@ export default function App() {
                 <div><FolderAddBtn /></div>
             </SideBarWrapper>
             <ContentsWrapper>
-                <section>menubar</section>
-                <section>
-                    <MemoEditor />
-                </section>
+                <section><MenuBar /></section>
+                <section><MemoEditor /></section>
             </ContentsWrapper>
-            <ThemeBtnWrapper><ThemeBtn /></ThemeBtnWrapper>
         </ThemeProvider>
     );
 }
@@ -57,20 +54,16 @@ const SideBarWrapper = styled.section`
 
 const ContentsWrapper = styled.article`
     flex: 1;
-    display: block;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: stretch;
     width: 100%;
     height: 100%;
+    border-left: 1px solid ${({ theme }) => theme.grayScale200};
     background-color: ${({ theme }) => theme.grayScale000};
-    transition: background 0.3s;
-`;
+    transition: background 0.3s, border 0.3s;
 
-const ThemeBtnWrapper = styled.div`
-    position: absolute;
-    z-index: 999;
-    bottom: 12px;
-    right: 12px;
-    display: inline-block;
-    width: auto;
-    height: auto;
-    font-size: 0px;
+    & > section:first-of-type {display: block; width: 100%; height: 48px;}
+    & > section:last-of-type {flex: 1; display: block; width: 100%; height: 100%; max-height: calc(100% - 48px);}
 `;

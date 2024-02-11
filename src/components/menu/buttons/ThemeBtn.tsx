@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { useAppDispatch } from '../app/hooks';
-import { changeTheme } from '../app/ui/ui';
+import { useAppDispatch } from '../../../app/hooks';
+import { changeTheme } from '../../../app/ui/ui';
 
 export default function ThemeBtn() {
 
@@ -25,15 +25,17 @@ const ThemeButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 42px;
-    height: 42px;
-    font-size: 24px;
+    width: 36px;
+    height: 32px;
+    font-size: 20px;
     user-select: none;
-    fill: ${({ theme }) => theme.current === 'light' ? '#727E84' : '#D8DFE3'};
-    border-radius: 50%;
-    background-color: ${({ theme }) => theme.current === 'light' ? '#EEF1F3' : '#323539'};
-    transition: fill 0.5s, background 0.5s;
+    fill: ${({ theme }) => theme.grayScale500};
+    border-radius: 4px;
+    background-color: ${({ theme }) => theme.grayScale000};
+    transition: fill 0.5s, background 0.3s;
 
+    &:hover,
+    &:focus {background-color: ${({ theme }) => theme.grayScale100};}
     .moon {
         position: absolute;
         animation: keyframes-fill .5s;

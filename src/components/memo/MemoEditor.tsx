@@ -13,9 +13,6 @@ export default function MemoEditor() {
           // You can store the "editor" and use when it is needed.
           console.log( 'Editor is ready to use!', editor );
         }}
-        onChange={(event) => { console.log(event); }}
-        onBlur={(event, editor) => { console.log('Blur.', editor); }}
-        onFocus={(event, editor) => { console.log('Focus.', editor); }}
       />
     </EditorWrapper>
   )
@@ -23,11 +20,17 @@ export default function MemoEditor() {
 
 const EditorWrapper = styled.div`
   position: relative;
-  padding: 12px 12px 12px 36px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 16px 16px 20px 36px;
   font-size: 15px;
   font-weight: 400;
   color: ${({ theme }) => theme.grayScale700};
+  overflow-y: auto;
 
-  & h1 {font-size: 17px; font-weight: 600; margin-top: 14px; margin-bottom: 8px;}
-  & ol, ul {padding-left: 28px;}
+  h1 {font-size: 17px; font-weight: 600; margin-top: 12px!important; margin-bottom: 8px;}
+  ol, ul {padding-left: 28px;}
+  & > div {border: none!important; box-shadow: none!important;}
+  .ck-editor__editable_inline {min-height: 100%;}
 `;
