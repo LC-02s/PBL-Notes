@@ -1,15 +1,14 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppDispatch } from '../app/hooks';
 import { changeTheme } from '../app/ui/ui';
 
 export default function ThemeBtn() {
 
-    const currentTheme = useAppSelector(({ ui }) => ui.theme) === 'light';
     const dispatch = useAppDispatch();
 
     return (
-        <ThemeButton $theme={currentTheme} onClick={() => dispatch(changeTheme(undefined))}>
+        <ThemeButton onClick={() => dispatch(changeTheme(undefined))}>
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" className="moon" viewBox="0 0 384 512">
                 <path d="M223.5 32C100 32 0 132.3 0 256s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path>
             </svg>
@@ -21,7 +20,7 @@ export default function ThemeBtn() {
 }
 
 // styled components
-const ThemeButton = styled.button<{ $theme: boolean }>`
+const ThemeButton = styled.button`
     position: relative;
     display: flex;
     justify-content: center;
@@ -30,9 +29,9 @@ const ThemeButton = styled.button<{ $theme: boolean }>`
     height: 42px;
     font-size: 24px;
     user-select: none;
-    fill: ${({ $theme }) => $theme ? '#54595B' : '#D8DFE3'};
+    fill: ${({ theme }) => theme.current === 'light' ? '#727E84' : '#D8DFE3'};
     border-radius: 50%;
-    background-color: ${({ $theme }) => $theme ? '#EEF1F3' : '#323539'};
+    background-color: ${({ theme }) => theme.current === 'light' ? '#EEF1F3' : '#323539'};
     transition: fill 0.5s, background 0.5s;
 
     .moon {
@@ -45,7 +44,7 @@ const ThemeButton = styled.button<{ $theme: boolean }>`
         animation: keyframes-fill .5s;
     }
     
-    ${({ $theme }) => $theme && css`
+    ${({ theme }) => theme.current === 'light' && css`
         .moon {display: none; !important}
         .sun {display: block; !important}
     `}

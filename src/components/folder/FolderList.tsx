@@ -1,31 +1,39 @@
 import React from 'react'
 import { THEME_COLOR } from '../../App.theme'
 import styled, { css } from 'styled-components'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { setActiveFolder } from '../../app/folder/folder';
 
 export default function FolderList() {
 
-  const data = { 
-    '1asdf': { index: 0, colorChip: THEME_COLOR['red'], length: 2 }, 
-    '2asdf': { index: 1, colorChip: THEME_COLOR['orange'], length: 0 }, 
-    '3asdf': { index: 2, colorChip: THEME_COLOR['yellow'], length: 1 }, 
-    '4asdf': { index: 3, colorChip: THEME_COLOR['green'], length: 2 }, 
-  }
+  const { data, activeFolder } = useAppSelector(({ folder }) => folder);
+  const dispatch = useAppDispatch();
 
   return (
     <FolderListContainer>
       <h1>My Folder</h1>
       <ul>
         <li>
-          <FolderListBtn $active={true}><span>모든 폴더</span><span>5</span></FolderListBtn>
+          <FolderListBtn 
+            $active={activeFolder === ''} $color='none' 
+            onClick={() => dispatch(setActiveFolder(''))}
+          >
+            <span>모든 폴더</span><span>0</span>
+          </FolderListBtn>
         </li>
         {
-        Object.entries(data).map(([ title, { colorChip, length } ], idx) => (
-          <li key={title}>
-            <FolderListBtn $active={false} $color={colorChip}>
-              <span>{ title }</span><span>{ length }</span>
-            </FolderListBtn>
-          </li>
-        ))
+        Object.entries(data)
+          .sort(([ , a], [ , b]) => Number(a.index) - Number(b.index))
+          .map(([ title, { colorChip, length } ], idx) => (
+            <li key={title}>
+              <FolderListBtn 
+                $active={activeFolder === title} $color={colorChip === 'none' ? 'none' : THEME_COLOR[colorChip]}
+                onClick={() => dispatch(setActiveFolder(title))}
+              >
+                <span>{ title }</span><span>{ String(length) }</span>
+              </FolderListBtn>
+            </li>
+          ))
         }
       </ul>
     </FolderListContainer>
@@ -52,7 +60,7 @@ const FolderListContainer = styled.div`
   }
 `;
 
-const FolderListBtn = styled.button<{ $color?: String, $active: boolean }>`
+const FolderListBtn = styled.button<{ $color: String, $active: boolean }>`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -62,8 +70,13 @@ const FolderListBtn = styled.button<{ $color?: String, $active: boolean }>`
   padding: 6px 8px;
   font-size: 14px;
   border-radius: 4px;
-  ${({ theme, $active }) => $active && css`
-    background-color: ${theme.currentTheme === 'light' ? 'rgba(255,255,255, 0.4)' : 'rgba(0,0,0, 0.32)'};
+  ${({ theme, $active }) => $active ? 
+  css`
+    background-color: rgba(${theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.32);
+  `:
+  css`
+    &:hover,
+    &:focus {background-color: rgba(${theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.12);}
   `}
   transition: background 0.2s;
 
@@ -86,7 +99,7 @@ const FolderListBtn = styled.button<{ $color?: String, $active: boolean }>`
       height: 4px;
       margin: auto 0px;
       border-radius: 50%;
-      background-color: ${({ theme, $color }) => $color ? $color : theme.grayScale500};
+      background-color: ${({ theme, $color }) => $color === 'none' ? theme.grayScale500 : $color};
     }
   }
   & > span:last-of-type {

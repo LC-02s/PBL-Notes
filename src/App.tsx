@@ -5,6 +5,7 @@ import { useAppSelector } from './app/hooks';
 import { lightTheme, darkTheme } from './App.theme';
 import FolderList from './components/folder/FolderList';
 import FolderAddBtn from './components/folder/FolderAddBtn';
+import MemoEditor from './components/memo/MemoEditor';
 
 
 export default function App() {
@@ -27,7 +28,9 @@ export default function App() {
             </SideBarWrapper>
             <ContentsWrapper>
                 <section>menubar</section>
-                <section>memo</section>
+                <section>
+                    <MemoEditor />
+                </section>
             </ContentsWrapper>
             <ThemeBtnWrapper><ThemeBtn /></ThemeBtnWrapper>
         </ThemeProvider>

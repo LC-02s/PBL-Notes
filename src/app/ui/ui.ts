@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit"
 export type UI = {
     theme:  'light' | 'dark' | String,
     menu: {},
-    sidebar: {},
+    isOpenSideBar: boolean,
 }
 
 const initialState: UI = {
     theme: localStorage.getItem('theme') ?? 'light',
     menu: {},
-    sidebar: {},
+    isOpenSideBar: localStorage.getItem('side_bar') === 'false' ? false : true,
 }
 
 const ui = createSlice({
@@ -20,6 +20,11 @@ const ui = createSlice({
             const prevTheme = state.theme === 'light';
             state.theme = prevTheme ? 'dart' : 'light';
             localStorage.setItem('theme', prevTheme ? 'dart' : 'light');
+        },
+        toggleSideBar: (state, _action?:any) => {
+            const prevStatus = state.isOpenSideBar;
+            state.isOpenSideBar = !prevStatus;
+            localStorage.setItem('side_bar', String(!prevStatus));
         }
     }
 });

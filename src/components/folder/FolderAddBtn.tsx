@@ -27,6 +27,7 @@ const FolderAddButton = styled.button`
 
   &:hover,
   &:focus {color: #3B84D8;}
+  & > svg {transition: fill 0.3s;}
   & > span {
     font-size: 14px;
     font-weight: inherit;

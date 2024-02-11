@@ -8,13 +8,7 @@ import reportWebVitals from './reportWebVitals';
 const container = document.getElementById('main')!;
 const main = createRoot(container);
 
-main.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <App />
-        </Provider>
-    </React.StrictMode>
-);
+main.render( <Provider store={store}><App /></Provider> );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
