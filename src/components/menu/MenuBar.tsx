@@ -61,12 +61,13 @@ const MemoMenuWrap = styled.div`
   height: 100%;
   padding: 8px;
 
-  & > div:first-of-type {gap: 12px;}
+  & > div:first-of-type {gap: 12px !important;}
   div:first-of-type {
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-start;
     align-items: center;
+    gap: 4px;
   }
 `;
 

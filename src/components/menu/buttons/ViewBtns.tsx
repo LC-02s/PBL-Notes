@@ -20,6 +20,7 @@ const ViewBtnContainer = styled.div`
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
+  gap: 4px;
   width: auto;
   height: 100%;
 `;
