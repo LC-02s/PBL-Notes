@@ -4,7 +4,7 @@ export type ColorChip = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple
 export type SortType = { type: 'create' | 'update' | 'title' | string, sort: 'desc' | 'asc' | string };
 export type FolderDetail = { index: Number, colorChip: ColorChip, length: Number, sort: SortType };
 export type FolderData = { [key: string] : FolderDetail } | {};
-export type FolderDataKey = keyof FolderData | ''
+export type FolderDataKey = keyof FolderData | '';
 
 interface FolderState {
   activeFolder: FolderDataKey,
@@ -27,7 +27,7 @@ const folder = createSlice({
     setActiveFolder: (state, { payload }) => {
       state.activeFolder = payload || '';
     },
-    addFolder: (state, { payload }) => {
+    addFolder: (state, { payload }: { payload: { id: keyof FolderData, color: ColorChip } }) => {
       const { dataLength } = state;
       const sort = { type: 'create', sort: 'desc' };
       const newFolder:FolderDetail = { 
@@ -35,6 +35,7 @@ const folder = createSlice({
       };
       Object.assign(state.data, { [payload.id]: newFolder });
       state.dataLength = Number(dataLength) + 1;
+      state.activeFolder = payload.id;
       localStorage.setItem('folder', JSON.stringify(state.data));
     },
   }

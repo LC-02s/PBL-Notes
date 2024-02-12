@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { FolderData } from "./folder";
 
 export type MemoData = {
-  included: string, updateAt: string, markdown: string, isPinned: boolean, isLocked: boolean 
+  included: keyof FolderData, title: string, updateAt: string, markdown: string, isPinned: boolean, isLocked: boolean 
 }
 export type MemoList = { [createAt: string]: MemoData }
 interface MemoState {
-  activeMemo: string,
+  activeMemo: keyof MemoList | '',
   data: MemoList,
   dataLength: number,
 }
@@ -22,20 +23,30 @@ const memo = createSlice({
   name: 'memo',
   initialState,
   reducers: {
-    addMemo: (state, { payload }) => {
+    addMemo: (state, { payload }: { payload: { time: keyof MemoList, folder: keyof FolderData } }) => {
       const { folder, time } = payload;
       const newMemo:MemoData = {
-        included: folder, updateAt: time, markdown: '', isPinned: false, isLocked: false
+        included: folder, title: '', updateAt: String(time), markdown: '', isPinned: false, isLocked: false
       }
       Object.assign(state.data, { [payload.time]: newMemo });
       localStorage.setItem('memo', JSON.stringify(state.data));
+      state.dataLength += 1;
       state.activeMemo = time;
     },
     deleteMemo: (state, { payload }) => {
         
     },
-    saveMemo: (state, { payload }) => {
-        
+    modifyMemo: (state, { payload }: { payload: { id: string, data: string, time: string } }) => {
+      state.data[payload.id].title = extractTitle(payload.data);
+      state.data[payload.id].markdown = payload.data;
+      state.data[payload.id].updateAt = payload.time;
+      localStorage.setItem('memo', JSON.stringify(state.data));
+    },
+    toggleMemoLock: (state, { payload }: { payload: keyof MemoList } ) => {
+      state.data[payload].isLocked = !state.data[payload].isLocked;
+    },
+    toggleMemoPin: (state, { payload }: { payload: keyof MemoList } ) => {
+      state.data[payload].isPinned = !state.data[payload].isPinned;
     },
     clearMemo: (state, { payload }) => {
         
@@ -48,6 +59,6 @@ export const extractTitle = (str:string) => {
   return match && match[1] ? match[1] : '';
 }
 
-export const { addMemo, deleteMemo, saveMemo } = memo.actions;
+export const { addMemo, deleteMemo, modifyMemo, toggleMemoLock, toggleMemoPin, clearMemo } = memo.actions;
 
 export default memo.reducer;

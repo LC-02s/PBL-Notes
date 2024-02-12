@@ -26,7 +26,7 @@ export const darkTheme = {
     grayScale900: '#FFFFFF',
 }
 
-export const THEME_COLOR = {
+export const THEME_COLOR: { [color: string] : string } = {
     'red': '#CF4542',
     'orange': '#D4671D',
     'yellow': '#C48632',
