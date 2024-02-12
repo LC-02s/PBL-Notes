@@ -21,7 +21,7 @@ const SearchContainer = styled.div`
   position: relative;
   flex: 1;
   font-size: 16px;
-  color: ${({ theme }) => theme.grayScale600};
+  color: ${({ theme }) => theme.grayScale500};
   transition: color 0.3s;
 
   svg {

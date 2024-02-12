@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import { useAppDispatch } from '../../app/hooks';
-import { toggleModal } from '../../app/ui/ui';
+import { toggleModal } from '../../app/actions/ui';
 
 export default function FolderAddBtn() {
 

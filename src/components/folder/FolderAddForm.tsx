@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import styled, { css } from 'styled-components';
-import { toggleModal } from '../../app/ui/ui';
-import { addFolder } from '../../app/folder/folder';
+import { toggleModal } from '../../app/actions/ui';
+import { addFolder } from '../../app/actions/folder';
 
 export default function FolderAddForm() {
 

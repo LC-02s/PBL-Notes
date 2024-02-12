@@ -2,7 +2,7 @@ import React from 'react'
 import { THEME_COLOR } from '../../App.theme'
 import styled, { css } from 'styled-components'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { setActiveFolder } from '../../app/folder/folder';
+import { setActiveFolder } from '../../app/actions/folder';
 
 export default function FolderList() {
 

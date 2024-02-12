@@ -2,34 +2,38 @@ import React from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
+import { useAppSelector } from '../../app/hooks';
+import { extractTitle } from '../../app/actions/memo';
 
 export default function MemoEditor() {
+
+  const isDisabled = useAppSelector(({ memo }) => memo.activeMemo) === '';
+
   return (
-    <EditorWrapper>
+    <EditorWrapper $isDisable={isDisabled}>
       <CKEditor
         editor={ CustomEditor }
         data=""
         onReady={(editor) => {
-          console.log('isReadOnly: ', editor.isReadOnly);
-          console.log('id: ', editor.id);
-          // editor.enableReadOnlyMode(editor.id);
-          // editor.disableReadOnlyMode(editor.id);
+          // if (isDisabled) editor.enableReadOnlyMode(editor.id);
+          // else editor.disableReadOnlyMode(editor.id);
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
-          console.log(data);
+          console.log({data}, extractTitle(data));
         }}
       />
     </EditorWrapper>
   )
 }
 
-const EditorWrapper = styled.div`
+const EditorWrapper = styled.div<{ $isDisable: boolean }>`
   position: relative;
+  flex: 1;
   display: block;
   width: 100%;
   height: 100%;
-  padding: 16px 16px 20px 36px;
+  padding: ${({ $isDisable }) => $isDisable ? '18px' : '16px 16px 20px 36px'};
   font-size: 15px;
   font-weight: 400;
   color: ${({ theme }) => theme.grayScale700};

@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import uiReducer from './ui/ui'
-import folderReducer from './folder/folder'
+import uiReducer from './actions/ui'
+import folderReducer from './actions/folder'
+import memoReducer from './actions/memo'
 
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
     folder: folderReducer,
+    memo: memoReducer,
   },
 });
 
