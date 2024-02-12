@@ -38,6 +38,8 @@ body.darkTheme > main {
   box-shadow:  none;
 }
 
+body.stopScroll {touch-action: none; overflow: hidden;}
+
 body.darkTheme {
   /* Overrides the border radius setting in the theme. */
   --ck-border-radius: 4px;

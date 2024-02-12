@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 export type ColorChip = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'pink' | 'none';
-export type FolderDetail = { index: Number, colorChip: ColorChip, length: Number };
+export type SortType = { type: 'create' | 'modify' | 'title' | string, sort: 'desc' | 'asc' | string };
+export type FolderDetail = { index: Number, colorChip: ColorChip, length: Number, sort: SortType };
 export type FolderData = { [key: string] : FolderDetail } | {};
 
 interface FolderState {
@@ -10,7 +11,7 @@ interface FolderState {
     dataLength: Number,
 }
 
-const initialData = JSON.parse(localStorage.getItem('folder') ?? '{ "asdf": {"index": "0", "colorChip": "red", "length": "0"} }');
+const initialData = JSON.parse(localStorage.getItem('folder') ?? '{}');
 
 const initialState: FolderState = {
     activeFolder: '',
@@ -27,7 +28,10 @@ const folder = createSlice({
         },
         addFolder: (state, { payload }) => {
             const { dataLength } = state;
-            const newFolder:FolderDetail = { index: dataLength, colorChip: payload?.color ?? 'none', length: 0 };
+            const sort = { type: 'create', sort: 'desc' };
+            const newFolder:FolderDetail = { 
+                index: dataLength, colorChip: payload?.color ?? 'none', length: 0, sort
+            };
             Object.assign(state.data, { [payload.id]: newFolder });
             state.dataLength = Number(dataLength) + 1;
             localStorage.setItem('folder', JSON.stringify(state.data));

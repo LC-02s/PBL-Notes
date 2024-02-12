@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const MenuBtn = styled.button<{ $active?: boolean }>`
+export const MenuBtn = styled.button<{ $active?: boolean, $hidden?: boolean }>`
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -10,15 +10,24 @@ export const MenuBtn = styled.button<{ $active?: boolean }>`
     color: ${({ theme }) => theme.grayScale600};
     border-radius: 4px;
     background-color: ${({ theme }) => theme.grayScale000};
-    transition: background 0.3s, color 0.5s;
+    opacity: 1;
+    visibility: visible;
+    transition: background 0.3s, color 0.5s, opacity 0.5s;
     ${({ $active }) => $active && css`
         background-color: ${({ theme }) => theme.grayScale100};
         svg:first-of-type {opacity: 0;}
         svg:last-of-type {opacity: 1;}
     `}
+    ${({ $hidden }) => $hidden && css`
+        opacity: 0;
+        visibility: hidden;
+    `}
 
     &:hover,
     &:focus {background-color: ${({ theme }) => theme.grayScale100};}
+    &:disabled {color: ${({ theme }) => theme.grayScale400};}
+    &:disabled:hover,
+    &:disabled:focus {background-color: ${({ theme }) => theme.grayScale000};}
 `;
 
 export const MenuToggleBtn = styled(MenuBtn)`

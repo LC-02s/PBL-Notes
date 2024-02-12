@@ -6,6 +6,7 @@ import FolderList from './components/folder/FolderList';
 import FolderAddBtn from './components/folder/FolderAddBtn';
 import MemoEditor from './components/memo/MemoEditor';
 import MenuBar from './components/menu/MenuBar';
+import Modal from './components/Modal';
 
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
                 <section><MenuBar /></section>
                 <section><MemoEditor /></section>
             </ContentsWrapper>
+            <ModalWrapper><Modal /></ModalWrapper>
         </ThemeProvider>
     );
 }
@@ -66,4 +68,17 @@ const ContentsWrapper = styled.article`
 
     & > section:first-of-type {display: block; width: 100%; height: 48px;}
     & > section:last-of-type {flex: 1; display: block; width: 100%; height: 100%; max-height: calc(100% - 48px);}
+`;
+
+const ModalWrapper = styled.div`
+    position: absolute;
+    z-index: 99999;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
 `;

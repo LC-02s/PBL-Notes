@@ -9,9 +9,15 @@ export default function MemoEditor() {
       <CKEditor
         editor={ CustomEditor }
         data=""
-        onReady={ editor => {
-          // You can store the "editor" and use when it is needed.
-          console.log( 'Editor is ready to use!', editor );
+        onReady={(editor) => {
+          console.log('isReadOnly: ', editor.isReadOnly);
+          console.log('id: ', editor.id);
+          // editor.enableReadOnlyMode(editor.id);
+          // editor.disableReadOnlyMode(editor.id);
+        }}
+        onChange={(event, editor) => {
+          const data = editor.getData();
+          console.log(data);
         }}
       />
     </EditorWrapper>
@@ -31,6 +37,7 @@ const EditorWrapper = styled.div`
 
   h1 {font-size: 17px; font-weight: 600; margin-top: 12px!important; margin-bottom: 8px;}
   ol, ul {padding-left: 28px;}
+  blockquote {padding: 0px 18px; border-color: ${({ theme }) => theme.grayScale300}; transition: border 0.3s;}
   & > div {border: none!important; box-shadow: none!important;}
   .ck-editor__editable_inline {min-height: 100%;}
 `;
