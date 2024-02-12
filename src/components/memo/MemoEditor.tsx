@@ -7,7 +7,8 @@ import { extractTitle } from '../../app/actions/memo';
 
 export default function MemoEditor() {
 
-  const isDisabled = useAppSelector(({ memo }) => memo.activeMemo) === '';
+  const memo = useAppSelector(({ memo }) => memo);
+  const isDisabled = memo.activeMemo  === '';
 
   return (
     <EditorWrapper $isDisable={isDisabled}>
@@ -15,8 +16,8 @@ export default function MemoEditor() {
         editor={ CustomEditor }
         data=""
         onReady={(editor) => {
-          // if (isDisabled) editor.enableReadOnlyMode(editor.id);
-          // else editor.disableReadOnlyMode(editor.id);
+          if (isDisabled) editor.enableReadOnlyMode(editor.id);
+          else editor.disableReadOnlyMode(editor.id);
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
