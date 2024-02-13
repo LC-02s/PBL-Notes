@@ -15,7 +15,7 @@ export default function MemoEditor() {
     <EditorWrapper $isDisable={isDisabled}>
       <CKEditor
         editor={ CustomEditor }
-        data={memo.data[memo.activeMemo].markdown || ''}
+        data={memo.data[memo.activeMemo]?.markdown ?? ''}
         onReady={(editor) => {
           if (isDisabled) editor.enableReadOnlyMode(editor.id);
           else editor.disableReadOnlyMode(editor.id);

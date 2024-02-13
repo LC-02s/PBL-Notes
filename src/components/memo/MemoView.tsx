@@ -23,22 +23,22 @@ export default function MemoView() {
           {
           memo.dataLength > 0 ? 
             <React.Fragment>
-                {
-                // 고정 메모 출력
-                pinnedMemo.length > 0 && 
-                <MemoListItem $viewType={viewType}>
-                  <h2>Pinned Notes ({ pinnedMemo.length })</h2>
-                  <ul>{ pinnedMemo.map(([ createAt, detail ]) => (<MemoItem key={createAt} data={[createAt, detail]} />)) }</ul>
-                </MemoListItem>
-                }
-                {
-                // 메모 출력
-                basicMemo.length > 0 && 
-                <MemoListItem $viewType={viewType}>
-                  <h2>All Notes ({ basicMemo.length })</h2>
-                  <ul>{ basicMemo.map(([ createAt, detail ]) => (<MemoItem key={createAt} data={[createAt, detail]} />)) }</ul>
-                </MemoListItem>
-                }
+              {
+              // 고정 메모 출력
+              pinnedMemo.length > 0 && 
+              <MemoListItem $viewType={viewType}>
+                <h2>Pinned Notes ({ pinnedMemo.length })</h2>
+                <ul>{ pinnedMemo.map(([ createAt, detail ]) => (<MemoItem key={createAt} data={[createAt, detail]} />)) }</ul>
+              </MemoListItem>
+              }
+              {
+              // 메모 출력
+              basicMemo.length > 0 && 
+              <MemoListItem $viewType={viewType}>
+                <h2>All Notes ({ basicMemo.length })</h2>
+                <ul>{ basicMemo.map(([ createAt, detail ]) => (<MemoItem key={createAt} data={[createAt, detail]} />)) }</ul>
+              </MemoListItem>
+              }
             </React.Fragment> :
             <MemoListItemEmpty>메모 없음</MemoListItemEmpty>
           }
@@ -49,7 +49,7 @@ export default function MemoView() {
   )
 }
 
-const dataSort = (data:MemoList, folderData:FolderData, activeFolder:FolderDataKey) => {
+export const dataSort = (data:MemoList, folderData:FolderData, activeFolder:FolderDataKey) => {
   let targetData = Object.entries(data);
   const { sort } = activeFolder !== '' ? folderData[activeFolder] : { sort: { type: 'create', sort: 'desc' } };
   const sortAction = `${sort.type}/${sort.sort}`;
@@ -64,10 +64,10 @@ const dataSort = (data:MemoList, folderData:FolderData, activeFolder:FolderDataK
         targetData.sort(([ createdA, ], [ createdB, ]) => Number(createdB) - Number(createdA));
         break;
       case 'update/desc':
-        targetData.sort(([ , a ], [ , b ]) => Number(a.updateAt) - Number(b.updateAt));
+        targetData.sort(([ , a ], [ , b ]) => Number(new Date(a.updateAt).getTime()) - Number(new Date(b.updateAt).getTime()));
         break;
       case 'update/asc':
-        targetData.sort(([ , a ], [ , b ]) => Number(b.updateAt) - Number(a.updateAt));
+        targetData.sort(([ , a ], [ , b ]) => Number(new Date(b.updateAt).getTime()) - Number(new Date(a.updateAt).getTime()));
         break;
       case 'title/desc':
         targetData.sort(([ , a ], [ , b ]) => a.markdown.charCodeAt(2) - b.markdown.charCodeAt(2));
@@ -95,7 +95,6 @@ const MemoListContainer = styled.div<{ $viewType: boolean }>`
   align-items: stretch;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
 
   & > ul {
     display: block;
@@ -106,6 +105,7 @@ const MemoListContainer = styled.div<{ $viewType: boolean }>`
       width: 241px;
       border-right: 1px solid ${({ theme }) => theme.grayScale200};
     `}
+    overflow-y: auto;
     transition: border 0.3s;
   }
 `;
@@ -115,7 +115,7 @@ const MemoListItem = styled.li<{ $viewType: boolean }>`
   width: 100%;
   height: auto;
 
-  & + & {margin: 8px 0px 0px;}
+  & + & {margin: 14px 0px 0px;}
   & > h2 {
     display: block;
     width: 100%;

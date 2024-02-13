@@ -10,7 +10,8 @@ export default function WriteBtn() {
 
   const handleBtnClick = () => {
     if (folder.activeFolder) {
-      dispatch(addMemo({ folder: folder.activeFolder, time: String(new Date().getTime()) }));
+      const currentTime = new Date();
+      dispatch(addMemo({ id: String(currentTime.getTime()), folder: folder.activeFolder, time: String(currentTime) }));
     }
   }
 

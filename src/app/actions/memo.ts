@@ -23,15 +23,18 @@ const memo = createSlice({
   name: 'memo',
   initialState,
   reducers: {
-    addMemo: (state, { payload }: { payload: { time: keyof MemoList, folder: keyof FolderData } }) => {
-      const { folder, time } = payload;
+    setActiveMemo: (state, { payload }: { payload: keyof MemoList }) => {
+      // state.activeMemo = payload
+    },
+    addMemo: (state, { payload }: { payload: { id: keyof MemoList, time: string, folder: keyof FolderData } }) => {
+      const { id, folder, time } = payload;
       const newMemo:MemoData = {
-        included: folder, title: '', updateAt: String(time), markdown: '', isPinned: false, isLocked: false
+        included: folder, title: '', updateAt: time, markdown: '', isPinned: false, isLocked: false
       }
-      Object.assign(state.data, { [payload.time]: newMemo });
+      Object.assign(state.data, { [id]: newMemo });
       localStorage.setItem('memo', JSON.stringify(state.data));
       state.dataLength += 1;
-      state.activeMemo = time;
+      state.activeMemo = id;
     },
     deleteMemo: (state, { payload }) => {
         
@@ -59,6 +62,6 @@ export const extractTitle = (str:string) => {
   return match && match[1] ? match[1] : '';
 }
 
-export const { addMemo, deleteMemo, modifyMemo, toggleMemoLock, toggleMemoPin, clearMemo } = memo.actions;
+export const { setActiveMemo, addMemo, deleteMemo, modifyMemo, toggleMemoLock, toggleMemoPin, clearMemo } = memo.actions;
 
 export default memo.reducer;

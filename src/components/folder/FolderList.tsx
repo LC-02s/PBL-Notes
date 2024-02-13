@@ -3,11 +3,21 @@ import { THEME_COLOR } from '../../App.theme'
 import styled, { css } from 'styled-components'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { setActiveFolder } from '../../app/actions/folder';
+// import { setActiveMemo } from '../../app/actions/memo';
 
 export default function FolderList() {
 
   const { data, activeFolder } = useAppSelector(({ folder }) => folder);
+  // const memo = useAppSelector(({ memo }) => memo);
   const dispatch = useAppDispatch();
+  const handleFolderClick = (title:string) => {
+    dispatch(setActiveFolder(title));
+    // if (title !== '') {
+    //   const memoTarget = Object.entries(memo.data)
+    //     .find(([ , { included } ]) => included === title);
+    //   if (memoTarget[0]) dispatch(setActiveMemo(memoTarget[0]));
+    // }
+  }
 
   return (
     <FolderListContainer>
@@ -28,7 +38,7 @@ export default function FolderList() {
             <li key={title}>
               <FolderListBtn 
                 $active={activeFolder === title} $color={colorChip === 'none' ? 'none' : THEME_COLOR[colorChip]}
-                onClick={() => dispatch(setActiveFolder(title))}
+                onClick={(title) => handleFolderClick(String(title))}
               >
                 <span>{ title }</span><span>{ String(length) }</span>
               </FolderListBtn>
