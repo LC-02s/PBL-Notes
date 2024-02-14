@@ -38,7 +38,7 @@ export default function FolderList() {
             <li key={title}>
               <FolderListBtn 
                 $active={activeFolder === title} $color={colorChip === 'none' ? 'none' : THEME_COLOR[colorChip]}
-                onClick={(title) => handleFolderClick(String(title))}
+                onClick={() => handleFolderClick(String(title))}
               >
                 <span>{ title }</span><span>{ String(length) }</span>
               </FolderListBtn>
