@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useAppSelector } from './app/hooks';
 import { lightTheme, darkTheme } from './App.theme';
-import FolderList from './components/folder/FolderList';
-import FolderAddBtn from './components/folder/FolderAddBtn';
 import MenuBar from './components/menu/MenuBar';
 import Modal from './components/Modal';
-import MemoView from './components/memo/MemoView';
+import SideBar from './components/SideBar/SideBar';
+import { Route, Routes } from 'react-router-dom';
+import NotFound from './components/NotFound';
+import NoteView from './components/note/NoteView';
 
 
 export default function App() {
@@ -14,46 +15,31 @@ export default function App() {
     const currentTheme = useAppSelector(({ ui }) => ui.theme) === 'light';
 
     useEffect(() => {
-        if (currentTheme) {
-            document.body.classList.remove('darkTheme');
-        } else {
-            document.body.classList.add('darkTheme');
-        }
+      if (currentTheme) document.body.classList.remove('darkTheme'); 
+      else document.body.classList.add('darkTheme');
     }, [currentTheme]);
 
     return (
-        <ThemeProvider theme={currentTheme ? lightTheme : darkTheme}>
-            <SideBarWrapper>
-                <div><FolderList /></div>
-                <div><FolderAddBtn /></div>
-            </SideBarWrapper>
-            <ContentsWrapper>
-                <section><MenuBar /></section>
-                <section><MemoView /></section>
-            </ContentsWrapper>
-            <ModalWrapper><Modal /></ModalWrapper>
-        </ThemeProvider>
+      <ThemeProvider theme={currentTheme ? lightTheme : darkTheme}>
+        <SideBar />
+        <ContentsWrapper>
+          <section><MenuBar /></section>
+          <section>
+            <Routes>
+              <Route path='/' element={<NoteView />} />
+              <Route path='/archive' element={<NoteView />} />
+              <Route path='/trash' element={<NoteView />} />
+              <Route path='/tag/:name' element={<NoteView />} />
+              <Route path='/*' element={<NotFound />} />
+            </Routes>
+          </section>
+        </ContentsWrapper>
+        <ModalWrapper><Modal /></ModalWrapper>
+      </ThemeProvider>
     );
 }
 
 // styled components
-const SideBarWrapper = styled.section`
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 240px;
-    height: 100%;
-
-    & > div {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
-    & > div:first-of-type {flex: 1; overflow-y: auto;}
-    & > div:last-of-type {padding: 12px;}
-`;
-
 const ContentsWrapper = styled.article`
     flex: 1;
     display: flex;

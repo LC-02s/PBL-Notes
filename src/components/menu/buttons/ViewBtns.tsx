@@ -7,7 +7,7 @@ import { changeView } from '../../../app/actions/ui';
 export default function ViewBtns() {
 
   const viewType = useAppSelector(({ ui }) => ui.view);
-  const isActive = useAppSelector(({ memo }) => memo.activeMemo) === '';
+  const isActive = (useAppSelector(({ note }) => note.activeNoteIndex) ?? -1) >= 0;
   const dispatch = useAppDispatch();
 
   return (

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
-import FolderAddForm from './folder/FolderAddForm'
+import FolderAddForm from './SideBar/folder/FolderAddForm'
 import { useAppSelector } from '../app/hooks'
 
 export default function Modal() {

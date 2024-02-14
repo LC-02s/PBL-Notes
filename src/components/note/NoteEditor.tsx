@@ -3,26 +3,25 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { modifyMemo } from '../../app/actions/memo';
 
-export default function MemoEditor() {
+export default function NoteEditor() {
 
-  const memo = useAppSelector(({ memo }) => memo);
-  const isDisabled = memo.activeMemo  === '';
+  const { activeNoteIndex } = useAppSelector(({ note }) => note);
+  const isDisabled = (activeNoteIndex ?? -1) >= 0;
   const dispatch = useAppDispatch();
 
   return (
     <EditorWrapper $isDisable={isDisabled}>
       <CKEditor
         editor={ CustomEditor }
-        data={memo.data[memo.activeMemo]?.markdown ?? ''}
+        data={''}
         onReady={(editor) => {
           if (isDisabled) editor.enableReadOnlyMode(editor.id);
           else editor.disableReadOnlyMode(editor.id);
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
-          dispatch(modifyMemo({ id: String(memo.activeMemo), data, time: String(new Date()) }));
+          console.log(data);
         }}
       />
     </EditorWrapper>

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import styled, { css } from 'styled-components';
-import { toggleModal } from '../../app/actions/ui';
-import { FolderData, addFolder } from '../../app/actions/folder';
+import { toggleModal } from '../../../app/actions/ui';
+import { addFolder } from '../../../app/actions/folder';
 
 export default function FolderAddForm() {
 
-  const data = useAppSelector(({ folder }) => folder.data);
+  const { folderList } = useAppSelector(({ folder }) => folder);
   const isActive = useAppSelector(({ ui }) => ui.modal);
   const dispatch = useAppDispatch();
   
@@ -15,7 +15,7 @@ export default function FolderAddForm() {
 
   useEffect(() => { if (isActive) reset(); }, [isActive, reset]);
 
-  const handleFormSubmit = ({ title }: { title?: keyof FolderData }, e: any) => {
+  const handleFormSubmit = ({ title }: { title?: string }, e: any) => {
     e.preventDefault();
     if (title) {
       dispatch(addFolder({ id: title, color: 'none' }));
@@ -34,8 +34,8 @@ export default function FolderAddForm() {
           {...register('title', {
             required: '폴더명을 입력해주세요',
             maxLength: {value: 12, message: '폴더명은 최대 12자까지 입력할 수 있습니다'},
-            validate: { overlap: (value) =>  Object
-              .keys(data).some((title) => title === value) ? '이미 사용중인 폴더명입니다' : undefined}
+            validate: { overlap: (value) =>  folderList
+              .some(({ name }) => name === value) ? '이미 사용중인 폴더명입니다' : undefined}
           })}
         />
         { errors.title &&

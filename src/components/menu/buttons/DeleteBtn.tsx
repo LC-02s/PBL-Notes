@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../app/hooks'
 
 export default function DeleteBtn() {
 
-  const isActive = useAppSelector(({ memo }) => memo.activeMemo) === '';
+  const isActive = (useAppSelector(({ note }) => note.activeNoteIndex) ?? -1) >= 0;
 
   return (
     <MenuBtn disabled={isActive} title='메모 삭제'>
