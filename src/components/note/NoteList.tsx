@@ -6,87 +6,39 @@ import NoteItem from './NoteItem';
 export default function NoteList() {
 
   const { view } = useAppSelector(({ ui }) => ui);
-  const { activeNoteIndex, currentNotes } = useAppSelector(({ note }) => note);
+  const { currentNotes } = useAppSelector(({ note }) => note);
   const [ pinnedNotes, basicNotes ] = currentNotes || [ [], [] ];
   const viewType = view === 'list';
 
   return (
     <NoteListContainer $viewType={viewType}>
       {
-      (viewType || (!viewType && activeNoteIndex === null)) &&
-        <ul>
+      (pinnedNotes.length !== 0 && basicNotes.length !== 0) ?
+        <React.Fragment>
           {
-          currentNotes?.length ?? -1 > 0 ? 
-            <React.Fragment>
-              {
-              // 고정 메모 출력
-              pinnedNotes.length > 0 && 
-              <NoteListItem $viewType={viewType}>
-                <h2>Pinned Notes ({ pinnedNotes.length })</h2>
-                <ul>{ pinnedNotes.map((data) => (<NoteItem key={data.createAt} data={data} />)) }</ul>
-              </NoteListItem>
-              }
-              {
-              // 메모 출력
-              basicNotes.length > 0 && 
-              <NoteListItem $viewType={viewType}>
-                <h2>All Notes ({ basicNotes.length })</h2>
-                <ul>{ basicNotes.map((data) => (<NoteItem key={data.createAt} data={data} />)) }</ul>
-              </NoteListItem>
-              }
-            </React.Fragment> :
-            <NoteListItemEmpty>메모 없음</NoteListItemEmpty>
+          // 고정 메모 출력
+          pinnedNotes.length > 0 && 
+            <li>
+              <h2>Pinned Notes ({ pinnedNotes.length })</h2>
+              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} />)) }</ul>
+            </li>
           }
-        </ul>
+          {
+          // 메모 출력
+          basicNotes.length > 0 && 
+            <li>
+              <h2>All Notes ({ basicNotes.length })</h2>
+              <ul>{ basicNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} />)) }</ul>
+            </li>
+          }
+        </React.Fragment> :
+        <NoteListItemEmpty>메모 없음</NoteListItemEmpty>
       }
     </NoteListContainer>
   )
 }
 
 // styled components
-const NoteListContainer = styled.div<{ $viewType: boolean }>`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-  width: 100%;
-  height: 100%;
-
-  & > ul {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 12px;
-    ${({ $viewType }) => $viewType && css`
-      width: 241px;
-      border-right: 1px solid ${({ theme }) => theme.grayScale200};
-    `}
-    overflow-y: auto;
-    transition: border 0.3s;
-  }
-`;
-
-const NoteListItem = styled.li<{ $viewType: boolean }>`
-  display: block;
-  width: 100%;
-  height: auto;
-
-  & + & {margin: 14px 0px 0px;}
-  & > h2 {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin: 0px 0px 4px;
-    font-size: 14px;
-    font-weight: 400;
-    color: ${({ theme }) => theme.grayScale500};
-  }
-  & > ul {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-`;
-
 const NoteListItemEmpty = styled.li`
   flex: 1;
   display: flex;
@@ -100,4 +52,45 @@ const NoteListItemEmpty = styled.li`
   color: ${({ theme }) => theme.grayScale400};
   white-space: nowrap;
   transition: color 0.3s;
+`;
+
+const NoteListContainer = styled.ul<{ $viewType: boolean }>`
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  overflow-y: auto;
+  transition: border 0.3s;
+  
+  ${({ $viewType }) => $viewType && css`
+    width: 241px;
+    border-right: 1px solid ${({ theme }) => theme.grayScale200};
+    & > li + li {margin: 14px 0px 0px;}
+  `}
+
+  & > li:not(${NoteListItemEmpty}) {
+    display: block;
+    width: 100%;
+    height: auto;
+
+    & > h2 {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0px 0px 4px;
+      font-size: 14px;
+      font-weight: 400;
+      color: ${({ theme }) => theme.grayScale500};
+    }
+    & > ul {
+      display: block;
+      width: 100%;
+      height: auto;
+  
+      ${({ $viewType }) => !$viewType && css`
+        display: grid;
+        
+      `}
+    }
+  }
 `;

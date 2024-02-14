@@ -3,8 +3,8 @@ export type Note = {
   included: string,
   title: string, 
   markdown: string, 
-  createAt: string | number,
-  updateAt: string | number, 
+  createAt: number,
+  updateAt: number, 
   isPinned: boolean, 
   isLocked: boolean 
 };

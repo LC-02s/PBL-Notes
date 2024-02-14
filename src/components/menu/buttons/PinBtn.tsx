@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 export default function PinBtn() {
 
   const { activeNoteIndex, tempData } = useAppSelector(({ note }) => note);
-  const isDisabled = (activeNoteIndex ?? -1) >= 0;
+  const isDisabled = !(activeNoteIndex >= 0);
   const isActive = !isDisabled && (tempData?.isLocked ?? false);
   const dispatch = useAppDispatch();
 

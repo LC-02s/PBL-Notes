@@ -6,8 +6,9 @@ const initialArchiveNote = JSON.parse(localStorage.getItem('archiveNotes') ?? '[
 const initialDeletedNote = JSON.parse(localStorage.getItem('deletedNotes') ?? '[]');
 
 interface NoteState {
-  activeNoteIndex: number | null,
-  currentNotes: NoteList[] | null,
+  noteStatus: '' | '' | '',
+  activeNoteIndex: number | -1,
+  currentNotes: NoteList[],
   tempData: Note | null,
   basicNotes: NoteList,
   archiveNotes: NoteList,
@@ -15,8 +16,9 @@ interface NoteState {
 }
 
 const initialState: NoteState = {
-  activeNoteIndex: null,
-  currentNotes: null,
+  noteStatus: '',
+  activeNoteIndex: -1,
+  currentNotes: [ [], [] ],
   tempData: null,
   basicNotes: initialBasicNote,
   archiveNotes: initialArchiveNote,
@@ -27,18 +29,43 @@ const note = createSlice({
   name: 'note',
   initialState,
   reducers: {
-    addNote: (state, { payload }) => {
+    addTempNote: (state, { payload }) => {
       const { folder, time } = payload;
       const newNote:Note = {
-        included: folder, title: '', createAt: time.getTime(), updateAt: time, markdown: '', isPinned: false, isLocked: false
+        included: folder, title: '', createAt: time, updateAt: time, markdown: '', isPinned: false, isLocked: false
       }
-      state.basicNotes.push(newNote);
-      localStorage.setItem('basicNotes', JSON.stringify(state.basicNotes));
+      state.tempData = newNote;
+      state.currentNotes[1].push(newNote);
+      state.activeNoteIndex = time;
+      // localStorage.setItem('basicNotes', JSON.stringify(state.basicNotes));
+    },
+    modifyTempNote: (state, { payload }) => {
+      if (state.tempData) {
+        state.tempData.markdown = payload.data;
+        state.tempData.title = extractTitle(payload.data);
+        state.tempData.updateAt = payload.time;
+      }
+    },
+    selectFolder: (state, { payload }) => {
+      if (payload === 'all') {
+        state.currentNotes = dataSort(state.basicNotes, '', '');
+      } else if (payload === 'archive') {
+        state.currentNotes = dataSort(state.archiveNotes, '', '');
+        state.activeNoteIndex = -1;
+      } else if (payload === 'trash') {
+        state.currentNotes = dataSort(state.deletedNotes, '', '');
+        state.activeNoteIndex = -1;
+      } else {
+        state.currentNotes = dataSort(state.basicNotes, payload, '');
+      }
+    },
+    changeActiveNoteIndex: (state, { payload }) => {
+
     },
   }
 });
 
-export const { addNote } = note.actions;
+export const { addTempNote, modifyTempNote, selectFolder, changeActiveNoteIndex } = note.actions;
 
 export default note.reducer;
 
@@ -60,10 +87,10 @@ export function dataSort(data: NoteList, targetFolder: string, sortType: string)
       data.sort((a, b) => Number(new Date(b.updateAt).getTime()) - Number(new Date(a.updateAt).getTime()));
       break;
     case 'title/desc':
-      data.sort((a, b) => a.markdown.charCodeAt(2) - b.markdown.charCodeAt(2));
+      data.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
       break;
     case 'title/asc':
-      data.sort((a, b) => b.markdown.charCodeAt(2) - a.markdown.charCodeAt(2));
+      data.sort((a, b) => b.title.charCodeAt(0) - a.title.charCodeAt(0));
       break;
     default:
       data.sort((a, b) => Number(a.createAt) - Number(b.createAt));

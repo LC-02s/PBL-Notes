@@ -6,7 +6,7 @@ export type SortType = {
 };
 
 export type Folder = { 
-  id: string, name: string, color: ColorChip, sort: SortType 
+  id: number, name: string, color: ColorChip, sort: SortType 
 };
 
 export type FolderList = Folder[];

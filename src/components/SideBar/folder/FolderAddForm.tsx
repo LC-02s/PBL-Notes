@@ -18,7 +18,8 @@ export default function FolderAddForm() {
   const handleFormSubmit = ({ title }: { title?: string }, e: any) => {
     e.preventDefault();
     if (title) {
-      dispatch(addFolder({ id: title, color: 'none' }));
+      const time = Number(new Date().getTime());
+      dispatch(addFolder({ name: title, time, color: 'none' }));
       dispatch(toggleModal(undefined));
     }
   }

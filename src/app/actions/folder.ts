@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { FolderList } from "../types/folder";
+import { Folder, FolderList } from "../types/folder";
 
 interface FolderState { folderList: FolderList }
 
@@ -14,7 +14,11 @@ const folder = createSlice({
   initialState,
   reducers: {
     addFolder: (state, { payload }) => {
-      
+      const newFolder:Folder = { 
+          id: payload.time, name: payload.name, color: payload?.color ?? 'none', sort: { type: 'create', sorted: 'desc' }
+      };
+      state.folderList.push(newFolder);
+      localStorage.setItem('folder', JSON.stringify(state.folderList));
     },
   }
 });

@@ -3,25 +3,27 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { modifyTempNote } from '../../app/actions/note';
 
 export default function NoteEditor() {
 
-  const { activeNoteIndex } = useAppSelector(({ note }) => note);
-  const isDisabled = (activeNoteIndex ?? -1) >= 0;
+  const { activeNoteIndex, tempData } = useAppSelector(({ note }) => note);
+  const isDisabled = !((activeNoteIndex ?? -1) >= 0);
   const dispatch = useAppDispatch();
 
   return (
     <EditorWrapper $isDisable={isDisabled}>
       <CKEditor
         editor={ CustomEditor }
-        data={''}
+        data={tempData?.markdown ?? ''}
         onReady={(editor) => {
           if (isDisabled) editor.enableReadOnlyMode(editor.id);
           else editor.disableReadOnlyMode(editor.id);
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
-          console.log(data);
+          const time = Number(new Date().getTime());
+          dispatch(modifyTempNote({ data, time }));
         }}
       />
     </EditorWrapper>
