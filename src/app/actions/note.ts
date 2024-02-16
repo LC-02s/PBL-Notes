@@ -6,7 +6,7 @@ const initialArchiveNote = JSON.parse(localStorage.getItem('archiveNotes') ?? '[
 const initialDeletedNote = JSON.parse(localStorage.getItem('deletedNotes') ?? '[]');
 
 interface NoteState {
-  noteStatus: '' | '' | '',
+  noteStatus: 'temp' | 'modify' | 'done',
   activeNoteIndex: number | -1,
   currentNotes: NoteList[],
   tempData: Note | null,
@@ -16,7 +16,7 @@ interface NoteState {
 }
 
 const initialState: NoteState = {
-  noteStatus: '',
+  noteStatus: 'done',
   activeNoteIndex: -1,
   currentNotes: [ [], [] ],
   tempData: null,
@@ -37,6 +37,7 @@ const note = createSlice({
       state.tempData = newNote;
       state.currentNotes[1].push(newNote);
       state.activeNoteIndex = time;
+      state.noteStatus = 'temp';
       // localStorage.setItem('basicNotes', JSON.stringify(state.basicNotes));
     },
     modifyTempNote: (state, { payload }) => {
@@ -47,16 +48,17 @@ const note = createSlice({
       }
     },
     selectFolder: (state, { payload }) => {
+      if (state.noteStatus === 'temp') { state.tempData = null; state.noteStatus = 'done' }
       if (payload === 'all') {
-        state.currentNotes = dataSort(state.basicNotes, '', '');
+        state.currentNotes = dataSort(state.basicNotes, null, null);
       } else if (payload === 'archive') {
-        state.currentNotes = dataSort(state.archiveNotes, '', '');
+        state.currentNotes = dataSort(state.archiveNotes, null, null);
         state.activeNoteIndex = -1;
       } else if (payload === 'trash') {
-        state.currentNotes = dataSort(state.deletedNotes, '', '');
+        state.currentNotes = dataSort(state.deletedNotes, null, null);
         state.activeNoteIndex = -1;
       } else {
-        state.currentNotes = dataSort(state.basicNotes, payload, '');
+        state.currentNotes = dataSort(state.basicNotes, payload, null);
       }
     },
     changeActiveNoteIndex: (state, { payload }) => {
@@ -69,9 +71,9 @@ export const { addTempNote, modifyTempNote, selectFolder, changeActiveNoteIndex 
 
 export default note.reducer;
 
-export function dataSort(data: NoteList, targetFolder: string, sortType: string): NoteList[] {
+export function dataSort(data: NoteList, targetFolder: string | null, sortType: string | null): NoteList[] {
   
-  if (targetFolder !== '') data = data.filter(({ included }) => included === targetFolder);
+  if (targetFolder) data = data.filter(({ included }) => included === targetFolder);
 
   switch (sortType) {
     case 'create/desc':

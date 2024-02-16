@@ -13,7 +13,7 @@ export default function NoteList() {
   return (
     <NoteListContainer $viewType={viewType}>
       {
-      (pinnedNotes.length !== 0 && basicNotes.length !== 0) ?
+      (pinnedNotes.length !== 0 || basicNotes.length !== 0) ?
         <React.Fragment>
           {
           // 고정 메모 출력

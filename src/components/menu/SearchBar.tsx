@@ -19,7 +19,9 @@ export default function SearchBar() {
 
 const SearchContainer = styled.div`
   position: relative;
-  flex: 1;
+  display: block;
+  width: auto;
+  height: auto;
   font-size: 16px;
   color: ${({ theme }) => theme.grayScale500};
   transition: color 0.3s;

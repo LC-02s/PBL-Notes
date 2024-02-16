@@ -2,7 +2,6 @@ import React from 'react'
 import { THEME_COLOR } from '../../../App.theme'
 import styled, { css } from 'styled-components'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import {  } from '../../../app/actions/folder';
 import { NavLink } from 'react-router-dom';
 import { selectFolder } from '../../../app/actions/note';
 
@@ -97,7 +96,7 @@ const FolderListItem = styled.button<{ $color: string }>`
   & > a > span {display: inline-block;}
   & > a > span:first-of-type {
     position: relative;
-    padding-left: 16px;
+    padding-left: 18px;
     font-size: inherit;
     font-weight: 400;
     color: ${({ theme }) => theme.grayScale700};
