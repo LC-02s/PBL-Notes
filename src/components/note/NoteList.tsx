@@ -7,11 +7,10 @@ export default function NoteList() {
 
   const { view } = useAppSelector(({ ui }) => ui);
   const { currentNotes } = useAppSelector(({ note }) => note);
-  const [ pinnedNotes, basicNotes ] = currentNotes || [ [], [] ];
-  const viewType = view === 'list';
+  const [ pinnedNotes, basicNotes ] = currentNotes;
 
   return (
-    <NoteListContainer $viewType={viewType}>
+    <NoteListContainer $viewType={view === 'list'}>
       {
       (pinnedNotes.length !== 0 || basicNotes.length !== 0) ?
         <React.Fragment>

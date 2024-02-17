@@ -26,7 +26,7 @@ export default function FolderAddForm() {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <FormFieldset $error={errors.title ? true: false}>
+      <FormFieldset $error={errors.title ? true : false}>
         <legend>새로운 폴더</legend>
         <label htmlFor="title">이름</label>
         <input 
@@ -34,9 +34,9 @@ export default function FolderAddForm() {
           placeholder='폴더명을 입력해주세요'
           {...register('title', {
             required: '폴더명을 입력해주세요',
-            maxLength: {value: 12, message: '폴더명은 최대 12자까지 입력할 수 있습니다'},
+            maxLength: { value: 12, message: '폴더명은 최대 12자까지 입력할 수 있습니다' },
             validate: { overlap: (value) =>  folderList
-              .some(({ name }) => name === value) ? '이미 사용중인 폴더명입니다' : undefined}
+              .some(({ name }) => name === value) ? '이미 사용중인 폴더명입니다' : undefined }
           })}
         />
         { errors.title &&

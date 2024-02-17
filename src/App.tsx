@@ -29,7 +29,7 @@ export default function App() {
               <Route path='/' element={<NoteView />} />
               <Route path='/archive' element={<NoteView />} />
               <Route path='/trash' element={<NoteView />} />
-              <Route path='/tag/:name' element={<NoteView />} />
+              <Route path='/folder/:name' element={<NoteView />} />
               <Route path='/*' element={<NotFound />} />
             </Routes>
           </section>

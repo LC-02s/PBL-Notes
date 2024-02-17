@@ -1,23 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import FolderAddForm from './SideBar/folder/FolderAddForm'
 import { useAppSelector } from '../app/hooks'
+import useDelay from '../hooks/useDelay';
 
 export default function Modal() {
 
   const isVisible = useAppSelector(({ ui }) => ui.modal);
-  const [ visibleDelay, setVisibleDelay ] = useState(false);
-  const delayTimer = useRef<number | null>(null);
+  const visibleDelay = useDelay(isVisible);
+  
   useEffect(() => {
-    if (isVisible) {
-      if (delayTimer.current) window.clearTimeout(delayTimer.current);
-      delayTimer.current = window.setTimeout(()=> setVisibleDelay(true), 180);
-      document.body.classList.add('stopScroll');
-    }
-    return () => {
-      document.body.classList.remove('stopScroll');
-      setVisibleDelay(false);
-    }
+    if (isVisible) { document.body.classList.add('stopScroll'); }
+    return () => { document.body.classList.remove('stopScroll'); }
   }, [ isVisible ]);
 
   return (

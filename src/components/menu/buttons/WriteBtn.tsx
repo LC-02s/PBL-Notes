@@ -6,14 +6,15 @@ import { addTempNote } from '../../../app/actions/note';
 
 export default function WriteBtn() {
 
-  const { pathname } = useLocation();
-  const isDisabled = pathname === '/' || pathname === '/archive' || pathname === '/trash';
+  const { pathname, state } = useLocation();
+  const targetName = pathname.split('/')[2];
+  const isDisabled = typeof targetName === 'string' ? true : false;
 
   const dispatch = useAppDispatch();
 
   const handleBtnClick = () => {
     const time = Number(new Date().getTime());
-    dispatch(addTempNote({ time, folder: pathname.split('/')[2] }));
+    dispatch(addTempNote({ time, folder: state ?? targetName }));
   }
 
   return (

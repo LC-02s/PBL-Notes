@@ -8,12 +8,20 @@ import { selectFolder } from '../../../app/actions/note';
 export default function FolderList() {
 
   const { basicNotes, archiveNotes, deletedNotes } = useAppSelector(({ note }) => note);
-  const { folderList } = useAppSelector(({ folder }) => folder);
+  const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
 
   const dispatch = useAppDispatch();
 
-  const handleNavLinkClick = (path: string) => {
-    dispatch(selectFolder(path))
+  const handleNavLinkClick = (name: string) => { 
+    const sort = name === 'all' ? `${defaultSort.type}/${defaultSort.sortedAt}` : null;
+    dispatch(selectFolder({ name, sort }));
+  }
+  const handleFolderNavLinkClick = (pathname: string) => {
+    const targetFolderIndex = folderList.findIndex(({ name }) => pathname === name);
+    if (targetFolderIndex >= 0) {
+      const { type, sortedAt } = folderList[targetFolderIndex].sort;
+      dispatch(selectFolder({ name: pathname, sort: `${type}/${sortedAt}` }));
+    }
   }
 
   return (
@@ -28,7 +36,7 @@ export default function FolderList() {
         {
         folderList.map(({ id, name, color }) => (
           <FolderListItem key={id} $color={color === 'none' ? 'none' : THEME_COLOR[color]}>
-            <NavLink to={`/tag/${name}`} state={name} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick(name)}>
+            <NavLink to={`/folder/${name}`} state={name} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleFolderNavLinkClick(name)}>
               <span>{ name }</span><span>{ basicNotes.filter(({ included }) => included === name).length }</span>
             </NavLink>
           </FolderListItem>

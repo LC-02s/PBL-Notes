@@ -49,17 +49,22 @@ const note = createSlice({
     },
     selectFolder: (state, { payload }) => {
       if (state.noteStatus === 'temp') { state.tempData = null; state.noteStatus = 'done' }
-      if (payload === 'all') {
-        state.currentNotes = dataSort(state.basicNotes, null, null);
-      } else if (payload === 'archive') {
+      
+      if (payload.name === 'all') {
+        state.currentNotes = dataSort(state.basicNotes, null, payload.sort);
+      } else if (payload.name === 'archive') {
         state.currentNotes = dataSort(state.archiveNotes, null, null);
         state.activeNoteIndex = -1;
-      } else if (payload === 'trash') {
+      } else if (payload.name === 'trash') {
         state.currentNotes = dataSort(state.deletedNotes, null, null);
         state.activeNoteIndex = -1;
       } else {
-        state.currentNotes = dataSort(state.basicNotes, payload, null);
+        state.currentNotes = dataSort(state.basicNotes, payload.name, payload.sort);
       }
+    },
+    changeCurrentNoteDataSort: (state, { payload }) => {
+      const targetName = payload.name === 'all' ? null : payload.name;
+      state.currentNotes = dataSort(state.basicNotes, targetName, payload.sort);
     },
     changeActiveNoteIndex: (state, { payload }) => {
 
@@ -67,7 +72,7 @@ const note = createSlice({
   }
 });
 
-export const { addTempNote, modifyTempNote, selectFolder, changeActiveNoteIndex } = note.actions;
+export const { addTempNote, modifyTempNote, selectFolder, changeCurrentNoteDataSort, changeActiveNoteIndex } = note.actions;
 
 export default note.reducer;
 
@@ -98,10 +103,12 @@ export function dataSort(data: NoteList, targetFolder: string | null, sortType: 
       data.sort((a, b) => Number(a.createAt) - Number(b.createAt));
   }
 
-  const pinnedNotes = data.filter(({ isPinned }) => isPinned);
-  const basicNotes = data.filter(({ isPinned }) => !isPinned);
-  
-  return [ pinnedNotes, basicNotes ];
+  if (sortType) {
+    const pinnedNotes = data.filter(({ isPinned }) => isPinned);
+    const basicNotes = data.filter(({ isPinned }) => !isPinned);
+    return [ pinnedNotes, basicNotes ];
+  } 
+  else return [ [], data ];
 };
 
 export function extractTitle(str:string) {
