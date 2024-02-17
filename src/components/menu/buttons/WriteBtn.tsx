@@ -8,7 +8,7 @@ export default function WriteBtn() {
 
   const { pathname, state } = useLocation();
   const targetName = pathname.split('/')[2];
-  const isDisabled = typeof targetName === 'string' ? true : false;
+  const isDisabled = typeof targetName === 'string' ? false : true;
 
   const dispatch = useAppDispatch();
 

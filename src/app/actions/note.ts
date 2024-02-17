@@ -51,20 +51,20 @@ const note = createSlice({
       if (state.noteStatus === 'temp') { state.tempData = null; state.noteStatus = 'done' }
       
       if (payload.name === 'all') {
-        state.currentNotes = dataSort(state.basicNotes, null, payload.sort);
+        state.currentNotes = filteredNoteData(state.basicNotes, null, payload.sort);
       } else if (payload.name === 'archive') {
-        state.currentNotes = dataSort(state.archiveNotes, null, null);
+        state.currentNotes = filteredNoteData(state.archiveNotes, null, null);
         state.activeNoteIndex = -1;
       } else if (payload.name === 'trash') {
-        state.currentNotes = dataSort(state.deletedNotes, null, null);
+        state.currentNotes = filteredNoteData(state.deletedNotes, null, null);
         state.activeNoteIndex = -1;
       } else {
-        state.currentNotes = dataSort(state.basicNotes, payload.name, payload.sort);
+        state.currentNotes = filteredNoteData(state.basicNotes, payload.name, payload.sort);
       }
     },
     changeCurrentNoteDataSort: (state, { payload }) => {
       const targetName = payload.name === 'all' ? null : payload.name;
-      state.currentNotes = dataSort(state.basicNotes, targetName, payload.sort);
+      state.currentNotes = filteredNoteData(state.basicNotes, targetName, payload.sort);
     },
     changeActiveNoteIndex: (state, { payload }) => {
 
@@ -76,10 +76,7 @@ export const { addTempNote, modifyTempNote, selectFolder, changeCurrentNoteDataS
 
 export default note.reducer;
 
-export function dataSort(data: NoteList, targetFolder: string | null, sortType: string | null): NoteList[] {
-  
-  if (targetFolder) data = data.filter(({ included }) => included === targetFolder);
-
+export function noteDataSort(data: NoteList, sortType: string | null) {
   switch (sortType) {
     case 'create/desc':
       data.sort((a, b) => Number(a.createAt) - Number(b.createAt));
@@ -102,6 +99,13 @@ export function dataSort(data: NoteList, targetFolder: string | null, sortType: 
     default:
       data.sort((a, b) => Number(a.createAt) - Number(b.createAt));
   }
+}
+
+export function filteredNoteData(data: NoteList, targetFolder: string | null, sortType: string | null): NoteList[] {
+  
+  if (targetFolder) data = data.filter(({ included }) => included === targetFolder);
+
+  noteDataSort(data, sortType);
 
   if (sortType) {
     const pinnedNotes = data.filter(({ isPinned }) => isPinned);
