@@ -4,23 +4,34 @@ import { useAppSelector } from '../../app/hooks';
 import NoteItem from './NoteItem';
 import { Note } from '../../app/types/note';
 import usePathname from '../../hooks/usePathname';
+import { noteDataSort } from '../../app/actions/note';
 
 export default function NoteList() {
 
-  const [ targetName, targetPath ] = usePathname();
+  const [ targetName, targetPath, isInvaild ] = usePathname();
 
   const { view } = useAppSelector(({ ui }) => ui);
+  const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
   const { basicNotes, archiveNotes, deletedNotes } = useAppSelector(({ note }) => note);
   
   const [ currentNotes, setCurrentNotes ] = useState<Note[]>([]);
 
   useEffect(() => {
-    if (targetName === '') {
+    if (targetName === '' || isInvaild) {
       setCurrentNotes(targetPath === 'archive' ? archiveNotes : (targetPath === 'trash' ? deletedNotes : []));
     } else {
-      setCurrentNotes(targetName === 'all' ?  basicNotes : basicNotes.filter(({ included }) => included === targetName));
+      let targetNotes =  basicNotes;
+      if (targetName === 'all') { 
+        targetNotes = noteDataSort(basicNotes, `${defaultSort.type}/${defaultSort.sortedAt}`);
+      } else {
+        targetNotes = basicNotes.filter(({ included }) => included === targetName);
+        const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
+        const targetSort = folderList[targetFolderIndex].sort;
+        noteDataSort(targetNotes, `${targetSort.type}/${targetSort.sortedAt}`);
+      }
+      setCurrentNotes(targetNotes);
     }
-  }, [ targetName, targetPath, basicNotes, archiveNotes, deletedNotes ]);
+  }, [ targetName, targetPath, isInvaild, basicNotes, archiveNotes, deletedNotes, folderList, defaultSort ]);
 
   const pinnedNotes = currentNotes.filter(({ isPinned }) => isPinned);
   const filteredNotes = currentNotes.filter(({ isPinned }) => !isPinned);

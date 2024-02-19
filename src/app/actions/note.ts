@@ -34,29 +34,36 @@ const note = createSlice({
   reducers: {
     addTempNote: (state, { payload }) => {
       const { folder, time }: { folder: string, time: number } = payload;
+      saveTempData(state);
       const newNote:Note = {
         included: folder, title: '', createAt: time, updateAt: time, markdown: '', isPinned: false, isLocked: false
       }
       state.tempData = newNote;
       state.basicNotes.push(newNote);
-      state.activeNoteIndex = time;
+      state.activeNoteIndex = state.basicNotes.length - 1;
       // localStorage.setItem('basicNotes', JSON.stringify(state.basicNotes));
     },
     modifyTempNote: (state, { payload }) => {
       const { data, time }: { data: string, time: number } = payload;
-      if (state.tempData) {
+      if (state.tempData !== null) {
         state.tempData.markdown = data;
         state.tempData.title = extractTitle(data);
         state.tempData.updateAt = time;
       }
+      state.basicNotes[state.activeNoteIndex].markdown = data;
+      state.basicNotes[state.activeNoteIndex].title = extractTitle(data);
+      state.basicNotes[state.activeNoteIndex].updateAt = time;
     },
     selectFolder: (state, { payload }) => {
       const { name }: { name: string } = payload;
-      if (name === 'archive' || name === 'trash') state.activeNoteIndex = -1;
+      if (name === 'archive' || name === 'trash') {
+        saveTempData(state);
+        state.activeNoteIndex = -1;
+      }
     },
     changeCurrentNoteDataSort: (state, { payload }) => {
       const { sort }: { sort: string } = payload;
-      noteDataSort(state.basicNotes, sort);
+      state.basicNotes = noteDataSort(state.basicNotes, sort);
     },
     changeActiveNoteIndex: (state, { payload }) => {
 
@@ -69,45 +76,42 @@ export const { addTempNote, modifyTempNote, selectFolder, changeCurrentNoteDataS
 export default note.reducer;
 
 export const noteDataSort = (data: NoteList, sortType: string | null) => {
+  const newData = [...data];
   switch (sortType) {
     case 'create/desc':
-      data.sort((a, b) => Number(a.createAt) - Number(b.createAt));
+      newData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
       break;
     case 'create/asc':
-      data.sort((a, b) => Number(b.createAt) - Number(a.createAt));
+      newData.sort((a, b) => Number(b.createAt) - Number(a.createAt));
       break;
     case 'update/desc':
-      data.sort((a, b) => Number(a.updateAt) - Number(b.updateAt));
+      newData.sort((a, b) => Number(a.updateAt) - Number(b.updateAt));
       break;
     case 'update/asc':
-      data.sort((a, b) => Number(b.updateAt) - Number(a.updateAt));
+      newData.sort((a, b) => Number(b.updateAt) - Number(a.updateAt));
       break;
     case 'title/desc':
-      data.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
+      newData.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
       break;
     case 'title/asc':
-      data.sort((a, b) => b.title.charCodeAt(0) - a.title.charCodeAt(0));
+      newData.sort((a, b) => b.title.charCodeAt(0) - a.title.charCodeAt(0));
       break;
     default:
-      data.sort((a, b) => Number(a.createAt) - Number(b.createAt));
+      newData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
   }
+  return newData;
 }
-
-export const filteredNoteData = (data: NoteList, targetFolder: string | null, sortType: string | null): NoteList[] => {
-  
-  if (targetFolder) data = data.filter(({ included }) => included === targetFolder);
-
-  noteDataSort(data, sortType);
-
-  if (sortType) {
-    const pinnedNotes = data.filter(({ isPinned }) => isPinned);
-    const basicNotes = data.filter(({ isPinned }) => !isPinned);
-    return [ pinnedNotes, basicNotes ];
-  } 
-  else return [ [], data ];
-};
 
 export const extractTitle = (str:string) => {
   const match = (/# (.*?)\n/g).exec(str);
   return match && match[1] ? match[1] : '';
+}
+
+const saveTempData = (state: NoteState) => {
+  if (state.tempData !== null) {
+    const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
+    if (targetIndex >= 0) state.basicNotes[targetIndex] = state.tempData;
+    else state.basicNotes.push(state.tempData);
+  }  
+  state.tempData = null;
 }
