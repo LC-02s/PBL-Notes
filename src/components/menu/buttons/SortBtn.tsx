@@ -1,23 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { MenuBtn } from './Button.style'
 import styled from 'styled-components'
-import { useLocation } from 'react-router-dom'
 import { SortType, SortedAt } from '../../../app/types/folder';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { changeSortTypeOfFolder } from '../../../app/actions/folder';
 import useClickOutOfElement from '../../../hooks/useElementClickOutOfArea';
 import useDelay from '../../../hooks/useDelay';
 import { changeCurrentNoteDataSort } from '../../../app/actions/note';
+import usePathname from '../../../hooks/usePathname';
 
 export default function SortBtn() {
 
-  const { pathname, state } = useLocation();
-  const targetPath = state ?? pathname.split('/')[1];
-  const isDisabled = targetPath === 'archive' || targetPath === 'trash';
-  const targetName = isDisabled ? '' : decodeURI(pathname.split('/')[2] ?? 'all');
-
   const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
   const dispatch = useAppDispatch();
+
+  const [ , targetName, isInvaild ] = usePathname();
+  const isDisabled = isInvaild || (targetName !== 'all' && !folderList.some(({ name }) => targetName === name));
   
   const [ isClicked, setIsClicked ] = useState(false);
   const [ inputRadioType, setInputRadioType ] = useState<SortType | string>('create');

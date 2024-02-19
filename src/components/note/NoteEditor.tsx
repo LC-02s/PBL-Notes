@@ -1,4 +1,4 @@
-import React, { useId } from 'react'
+import React from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
@@ -11,8 +11,7 @@ export default function NoteEditor() {
   const isDisabled = !((activeNoteIndex ?? -1) >= 0);
   const dispatch = useAppDispatch();
 
-  const id = useId();
-  console.log(id);
+  console.log(tempData);
 
   return (
     <EditorWrapper $isDisable={isDisabled}>

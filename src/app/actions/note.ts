@@ -1,14 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Note, NoteList } from "../types/note";
 
-const initialBasicNote = JSON.parse(localStorage.getItem('basicNotes') ?? '[]');
+// const initialBasicNote = JSON.parse(localStorage.getItem('basicNotes') ?? '[]');
 const initialArchiveNote = JSON.parse(localStorage.getItem('archiveNotes') ?? '[]');
 const initialDeletedNote = JSON.parse(localStorage.getItem('deletedNotes') ?? '[]');
 
+const temp = [
+  {createAt: 1708310444782, included: "fasdf", isLocked: false, isPinned: false, markdown: "# asdf\n\nasdf", title: "asdf", updateAt: 1708310449173},
+  {createAt: 1708310603468, included: "qwefasd", isLocked: false, isPinned: true, markdown: "# asdfdf\n\nasdfsadf", title: "asdfdf", updateAt: 1708310607067},
+  {createAt: 1708310640750, included: "fasdf", isLocked: false, isPinned: true, markdown: "# asdfasdf\n\nasdfasdfasdfsadf", title: "asdfasdf", updateAt: 1708310645586},
+  {createAt: 1708310675862, included: "fasdf", isLocked: false, isPinned: false, markdown: "# 12312\n\nasdfasd", title: "12312", updateAt: 1708310678827},
+]
+
 interface NoteState {
-  noteStatus: 'temp' | 'modify' | 'done',
   activeNoteIndex: number | -1,
-  currentNotes: NoteList[],
   tempData: Note | null,
   basicNotes: NoteList,
   archiveNotes: NoteList,
@@ -16,11 +21,9 @@ interface NoteState {
 }
 
 const initialState: NoteState = {
-  noteStatus: 'done',
   activeNoteIndex: -1,
-  currentNotes: [ [], [] ],
   tempData: null,
-  basicNotes: initialBasicNote,
+  basicNotes: temp,
   archiveNotes: initialArchiveNote,
   deletedNotes: initialDeletedNote,
 }
@@ -35,9 +38,8 @@ const note = createSlice({
         included: folder, title: '', createAt: time, updateAt: time, markdown: '', isPinned: false, isLocked: false
       }
       state.tempData = newNote;
-      state.currentNotes[1].push(newNote);
+      state.basicNotes.push(newNote);
       state.activeNoteIndex = time;
-      state.noteStatus = 'temp';
       // localStorage.setItem('basicNotes', JSON.stringify(state.basicNotes));
     },
     modifyTempNote: (state, { payload }) => {
@@ -49,26 +51,12 @@ const note = createSlice({
       }
     },
     selectFolder: (state, { payload }) => {
-      const { name, sort }: { name: string, sort: string } = payload;
-
-      if (state.noteStatus === 'temp') { state.tempData = null; state.noteStatus = 'done'; state.activeNoteIndex = -1; }
-      
-      if (name === 'all') {
-        state.currentNotes = filteredNoteData(state.basicNotes, null, sort);
-      } else if (name === 'archive') {
-        state.currentNotes = filteredNoteData(state.archiveNotes, null, null);
-        state.activeNoteIndex = -1;
-      } else if (name === 'trash') {
-        state.currentNotes = filteredNoteData(state.deletedNotes, null, null);
-        state.activeNoteIndex = -1;
-      } else {
-        state.currentNotes = filteredNoteData(state.basicNotes, name, sort);
-      }
+      const { name }: { name: string } = payload;
+      if (name === 'archive' || name === 'trash') state.activeNoteIndex = -1;
     },
     changeCurrentNoteDataSort: (state, { payload }) => {
-      const { name, sort }: { name: string, sort: string } = payload;
-      const targetName = name === 'all' ? null : name;
-      state.currentNotes = filteredNoteData(state.basicNotes, targetName, sort);
+      const { sort }: { sort: string } = payload;
+      noteDataSort(state.basicNotes, sort);
     },
     changeActiveNoteIndex: (state, { payload }) => {
 
