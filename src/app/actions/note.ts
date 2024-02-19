@@ -30,7 +30,7 @@ const note = createSlice({
   initialState,
   reducers: {
     addTempNote: (state, { payload }) => {
-      const { folder, time } = payload;
+      const { folder, time }: { folder: string, time: number } = payload;
       const newNote:Note = {
         included: folder, title: '', createAt: time, updateAt: time, markdown: '', isPinned: false, isLocked: false
       }
@@ -41,30 +41,34 @@ const note = createSlice({
       // localStorage.setItem('basicNotes', JSON.stringify(state.basicNotes));
     },
     modifyTempNote: (state, { payload }) => {
+      const { data, time }: { data: string, time: number } = payload;
       if (state.tempData) {
-        state.tempData.markdown = payload.data;
-        state.tempData.title = extractTitle(payload.data);
-        state.tempData.updateAt = payload.time;
+        state.tempData.markdown = data;
+        state.tempData.title = extractTitle(data);
+        state.tempData.updateAt = time;
       }
     },
     selectFolder: (state, { payload }) => {
-      if (state.noteStatus === 'temp') { state.tempData = null; state.noteStatus = 'done' }
+      const { name, sort }: { name: string, sort: string } = payload;
+
+      if (state.noteStatus === 'temp') { state.tempData = null; state.noteStatus = 'done'; state.activeNoteIndex = -1; }
       
-      if (payload.name === 'all') {
-        state.currentNotes = filteredNoteData(state.basicNotes, null, payload.sort);
-      } else if (payload.name === 'archive') {
+      if (name === 'all') {
+        state.currentNotes = filteredNoteData(state.basicNotes, null, sort);
+      } else if (name === 'archive') {
         state.currentNotes = filteredNoteData(state.archiveNotes, null, null);
         state.activeNoteIndex = -1;
-      } else if (payload.name === 'trash') {
+      } else if (name === 'trash') {
         state.currentNotes = filteredNoteData(state.deletedNotes, null, null);
         state.activeNoteIndex = -1;
       } else {
-        state.currentNotes = filteredNoteData(state.basicNotes, payload.name, payload.sort);
+        state.currentNotes = filteredNoteData(state.basicNotes, name, sort);
       }
     },
     changeCurrentNoteDataSort: (state, { payload }) => {
-      const targetName = payload.name === 'all' ? null : payload.name;
-      state.currentNotes = filteredNoteData(state.basicNotes, targetName, payload.sort);
+      const { name, sort }: { name: string, sort: string } = payload;
+      const targetName = name === 'all' ? null : name;
+      state.currentNotes = filteredNoteData(state.basicNotes, targetName, sort);
     },
     changeActiveNoteIndex: (state, { payload }) => {
 
@@ -76,7 +80,7 @@ export const { addTempNote, modifyTempNote, selectFolder, changeCurrentNoteDataS
 
 export default note.reducer;
 
-export function noteDataSort(data: NoteList, sortType: string | null) {
+export const noteDataSort = (data: NoteList, sortType: string | null) => {
   switch (sortType) {
     case 'create/desc':
       data.sort((a, b) => Number(a.createAt) - Number(b.createAt));
@@ -85,10 +89,10 @@ export function noteDataSort(data: NoteList, sortType: string | null) {
       data.sort((a, b) => Number(b.createAt) - Number(a.createAt));
       break;
     case 'update/desc':
-      data.sort((a, b) => Number(new Date(a.updateAt).getTime()) - Number(new Date(b.updateAt).getTime()));
+      data.sort((a, b) => Number(a.updateAt) - Number(b.updateAt));
       break;
     case 'update/asc':
-      data.sort((a, b) => Number(new Date(b.updateAt).getTime()) - Number(new Date(a.updateAt).getTime()));
+      data.sort((a, b) => Number(b.updateAt) - Number(a.updateAt));
       break;
     case 'title/desc':
       data.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
@@ -101,7 +105,7 @@ export function noteDataSort(data: NoteList, sortType: string | null) {
   }
 }
 
-export function filteredNoteData(data: NoteList, targetFolder: string | null, sortType: string | null): NoteList[] {
+export const filteredNoteData = (data: NoteList, targetFolder: string | null, sortType: string | null): NoteList[] => {
   
   if (targetFolder) data = data.filter(({ included }) => included === targetFolder);
 
@@ -115,7 +119,7 @@ export function filteredNoteData(data: NoteList, targetFolder: string | null, so
   else return [ [], data ];
 };
 
-export function extractTitle(str:string) {
+export const extractTitle = (str:string) => {
   const match = (/# (.*?)\n/g).exec(str);
   return match && match[1] ? match[1] : '';
 }

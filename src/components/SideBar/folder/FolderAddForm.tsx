@@ -146,6 +146,9 @@ const FormFieldset = styled.fieldset<{ $error: boolean, $color?: string }>`
     gap: 8px;
     p {
       position: relative;
+      display: block;
+      width: auto;
+      height: auto;
     }
     p::before {
       content: '';

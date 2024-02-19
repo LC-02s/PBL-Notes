@@ -77,7 +77,7 @@ const FolderListContainer = styled.div`
   }
 `;
 
-const FolderListItem = styled.button<{ $color: string }>`
+const FolderListItem = styled.li<{ $color: string }>`
   display: block;
   width: 100%;
   height: auto;

@@ -6,8 +6,7 @@ import styled from 'styled-components';
 
 export default function NoteView() {
 
-  const { tempData, activeNoteIndex } = useAppSelector(({ note }) => note);
-  const isActive = !((activeNoteIndex ?? -1) >= 0);
+  const { tempData } = useAppSelector(({ note }) => note);
   const { view } = useAppSelector(({ ui }) => ui);
 
   return (
@@ -18,8 +17,8 @@ export default function NoteView() {
           <NoteList />
           { tempData && <NoteEditor /> } 
         </React.Fragment> :
-      isActive ? 
-        <NoteList /> : <NoteEditor />
+      tempData ? 
+        <NoteEditor /> : <NoteList />
       }
     </NoteViewContainer>
   )
