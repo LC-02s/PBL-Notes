@@ -7,7 +7,7 @@ export default function useDelay(isVisible: boolean) {
 
   useEffect(() => {
     if (isVisible) {
-      if (delayTimer.current) window.clearTimeout(delayTimer.current);
+      if (delayTimer.current) clearTimeout(delayTimer.current);
       delayTimer.current = window.setTimeout(()=> setVisibleDelay(true), 0);
     }
     return () => {

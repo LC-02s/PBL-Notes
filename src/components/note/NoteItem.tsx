@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { Note } from '../../app/types/note';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
+import 'moment/locale/ko';
 import { THEME_COLOR } from '../../App.theme';
 import { useAppSelector } from '../../app/hooks';
 
@@ -51,7 +52,7 @@ const NoteItemContents = styled.li<{ $active: boolean }>`
   `}
   transition: background 0.3s, border 0.3s;
 
-  & > p {display: flex; justify-content: flex-start; align-items: center; gap: 8px; margin: 4px 0px 0px; width: 100%; height: auto; font-size: 0px;}
+  & > p {display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: center; gap: 4px 8px; margin: 4px 0px 0px; width: 100%; height: auto; font-size: 0px;}
 `;
 
 const NoteItemTitle = styled.h3<{ $isPinned: boolean }>`

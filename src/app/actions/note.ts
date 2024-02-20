@@ -46,13 +46,10 @@ const note = createSlice({
     modifyTempNote: (state, { payload }) => {
       const { data, time }: { data: string, time: number } = payload;
       if (state.tempData !== null) {
-        state.tempData.markdown = data;
-        state.tempData.title = extractTitle(data);
-        state.tempData.updateAt = time;
+        const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
+        state.tempData = modifyingNote;
+        state.basicNotes[state.activeNoteIndex] = modifyingNote;
       }
-      state.basicNotes[state.activeNoteIndex].markdown = data;
-      state.basicNotes[state.activeNoteIndex].title = extractTitle(data);
-      state.basicNotes[state.activeNoteIndex].updateAt = time;
     },
     selectFolder: (state, { payload }) => {
       const { name }: { name: string } = payload;
@@ -91,10 +88,10 @@ export const noteDataSort = (data: NoteList, sortType: string | null) => {
       newData.sort((a, b) => Number(b.updateAt) - Number(a.updateAt));
       break;
     case 'title/desc':
-      newData.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
+      newData.sort((a, b) => a.title < b.title ? -1 : (a.title > b.title ? 1 : 0));
       break;
     case 'title/asc':
-      newData.sort((a, b) => b.title.charCodeAt(0) - a.title.charCodeAt(0));
+      newData.sort((a, b) => a.title < b.title ? 1 : (a.title > b.title ? -1 : 0));
       break;
     default:
       newData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
@@ -108,10 +105,15 @@ export const extractTitle = (str:string) => {
 }
 
 const saveTempData = (state: NoteState) => {
-  if (state.tempData !== null) {
+  if (state.tempData !== null && extractTitle(state.tempData.markdown) !== '') 
+  {
     const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
     if (targetIndex >= 0) state.basicNotes[targetIndex] = state.tempData;
     else state.basicNotes.push(state.tempData);
-  }  
+  } 
+  else if (state.tempData !== null && extractTitle(state.tempData.markdown) === '') 
+  {
+    state.basicNotes = state.basicNotes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
+  }
   state.tempData = null;
 }

@@ -98,6 +98,7 @@ const SortBtnContainer = styled.div`
 
 const SortBtnTool = styled.div<{ $isVisible: boolean }>`
   position: absolute;
+  z-index: 99999;
   right: -160%;
   bottom: -46px;
   display: inline-flex;
