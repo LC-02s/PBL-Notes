@@ -15,10 +15,11 @@ export default function NoteView() {
       view === 'list' ? 
         <React.Fragment>
           <NoteList />
-          { tempData && <NoteEditor /> } 
+          <NoteEditor />
         </React.Fragment> :
       tempData ? 
-        <NoteEditor /> : <NoteList />
+        <NoteEditor /> : 
+        <NoteList />
       }
     </NoteViewContainer>
   )

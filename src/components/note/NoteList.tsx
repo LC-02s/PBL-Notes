@@ -17,8 +17,8 @@ export default function NoteList() {
   const [ currentNotes, setCurrentNotes ] = useState<Note[]>([]);
 
   useEffect(() => {
-    if (targetName === '' || isInvaild) {
-      setCurrentNotes(targetPath === 'archive' ? archiveNotes : (targetPath === 'trash' ? deletedNotes : []));
+    if (targetName !== '' && isInvaild) {
+      setCurrentNotes(targetName === 'archive' ? archiveNotes : (targetName === 'trash' ? deletedNotes : []));
     } else {
       let targetNotes =  basicNotes;
       if (targetName === 'all') { 
@@ -46,7 +46,7 @@ export default function NoteList() {
           pinnedNotes.length > 0 && 
             <li>
               <h2>Pinned Notes ({ pinnedNotes.length })</h2>
-              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} />)) }</ul>
+              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetName={targetName} />)) }</ul>
             </li>
           }
           {
@@ -54,7 +54,7 @@ export default function NoteList() {
           filteredNotes.length > 0 && 
             <li>
               <h2>All Notes ({ filteredNotes.length })</h2>
-              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} />)) }</ul>
+              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetName={targetName} />)) }</ul>
             </li>
           }
         </React.Fragment> :

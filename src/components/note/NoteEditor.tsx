@@ -1,35 +1,46 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { modifyTempNote } from '../../app/actions/note';
+import { modifyTempNote, modifyTempNoteDone } from '../../app/actions/note';
 
 export default function NoteEditor() {
 
-  const { activeNoteIndex, tempData } = useAppSelector(({ note }) => note);
-  const isDisabled = !((activeNoteIndex ?? -1) >= 0);
+  const { tempData } = useAppSelector(({ note }) => note);
+  const isDisabled = (tempData?.isLocked ?? false) || !(tempData?.modifiable ?? true);
+  const prevData = useRef<string | null>(null);
   const dispatch = useAppDispatch();
 
-  console.log(tempData);
+  if (tempData !== null) {
+    return (
+      <EditorWrapper $isDisable={isDisabled}>
+        <CKEditor
+          editor={ CustomEditor }
+          data={tempData?.markdown ?? ''}
+          onReady={(editor) => {
+            if (isDisabled) editor.enableReadOnlyMode(editor.id);
+            else editor.disableReadOnlyMode(editor.id);
+          }}
+          onChange={(event, editor) => {
+            dispatch(modifyTempNote(editor.getData()));
+          }}
+          onFocus={(event, editor) => {
+            prevData.current = tempData.markdown;
+          }}
+          onBlur={(event, editor) => {
+            const data = editor.getData();
+            if (data !== prevData.current) {
+              const time = Number(new Date().getTime());
+              dispatch(modifyTempNoteDone({ data, time }));
+            }
+            prevData.current = null;
+          }}
+        />
+      </EditorWrapper>
+    )
+  } else return <></>;
 
-  return (
-    <EditorWrapper $isDisable={isDisabled}>
-      <CKEditor
-        editor={ CustomEditor }
-        data={tempData?.markdown ?? ''}
-        onReady={(editor) => {
-          if (isDisabled) editor.enableReadOnlyMode(editor.id);
-          else editor.disableReadOnlyMode(editor.id);
-        }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          const time = Number(new Date().getTime());
-          dispatch(modifyTempNote({ data, time }));
-        }}
-      />
-    </EditorWrapper>
-  )
 }
 
 const EditorWrapper = styled.div<{ $isDisable: boolean }>`

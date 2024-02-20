@@ -1,20 +1,19 @@
 import React from 'react'
 import { MenuBtn } from './Button.style'
-import { useLocation } from 'react-router-dom'
 import { useAppDispatch } from '../../../app/hooks';
 import { addTempNote } from '../../../app/actions/note';
+import usePathname from '../../../hooks/usePathname';
 
 export default function WriteBtn() {
 
-  const { pathname, state } = useLocation();
-  const targetName = pathname.split('/')[2];
-  const isDisabled = typeof targetName === 'string' ? false : true;
+  const [ , targetName, isInvalid ] = usePathname();
+  const isDisabled = targetName === 'all' || isInvalid;
 
   const dispatch = useAppDispatch();
 
   const handleBtnClick = () => {
     const time = Number(new Date().getTime());
-    dispatch(addTempNote({ time, folder: state ?? targetName }));
+    dispatch(addTempNote({ time, folder: targetName }));
   }
 
   return (

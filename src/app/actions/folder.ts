@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Folder, FolderList, FolderSortType } from "../types/folder";
 
-interface FolderState { folderList: FolderList, defaultSort: FolderSortType }
+interface FolderState { folderList: FolderList, defaultSort: FolderSortType, activeFolderId: number }
 
 const initialData = JSON.parse(localStorage.getItem('folder') ?? '[]');
 const initialSort = JSON.parse(localStorage.getItem('defaultSort') ?? '{"type":"create","sortedAt":"desc"}');
@@ -9,6 +9,7 @@ const initialSort = JSON.parse(localStorage.getItem('defaultSort') ?? '{"type":"
 const initialState: FolderState = {
   folderList: initialData,
   defaultSort: initialSort,
+  activeFolderId: -1,
 }
 
 const folder = createSlice({

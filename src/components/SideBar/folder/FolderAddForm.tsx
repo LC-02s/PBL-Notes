@@ -25,7 +25,7 @@ export default function FolderAddForm() {
     if (title) {
       const time = Number(new Date().getTime());
       dispatch(addFolder({ name: title, time, color: currentColorChip }));
-      dispatch(toggleModal(undefined));
+      dispatch(toggleModal(null));
     }
   }
 
@@ -61,7 +61,7 @@ export default function FolderAddForm() {
         { errors.title && <FormErrorMessage>{ String(errors.title?.message) }</FormErrorMessage> }
       </FormFieldset>
       <FormBtnWrap>
-        <button type='button' onClick={() => dispatch(toggleModal(undefined))}>취소</button>
+        <button type='button' onClick={() => dispatch(toggleModal(null))}>취소</button>
         <button type='submit'>확인</button>
       </FormBtnWrap>
     </form>

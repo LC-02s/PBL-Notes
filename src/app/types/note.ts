@@ -6,7 +6,8 @@ export type Note = {
   createAt: number,
   updateAt: number, 
   isPinned: boolean, 
-  isLocked: boolean 
+  isLocked: boolean,
+  modifiable: boolean,
 };
 
 export type NoteList = Note[];

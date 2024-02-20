@@ -6,14 +6,14 @@ const initialArchiveNote = JSON.parse(localStorage.getItem('archiveNotes') ?? '[
 const initialDeletedNote = JSON.parse(localStorage.getItem('deletedNotes') ?? '[]');
 
 const temp = [
-  {createAt: 1708310444782, included: "fasdf", isLocked: false, isPinned: false, markdown: "# asdf\n\nasdf", title: "asdf", updateAt: 1708310449173},
-  {createAt: 1708310603468, included: "qwefasd", isLocked: false, isPinned: true, markdown: "# asdfdf\n\nasdfsadf", title: "asdfdf", updateAt: 1708310607067},
-  {createAt: 1708310640750, included: "fasdf", isLocked: false, isPinned: true, markdown: "# asdfasdf\n\nasdfasdfasdfsadf", title: "asdfasdf", updateAt: 1708310645586},
-  {createAt: 1708310675862, included: "fasdf", isLocked: false, isPinned: false, markdown: "# 12312\n\nasdfasd", title: "12312", updateAt: 1708310678827},
+  {createAt: 1708310444782, included: "fasdf", isLocked: false, isPinned: false, markdown: "# asdf\n\nasdf", modifiable: true, title: "asdf", updateAt: 1708310449173},
+  {createAt: 1708310603468, included: "qwefasd", isLocked: false, isPinned: true, markdown: "# asdfdf\n\nasdfsadf", modifiable: true, title: "asdfdf", updateAt: 1708310607067},
+  {createAt: 1708310640750, included: "fasdf", isLocked: false, isPinned: true, markdown: "# asdfasdf\n\nasdfasdfasdfsadf", modifiable: true, title: "asdfasdf", updateAt: 1708310645586},
+  {createAt: 1708310675862, included: "fasdf", isLocked: false, isPinned: false, markdown: "# 12312\n\nasdfasd", modifiable: true, title: "12312", updateAt: 1708310678827},
 ]
 
 interface NoteState {
-  activeNoteIndex: number | -1,
+  activeNoteId: number,
   tempData: Note | null,
   basicNotes: NoteList,
   archiveNotes: NoteList,
@@ -21,7 +21,7 @@ interface NoteState {
 }
 
 const initialState: NoteState = {
-  activeNoteIndex: -1,
+  activeNoteId: -1,
   tempData: null,
   basicNotes: temp,
   archiveNotes: initialArchiveNote,
@@ -36,39 +36,71 @@ const note = createSlice({
       const { folder, time }: { folder: string, time: number } = payload;
       saveTempData(state);
       const newNote:Note = {
-        included: folder, title: '', createAt: time, updateAt: time, markdown: '', isPinned: false, isLocked: false
+        included: folder, title: '', createAt: time, updateAt: time, markdown: '', isPinned: false, isLocked: false, modifiable: true
       }
       state.tempData = newNote;
       state.basicNotes.push(newNote);
-      state.activeNoteIndex = state.basicNotes.length - 1;
-      // localStorage.setItem('basicNotes', JSON.stringify(state.basicNotes));
+      state.activeNoteId = time;
     },
-    modifyTempNote: (state, { payload }) => {
+    modifyTempNote: (state, { payload }: { payload: string }) => {
+      if (state.tempData !== null) {
+        const modifyingNote = { ...state.tempData, markdown: payload, title: extractTitle(payload) };
+        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.activeNoteId);
+        state.tempData = modifyingNote;
+        state.basicNotes[targetIndex] = modifyingNote;
+      }
+    },
+    modifyTempNoteDone: (state, { payload }) => {
       const { data, time }: { data: string, time: number } = payload;
       if (state.tempData !== null) {
         const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
+        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.activeNoteId);
         state.tempData = modifyingNote;
-        state.basicNotes[state.activeNoteIndex] = modifyingNote;
+        state.basicNotes[targetIndex] = modifyingNote;
+      }
+    },
+    deleteNote: (state, action) => {
+      if (state.tempData !== null) {
+        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.activeNoteId);
+        const targetNote = state.basicNotes[targetIndex];
+        targetNote.modifiable = false;
+        state.basicNotes = state.basicNotes.filter((_, idx) => idx !== targetIndex);
+        state.deletedNotes.push(targetNote);
       }
     },
     selectFolder: (state, { payload }) => {
       const { name }: { name: string } = payload;
-      if (name === 'archive' || name === 'trash') {
-        saveTempData(state);
-        state.activeNoteIndex = -1;
-      }
+      if (name === 'archive' || name === 'trash') saveTempData(state);
     },
     changeCurrentNoteDataSort: (state, { payload }) => {
       const { sort }: { sort: string } = payload;
       state.basicNotes = noteDataSort(state.basicNotes, sort);
     },
-    changeActiveNoteIndex: (state, { payload }) => {
-
+    changeActiveNoteId: (state, { payload }: { payload: number }) => {
+      saveTempData(state);
+      const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === payload);
+      state.tempData = state.basicNotes[targetIndex];
+      state.activeNoteId = payload;
     },
+    changePinnedState: (state, action) => {
+      if (state.tempData !== null) {
+        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
+        state.tempData.isPinned = !state.tempData.isPinned;
+        state.basicNotes[targetIndex].isPinned = state.tempData.isPinned;
+      }
+    },
+    changeLockedState: (state, action) => {
+      if (state.tempData !== null) {
+        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
+        state.tempData.isLocked = !state.tempData.isLocked;
+        state.basicNotes[targetIndex].isLocked = state.tempData.isLocked;
+      }
+    },
+    clickedViewBtnBack: (state, action) => { saveTempData(state); },
   }
 });
 
-export const { addTempNote, modifyTempNote, selectFolder, changeCurrentNoteDataSort, changeActiveNoteIndex } = note.actions;
+export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, selectFolder, changeCurrentNoteDataSort, changeActiveNoteId, changePinnedState, changeLockedState, clickedViewBtnBack } = note.actions;
 
 export default note.reducer;
 
@@ -105,15 +137,14 @@ export const extractTitle = (str:string) => {
 }
 
 const saveTempData = (state: NoteState) => {
-  if (state.tempData !== null && extractTitle(state.tempData.markdown) !== '') 
-  {
-    const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
-    if (targetIndex >= 0) state.basicNotes[targetIndex] = state.tempData;
-    else state.basicNotes.push(state.tempData);
-  } 
-  else if (state.tempData !== null && extractTitle(state.tempData.markdown) === '') 
-  {
-    state.basicNotes = state.basicNotes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
+  if (state.tempData !== null && state.tempData.modifiable) {
+    if (extractTitle(state.tempData.markdown) === '') {
+      state.basicNotes = state.basicNotes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
+    } else {
+      const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
+      state.basicNotes[targetIndex] = state.tempData;
+    }
   }
   state.tempData = null;
+  state.activeNoteId = -1;
 }
