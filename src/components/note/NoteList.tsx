@@ -8,33 +8,32 @@ import { noteDataSort } from '../../app/actions/note';
 
 export default function NoteList() {
 
-  const [ targetName, targetPath, isInvaild ] = usePathname();
+  const [ targetPath, targetName, isInvaild ] = usePathname();
 
   const { view } = useAppSelector(({ ui }) => ui);
   const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
-  const { basicNotes, archiveNotes, deletedNotes } = useAppSelector(({ note }) => note);
+  const { notes } = useAppSelector(({ note }) => note);
   
   const [ currentNotes, setCurrentNotes ] = useState<Note[]>([]);
 
   useEffect(() => {
-    if (targetName !== '' && isInvaild) {
-      setCurrentNotes(targetName === 'archive' ? archiveNotes : (targetName === 'trash' ? deletedNotes : []));
+    if (isInvaild) {
+      setCurrentNotes(notes.filter(({ modifiable }) => !modifiable));
     } else {
-      let targetNotes =  basicNotes;
-      if (targetName === 'all') { 
-        targetNotes = noteDataSort(basicNotes, `${defaultSort.type}/${defaultSort.sortedAt}`);
+      let targetNotes;
+      if (targetPath === 'all') { 
+        targetNotes = noteDataSort(notes.filter(({ modifiable }) => modifiable), `${defaultSort.type}/${defaultSort.sortedAt}`);
       } else {
-        targetNotes = basicNotes.filter(({ included }) => included === targetName);
         const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
-        const targetSort = folderList[targetFolderIndex].sort;
-        noteDataSort(targetNotes, `${targetSort.type}/${targetSort.sortedAt}`);
+        const targetSort = folderList[targetFolderIndex]?.sort ?? { type: 'create', sortedAt: 'desc' };
+        targetNotes = noteDataSort(notes.filter(({ included, modifiable }) => included === targetName && modifiable), `${targetSort.type}/${targetSort.sortedAt}`);
       }
       setCurrentNotes(targetNotes);
     }
-  }, [ targetName, targetPath, isInvaild, basicNotes, archiveNotes, deletedNotes, folderList, defaultSort ]);
+  }, [ targetPath, targetName, isInvaild, notes, folderList, defaultSort ]);
 
-  const pinnedNotes = currentNotes.filter(({ isPinned }) => isPinned);
-  const filteredNotes = currentNotes.filter(({ isPinned }) => !isPinned);
+  const pinnedNotes = isInvaild ? [] : currentNotes.filter(({ isPinned }) => isPinned);
+  const filteredNotes = isInvaild ? currentNotes : currentNotes.filter(({ isPinned }) => !isPinned);
 
   return (
     <NoteListContainer $viewType={view === 'list'}>
@@ -46,7 +45,7 @@ export default function NoteList() {
           pinnedNotes.length > 0 && 
             <li>
               <h2>Pinned Notes ({ pinnedNotes.length })</h2>
-              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetName={targetName} />)) }</ul>
+              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetPath={targetPath} />)) }</ul>
             </li>
           }
           {
@@ -54,7 +53,7 @@ export default function NoteList() {
           filteredNotes.length > 0 && 
             <li>
               <h2>All Notes ({ filteredNotes.length })</h2>
-              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetName={targetName} />)) }</ul>
+              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetPath={targetPath} />)) }</ul>
             </li>
           }
         </React.Fragment> :

@@ -4,9 +4,9 @@ export default function usePathname() {
 
   const { pathname, state } = useLocation();
 
-  const targetPath = state ?? pathname.split('/')[1];
-  const isInvalid = targetPath === 'archive' || targetPath === 'trash';
-  const targetName = isInvalid ? '' : decodeURI(pathname.split('/')[2] ?? 'all');
+  const targetPath = state ?? pathname.split('/')[1] ?? 'all';
+  const isInvalid = targetPath === 'trash';
+  const targetName = targetPath === 'folder' ? decodeURI(pathname.split('/')[2]) : '';
 
   return [ targetPath, targetName, isInvalid ];
 }

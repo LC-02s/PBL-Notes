@@ -24,7 +24,7 @@ const folder = createSlice({
       localStorage.setItem('folder', JSON.stringify(state.folderList));
     },
     changeSortTypeOfFolder: (state, { payload }) => {
-      if (payload.name === 'all') {
+      if (payload.name === '') {
         state.defaultSort = payload.sort;
         localStorage.setItem('defaultSort', JSON.stringify(state.defaultSort));
       } else {

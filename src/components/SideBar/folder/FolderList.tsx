@@ -7,22 +7,12 @@ import { selectFolder } from '../../../app/actions/note';
 
 export default function FolderList() {
 
-  const { basicNotes, archiveNotes, deletedNotes } = useAppSelector(({ note }) => note);
-  const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
+  const { notes } = useAppSelector(({ note }) => note);
+  const { folderList } = useAppSelector(({ folder }) => folder);
 
   const dispatch = useAppDispatch();
 
-  const handleNavLinkClick = (name: string) => { 
-    const sort = name === 'all' ? `${defaultSort.type}/${defaultSort.sortedAt}` : null;
-    dispatch(selectFolder({ name, sort }));
-  }
-  const handleFolderNavLinkClick = (pathname: string) => {
-    const targetFolderIndex = folderList.findIndex(({ name }) => pathname === name);
-    if (targetFolderIndex >= 0) {
-      const { type, sortedAt } = folderList[targetFolderIndex].sort;
-      dispatch(selectFolder({ name: pathname, sort: `${type}/${sortedAt}` }));
-    }
-  }
+  const handleNavLinkClick = (name: string) => { dispatch(selectFolder(name)); }
 
   return (
     <FolderListContainer>
@@ -30,26 +20,21 @@ export default function FolderList() {
       <ul>
         <FolderListIconItem $type='' $color='none'>
           <NavLink to='/' state='all' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick('all')}>
-            <span>모든 노트</span><span>{ basicNotes.length }</span>
+            <span>모든 노트</span><span>{ notes.filter(({ modifiable }) => modifiable).length }</span>
           </NavLink>
         </FolderListIconItem>
         {
         folderList.map(({ id, name, color }) => (
           <FolderListItem key={id} $color={color === 'none' ? 'none' : THEME_COLOR[color]}>
-            <NavLink to={`/folder/${name}`} state={name} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleFolderNavLinkClick(name)}>
-              <span>{ name }</span><span>{ basicNotes.filter(({ included }) => included === name).length }</span>
+            <NavLink to={`/folder/${name}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick(name)}>
+              <span>{ name }</span><span>{ notes.filter(({ included, modifiable }) => included === name && modifiable).length }</span>
             </NavLink>
           </FolderListItem>
         ))
         }
-        <FolderListIconItem $type='archive' $color='none'>
-          <NavLink to='/archive' state='archive' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick('archive')}>
-            <span>보관된 항목</span><span>{ archiveNotes.length }</span>
-          </NavLink>
-        </FolderListIconItem>
         <FolderListIconItem $type='trash' $color='none'>
           <NavLink to='/trash' state='trash' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick('trash')}>
-            <span>최근 삭제한 항목</span><span>{ deletedNotes.length }</span>
+            <span>최근 삭제한 항목</span><span>{ notes.filter(({ modifiable }) => !modifiable).length }</span>
           </NavLink>
         </FolderListIconItem>
       </ul>

@@ -14,8 +14,7 @@ export default function SortBtn() {
   const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
   const dispatch = useAppDispatch();
 
-  const [ , targetName, isInvaild ] = usePathname();
-  const isDisabled = isInvaild || (targetName !== 'all' && !folderList.some(({ name }) => targetName === name));
+  const [ targetPath, targetName, isDisabled ] = usePathname();
   
   const [ isClicked, setIsClicked ] = useState(false);
   const [ inputRadioType, setInputRadioType ] = useState<SortType | string>('create');
@@ -26,7 +25,7 @@ export default function SortBtn() {
   const visibleDelay = useDelay(isClicked);
 
   useEffect(() => {
-    if (targetName === 'all') {
+    if (targetPath === 'all') {
       setInputRadioType(defaultSort.type);
       setInputRadioSorted(defaultSort.sortedAt);
     } else {
@@ -38,7 +37,7 @@ export default function SortBtn() {
         setInputRadioSorted(sortedAt);
       }
     }
-  }, [ targetName, folderList, defaultSort ]);
+  }, [ targetPath, targetName, folderList, defaultSort ]);
 
   useEffect(() => { if (isOutOfClicked) { setIsClicked(false); } }, [ isOutOfClicked, setIsClicked ]);
 

@@ -49,7 +49,7 @@ const EditorWrapper = styled.div<{ $isDisable: boolean }>`
   display: block;
   width: 100%;
   height: 100%;
-  padding: ${({ $isDisable }) => $isDisable ? '18px' : '16px 16px 20px 36px'};
+  padding: ${({ $isDisable }) => $isDisable ? '18px 32px' : '16px 16px 20px 36px'};
   font-size: 15px;
   font-weight: 400;
   color: ${({ theme }) => theme.grayScale700};

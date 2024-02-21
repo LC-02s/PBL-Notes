@@ -2,8 +2,6 @@ import { createSlice } from "@reduxjs/toolkit"
 import { Note, NoteList } from "../types/note";
 
 // const initialBasicNote = JSON.parse(localStorage.getItem('basicNotes') ?? '[]');
-const initialArchiveNote = JSON.parse(localStorage.getItem('archiveNotes') ?? '[]');
-const initialDeletedNote = JSON.parse(localStorage.getItem('deletedNotes') ?? '[]');
 
 const temp = [
   {createAt: 1708310444782, included: "fasdf", isLocked: false, isPinned: false, markdown: "# asdf\n\nasdf", modifiable: true, title: "asdf", updateAt: 1708310449173},
@@ -15,17 +13,13 @@ const temp = [
 interface NoteState {
   activeNoteId: number,
   tempData: Note | null,
-  basicNotes: NoteList,
-  archiveNotes: NoteList,
-  deletedNotes: NoteList,
+  notes: NoteList,
 }
 
 const initialState: NoteState = {
   activeNoteId: -1,
   tempData: null,
-  basicNotes: temp,
-  archiveNotes: initialArchiveNote,
-  deletedNotes: initialDeletedNote,
+  notes: temp,
 }
 
 const note = createSlice({
@@ -36,64 +30,67 @@ const note = createSlice({
       const { folder, time }: { folder: string, time: number } = payload;
       saveTempData(state);
       const newNote:Note = {
-        included: folder, title: '', createAt: time, updateAt: time, markdown: '', isPinned: false, isLocked: false, modifiable: true
+        included: folder, title: '', createAt: time, updateAt: time, markdown: '', 
+        isPinned: false, isLocked: false, modifiable: true,
       }
       state.tempData = newNote;
-      state.basicNotes.push(newNote);
+      state.notes.push(newNote);
       state.activeNoteId = time;
     },
     modifyTempNote: (state, { payload }: { payload: string }) => {
       if (state.tempData !== null) {
         const modifyingNote = { ...state.tempData, markdown: payload, title: extractTitle(payload) };
-        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.activeNoteId);
+        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
         state.tempData = modifyingNote;
-        state.basicNotes[targetIndex] = modifyingNote;
+        state.notes[targetIndex] = modifyingNote;
       }
     },
     modifyTempNoteDone: (state, { payload }) => {
       const { data, time }: { data: string, time: number } = payload;
       if (state.tempData !== null) {
         const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
-        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.activeNoteId);
+        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
         state.tempData = modifyingNote;
-        state.basicNotes[targetIndex] = modifyingNote;
+        state.notes[targetIndex] = modifyingNote;
       }
     },
     deleteNote: (state, action) => {
       if (state.tempData !== null) {
-        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.activeNoteId);
-        const targetNote = state.basicNotes[targetIndex];
-        targetNote.modifiable = false;
-        state.basicNotes = state.basicNotes.filter((_, idx) => idx !== targetIndex);
-        state.deletedNotes.push(targetNote);
+        if (state.tempData.modifiable) {
+          const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
+          state.notes[targetIndex].modifiable = false;
+        } else {
+          state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
+        }
+        state.tempData = null;
+        state.activeNoteId = -1;
       }
     },
     selectFolder: (state, { payload }) => {
-      const { name }: { name: string } = payload;
-      if (name === 'archive' || name === 'trash') saveTempData(state);
+      if (payload === 'trash') saveTempData(state);
     },
     changeCurrentNoteDataSort: (state, { payload }) => {
       const { sort }: { sort: string } = payload;
-      state.basicNotes = noteDataSort(state.basicNotes, sort);
+      state.notes = noteDataSort(state.notes, sort);
     },
     changeActiveNoteId: (state, { payload }: { payload: number }) => {
       saveTempData(state);
-      const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === payload);
-      state.tempData = state.basicNotes[targetIndex];
+      const targetIndex = state.notes.findIndex(({ createAt }) => createAt === payload);
+      state.tempData = state.notes[targetIndex];
       state.activeNoteId = payload;
     },
     changePinnedState: (state, action) => {
       if (state.tempData !== null) {
-        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
+        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
         state.tempData.isPinned = !state.tempData.isPinned;
-        state.basicNotes[targetIndex].isPinned = state.tempData.isPinned;
+        state.notes[targetIndex].isPinned = state.tempData.isPinned;
       }
     },
     changeLockedState: (state, action) => {
       if (state.tempData !== null) {
-        const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
+        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
         state.tempData.isLocked = !state.tempData.isLocked;
-        state.basicNotes[targetIndex].isLocked = state.tempData.isLocked;
+        state.notes[targetIndex].isLocked = state.tempData.isLocked;
       }
     },
     clickedViewBtnBack: (state, action) => { saveTempData(state); },
@@ -139,10 +136,10 @@ export const extractTitle = (str:string) => {
 const saveTempData = (state: NoteState) => {
   if (state.tempData !== null && state.tempData.modifiable) {
     if (extractTitle(state.tempData.markdown) === '') {
-      state.basicNotes = state.basicNotes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
+      state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
     } else {
-      const targetIndex = state.basicNotes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
-      state.basicNotes[targetIndex] = state.tempData;
+      const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
+      state.notes[targetIndex] = state.tempData;
     }
   }
   state.tempData = null;
