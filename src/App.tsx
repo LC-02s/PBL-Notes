@@ -29,41 +29,29 @@ export default function App() {
               <Route path='/' element={<NoteView />} />
               <Route path='/trash' element={<NoteView />} />
               <Route path='/folder/:name' element={<NoteView />} />
+              <Route path='/notfound' element={<NotFound />} />
               <Route path='/*' element={<NotFound />} />
             </Routes>
           </section>
         </ContentsWrapper>
-        <ModalWrapper><Modal /></ModalWrapper>
+        <Modal />
       </ThemeProvider>
     );
 }
 
 // styled components
 const ContentsWrapper = styled.article`
-    flex: 1;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 100%;
-    height: 100%;
-    border-left: 1px solid ${({ theme }) => theme.grayScale200};
-    background-color: ${({ theme }) => theme.grayScale000};
-    transition: background 0.3s, border 0.3s;
+  flex: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  border-left: 1px solid ${({ theme }) => theme.grayScale200};
+  background-color: ${({ theme }) => theme.grayScale000};
+  transition: background 0.3s, border 0.3s;
 
-    & > section:first-of-type {display: block; width: 100%; height: 48px;}
-    & > section:last-of-type {flex: 1; display: block; width: 100%; height: 100%; max-height: calc(100% - 48px);}
-`;
-
-const ModalWrapper = styled.div`
-    position: absolute;
-    z-index: 99999;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
+  & > section:first-of-type {display: block; width: 100%; height: 48px;}
+  & > section:last-of-type {flex: 1; display: block; width: 100%; height: 100%; max-height: calc(100% - 48px);}
 `;

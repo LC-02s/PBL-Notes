@@ -16,7 +16,13 @@ export default function FolderList() {
 
   return (
     <FolderListContainer>
-      <h1>My Notes</h1>
+      <FolderListTitle>
+        <span>My Notes</span>
+        {
+        folderList.length > 0 &&
+          <button type='button'>Edit</button>
+        }
+      </FolderListTitle>
       <ul>
         <FolderListIconItem $type='' $color='none'>
           <NavLink to='/' state='all' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick('all')}>
@@ -50,16 +56,6 @@ const FolderListContainer = styled.div`
   padding: 12px;
 
   & + & {margin: 12px 0px 0px;}
-  & > h1 {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin: 0px 0px 4px;
-    font-size: 13px;
-    font-weight: 500;
-    color: ${({ theme }) => theme.grayScale500};
-    white-space: nowrap;
-  }
 `;
 
 const FolderListItem = styled.li<{ $color: string }>`
@@ -72,6 +68,7 @@ const FolderListItem = styled.li<{ $color: string }>`
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
     width: 100%;
     height: auto;
     padding: 6px 8px;
@@ -86,13 +83,16 @@ const FolderListItem = styled.li<{ $color: string }>`
   & > a.active:focus {
     background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.32);
   }
-  & > a > span {display: inline-block;}
+  & > a > span {display: inline-block; white-space: nowrap;}
   & > a > span:first-of-type {
     position: relative;
+    width: 100%;
     padding-left: 18px;
     font-size: inherit;
     font-weight: 400;
     color: ${({ theme }) => theme.grayScale700};
+    text-overflow: ellipsis;
+    overflow: hidden;
 
     &::before {
       content: '';
@@ -144,4 +144,31 @@ const FolderListIconItem = styled(FolderListItem)<{ $type: string }>`
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
   }
+`;
+
+const FolderListTitle = styled.h1`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  height: auto;
+  margin: 0px 0px 8px;
+  & > span {
+    font-size: 14px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.grayScale500};
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+  & > button {
+    font-size: 14px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.grayScale500};
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+  & > button:hover,
+  & > button:focus {color: #3B84D8;}
 `;

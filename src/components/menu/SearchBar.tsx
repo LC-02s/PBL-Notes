@@ -36,7 +36,7 @@ const SearchContainer = styled.div`
   input {
     display: block;
     width: 100%;
-    max-width: 240px;
+    max-width: 280px;
     min-width: 200px;
     height: 32px;
     padding: 4px 4px 4px 32px;

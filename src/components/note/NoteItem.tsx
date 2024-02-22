@@ -7,9 +7,9 @@ import { THEME_COLOR } from '../../App.theme';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { changeActiveNoteId } from '../../app/actions/note';
 
-type MemoItemsProps = { data: Note, index: number, targetPath: string };
+type MemoItemsProps = { data: Note, targetPath: string };
 
-const NoteItem: React.FC<MemoItemsProps> = ({ data, index, targetPath }) => {
+const NoteItem: React.FC<MemoItemsProps> = ({ data, targetPath }) => {
 
   const { folderList } = useAppSelector(({ folder }) => folder);
   const { activeNoteId } = useAppSelector(({ note }) => note);

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
@@ -9,8 +9,10 @@ export default function NoteEditor() {
 
   const { tempData } = useAppSelector(({ note }) => note);
   const isDisabled = (tempData?.isLocked ?? false) || !(tempData?.modifiable ?? true);
-  const prevData = useRef<string | null>(null);
+  const prevData = useRef<string>('');
   const dispatch = useAppDispatch();
+  const [ currentEditorId, setCurrentEditorId ] = useState<string>('');
+  console.log(currentEditorId);
 
   if (tempData !== null) {
     return (
@@ -19,6 +21,7 @@ export default function NoteEditor() {
           editor={ CustomEditor }
           data={tempData?.markdown ?? ''}
           onReady={(editor) => {
+            setCurrentEditorId(editor.id);
             if (isDisabled) editor.enableReadOnlyMode(editor.id);
             else editor.disableReadOnlyMode(editor.id);
           }}
@@ -34,7 +37,7 @@ export default function NoteEditor() {
               const time = Number(new Date().getTime());
               dispatch(modifyTempNoteDone({ data, time }));
             }
-            prevData.current = null;
+            prevData.current = '';
           }}
         />
       </EditorWrapper>
@@ -60,4 +63,6 @@ const EditorWrapper = styled.div<{ $isDisable: boolean }>`
   blockquote {padding: 0px 18px; border-color: ${({ theme }) => theme.grayScale300}; transition: border 0.3s;}
   & > div {border: none!important; box-shadow: none!important;}
   .ck-editor__editable_inline {min-height: 100%;}
+  .ck .ck-placeholder::before, 
+  .ck.ck-placeholder::before {color: ${({ theme }) => theme.grayScale400};}
 `;

@@ -1,75 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import styled, { css } from 'styled-components';
-import { toggleModal } from '../../../app/actions/ui';
-import { addFolder } from '../../../app/actions/folder';
-import { THEME_COLOR } from '../../../App.theme';
-import { ColorChip } from '../../../app/types/folder';
+import styled, { css } from "styled-components";
 
-export default function FolderAddForm() {
-
-  const { folderList } = useAppSelector(({ folder }) => folder);
-  const isActive = useAppSelector(({ ui }) => ui.modal);
-  const dispatch = useAppDispatch();
-  
-  const { register, formState: { errors }, reset, handleSubmit } = useForm({ mode: 'onSubmit' });
-
-  const [ currentColorChip, setCurrentColorChip ] = useState<ColorChip | string>('none');
-  
-  useEffect(() => { if (isActive) reset(); setCurrentColorChip('none'); }, [isActive, reset]);
-  
-  const handleColorSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => { setCurrentColorChip(e.target.value); }
-  const handleFormSubmit = ({ title }: { title?: string }, e: any) => {
-    e.preventDefault();
-    if (title) {
-      const time = Number(new Date().getTime());
-      dispatch(addFolder({ name: title, time, color: currentColorChip }));
-      dispatch(toggleModal(null));
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <FormFieldset $error={errors.title ? true : false} $color={currentColorChip === 'none' ? 'none' : THEME_COLOR[currentColorChip]}>
-        <legend>새로운 폴더</legend>
-        <label htmlFor="title">이름</label>
-        <div>
-          <input 
-            type='text'
-            placeholder='폴더명을 입력해주세요'
-            {...register('title', {
-              required: '폴더명을 입력해주세요',
-              maxLength: { value: 12, message: '폴더명은 최대 12자까지 입력할 수 있습니다' },
-              validate: { overlap: (value) =>  folderList
-                .some(({ name }) => name === value) ? '이미 사용중인 폴더명입니다' : undefined }
-            })}
-          />
-          <p>
-            <select name="color" onChange={handleColorSelectChange}>
-              <option value="none">none</option>
-              <option value="red">red</option>
-              <option value="orange">orange</option>
-              <option value="yellow">yellow</option>
-              <option value="green">green</option>
-              <option value="blue">blue</option>
-              <option value="purple">purple</option>
-              <option value="pink">pink</option>
-            </select>
-          </p>
-        </div>
-        { errors.title && <FormErrorMessage>{ String(errors.title?.message) }</FormErrorMessage> }
-      </FormFieldset>
-      <FormBtnWrap>
-        <button type='button' onClick={() => dispatch(toggleModal(null))}>취소</button>
-        <button type='submit'>확인</button>
-      </FormBtnWrap>
-    </form>
-  )
-}
-
-// styled components
-const FormFieldset = styled.fieldset<{ $error: boolean, $color?: string }>`
+export const FormFieldset = styled.fieldset<{ $error: boolean }>`
   display: block;
   width: 100%;
   height: auto;
@@ -119,6 +50,36 @@ const FormFieldset = styled.fieldset<{ $error: boolean, $color?: string }>`
       box-shadow: 0px 0px 0px 2px rgba(225,75,77,0.3);
     `}
   }
+`;
+
+export const BasicFolderInputWrapper = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const FormColorSelectEl = styled.p<{ $color: string }>`
+  position: relative;
+  display: block;
+  width: auto;
+  height: auto;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: 9;
+    top: 0px;
+    bottom: 0px;
+    left: 12px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: auto 0px;
+    background-color: ${({ theme, $color }) => $color === 'none' ? theme.grayScale500 : $color};
+    border-radius: 50%;
+  }
   select {
     position: relative;
     display: block;
@@ -138,36 +99,9 @@ const FormFieldset = styled.fieldset<{ $error: boolean, $color?: string }>`
     appearance: none;
     cursor: pointer;
   }
-  & > div {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    p {
-      position: relative;
-      display: block;
-      width: auto;
-      height: auto;
-    }
-    p::before {
-      content: '';
-      position: absolute;
-      z-index: 9;
-      top: 0px;
-      bottom: 0px;
-      left: 12px;
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      margin: auto 0px;
-      background-color: ${({ theme, $color }) => $color === 'none' ? theme.grayScale500 : $color};
-      border-radius: 50%;
-    }
-  }
 `;
 
-const FormErrorMessage = styled.p`
+export const FormErrorMessage = styled.p`
   position: relative;
   display: block;
   width: 100%;
@@ -193,7 +127,7 @@ const FormErrorMessage = styled.p`
   }
 `;
 
-const FormBtnWrap = styled.p`
+export const FormBtnWrap = styled.p`
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;

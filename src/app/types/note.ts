@@ -1,4 +1,3 @@
-
 export type Note = {
   included: string,
   title: string, 
@@ -9,5 +8,3 @@ export type Note = {
   isLocked: boolean,
   modifiable: boolean,
 };
-
-export type NoteList = Note[];

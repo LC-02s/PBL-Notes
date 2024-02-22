@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { Note, NoteList } from "../types/note";
+import { Note } from "../types/note";
 
 // const initialBasicNote = JSON.parse(localStorage.getItem('basicNotes') ?? '[]');
 
@@ -13,7 +13,7 @@ const temp = [
 interface NoteState {
   activeNoteId: number,
   tempData: Note | null,
-  notes: NoteList,
+  notes: Note[],
 }
 
 const initialState: NoteState = {
@@ -56,7 +56,9 @@ const note = createSlice({
     },
     deleteNote: (state, action) => {
       if (state.tempData !== null) {
-        if (state.tempData.modifiable) {
+        if (extractTitle(state.tempData.markdown) === '') {
+          state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
+        } else if (state.tempData.modifiable) {
           const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
           state.notes[targetIndex].modifiable = false;
         } else {
@@ -101,31 +103,31 @@ export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, sele
 
 export default note.reducer;
 
-export const noteDataSort = (data: NoteList, sortType: string | null) => {
-  const newData = [...data];
+export const noteDataSort = (data: Note[], sortType: string | null) => {
+  const sortedData = [...data];
   switch (sortType) {
     case 'create/desc':
-      newData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
+      sortedData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
       break;
     case 'create/asc':
-      newData.sort((a, b) => Number(b.createAt) - Number(a.createAt));
+      sortedData.sort((a, b) => Number(b.createAt) - Number(a.createAt));
       break;
     case 'update/desc':
-      newData.sort((a, b) => Number(a.updateAt) - Number(b.updateAt));
+      sortedData.sort((a, b) => Number(a.updateAt) - Number(b.updateAt));
       break;
     case 'update/asc':
-      newData.sort((a, b) => Number(b.updateAt) - Number(a.updateAt));
+      sortedData.sort((a, b) => Number(b.updateAt) - Number(a.updateAt));
       break;
     case 'title/desc':
-      newData.sort((a, b) => a.title < b.title ? -1 : (a.title > b.title ? 1 : 0));
+      sortedData.sort((a, b) => a.title < b.title ? -1 : (a.title > b.title ? 1 : 0));
       break;
     case 'title/asc':
-      newData.sort((a, b) => a.title < b.title ? 1 : (a.title > b.title ? -1 : 0));
+      sortedData.sort((a, b) => a.title < b.title ? 1 : (a.title > b.title ? -1 : 0));
       break;
     default:
-      newData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
+      sortedData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
   }
-  return newData;
+  return sortedData;
 }
 
 export const extractTitle = (str:string) => {

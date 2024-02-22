@@ -5,10 +5,12 @@ import NoteItem from './NoteItem';
 import { Note } from '../../app/types/note';
 import usePathname from '../../hooks/usePathname';
 import { noteDataSort } from '../../app/actions/note';
+import { useNavigate } from 'react-router-dom';
 
 export default function NoteList() {
 
-  const [ targetPath, targetName, isInvaild ] = usePathname();
+  const [ targetPath, targetName, isInvaild, isNotFound ] = usePathname();
+  const navigate = useNavigate();
 
   const { view } = useAppSelector(({ ui }) => ui);
   const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
@@ -17,20 +19,18 @@ export default function NoteList() {
   const [ currentNotes, setCurrentNotes ] = useState<Note[]>([]);
 
   useEffect(() => {
-    if (isInvaild) {
-      setCurrentNotes(notes.filter(({ modifiable }) => !modifiable));
+    if (isInvaild) { setCurrentNotes(notes.filter(({ modifiable }) => !modifiable)); return }
+    let targetNotes;
+    if (targetPath === 'all') { 
+      targetNotes = noteDataSort(notes.filter(({ modifiable }) => modifiable), `${defaultSort.type}/${defaultSort.sortedAt}`);
     } else {
-      let targetNotes;
-      if (targetPath === 'all') { 
-        targetNotes = noteDataSort(notes.filter(({ modifiable }) => modifiable), `${defaultSort.type}/${defaultSort.sortedAt}`);
-      } else {
-        const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
-        const targetSort = folderList[targetFolderIndex]?.sort ?? { type: 'create', sortedAt: 'desc' };
-        targetNotes = noteDataSort(notes.filter(({ included, modifiable }) => included === targetName && modifiable), `${targetSort.type}/${targetSort.sortedAt}`);
-      }
-      setCurrentNotes(targetNotes);
+      if (isNotFound) { navigate('/notfound'); return }
+      const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
+      const targetSort = folderList[targetFolderIndex]?.sort ?? { type: 'create', sortedAt: 'desc' };
+      targetNotes = noteDataSort(notes.filter(({ included, modifiable }) => included === targetName && modifiable), `${targetSort.type}/${targetSort.sortedAt}`);
     }
-  }, [ targetPath, targetName, isInvaild, notes, folderList, defaultSort ]);
+    setCurrentNotes(targetNotes);
+  }, [ targetPath, targetName, isInvaild, isNotFound, notes, folderList, defaultSort, navigate ]);
 
   const pinnedNotes = isInvaild ? [] : currentNotes.filter(({ isPinned }) => isPinned);
   const filteredNotes = isInvaild ? currentNotes : currentNotes.filter(({ isPinned }) => !isPinned);
@@ -45,7 +45,7 @@ export default function NoteList() {
           pinnedNotes.length > 0 && 
             <li>
               <h2>Pinned Notes ({ pinnedNotes.length })</h2>
-              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetPath={targetPath} />)) }</ul>
+              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} targetPath={targetPath} />)) }</ul>
             </li>
           }
           {
@@ -53,7 +53,7 @@ export default function NoteList() {
           filteredNotes.length > 0 && 
             <li>
               <h2>All Notes ({ filteredNotes.length })</h2>
-              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} index={idx} targetPath={targetPath} />)) }</ul>
+              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} targetPath={targetPath} />)) }</ul>
             </li>
           }
         </React.Fragment> :
@@ -83,7 +83,7 @@ const NoteListContainer = styled.ul<{ $viewType: boolean }>`
   display: block;
   width: 100%;
   height: 100%;
-  padding: 12px;
+  padding: ${({ $viewType }) => $viewType ? '12px' : '24px'};
   overflow-y: auto;
   transition: border 0.3s;
   
@@ -92,7 +92,7 @@ const NoteListContainer = styled.ul<{ $viewType: boolean }>`
     border-right: 1px solid ${({ theme }) => theme.grayScale200};
     & > li + li {margin: 14px 0px 0px;}
   ` : css`
-    & > li + li {margin: 18px 0px 0px;}
+    & > li + li {margin: 20px 0px 0px;}
   `}
 
   & > li:not(${NoteListItemEmpty}) {
@@ -118,7 +118,7 @@ const NoteListContainer = styled.ul<{ $viewType: boolean }>`
         & > li + li {margin: 8px 0px 0px;}
       ` : css`
         display: grid;
-        grid-template-columns: repeat(5, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, auto));
         gap: 12px;
       `}
     }
