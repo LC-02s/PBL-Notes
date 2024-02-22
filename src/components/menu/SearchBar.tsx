@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export default function SearchBar() {
 
   const [ inputValue, setInputValue ] = useState('')
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     // 검색 관련 로직
   }
@@ -19,7 +19,9 @@ export default function SearchBar() {
 
 const SearchContainer = styled.div`
   position: relative;
-  flex: 1;
+  display: block;
+  width: auto;
+  height: auto;
   font-size: 16px;
   color: ${({ theme }) => theme.grayScale500};
   transition: color 0.3s;
@@ -34,7 +36,7 @@ const SearchContainer = styled.div`
   input {
     display: block;
     width: 100%;
-    max-width: 240px;
+    max-width: 280px;
     min-width: 200px;
     height: 32px;
     padding: 4px 4px 4px 32px;

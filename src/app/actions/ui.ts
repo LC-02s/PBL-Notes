@@ -1,25 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-export type UI = {
-  theme:  'light' | 'dark' | String,
-  view: 'list' | 'gallary' | string,
-  modal: boolean,
-  // isOpenSideBar: boolean,
-}
+export type UITheme = 'light' | 'dark';
+export type UIView = 'list' | 'gallary';
+
+export interface UIState { theme:  UITheme, view: UIView, modal: boolean }
 
 const initialSetting = JSON.parse(localStorage.getItem('setting') ?? '{}');
-const initialState: UI = {
+const initialState: UIState = {
   theme: initialSetting.theme || 'light',
   view: initialSetting.view || 'list',
   modal: false,
-  // isOpenSideBar: localStorage.getItem('side_bar') === 'false' ? false : true,
 }
 
 const ui = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    changeTheme: (state, _action?:any) => {
+    changeTheme: (state, action) => {
       const nextTheme = state.theme === 'light' ? 'dark' : 'light';
       state.theme = nextTheme;
       localStorage.setItem('setting', JSON.stringify({ theme: state.theme, view: state.view }));
@@ -28,14 +25,9 @@ const ui = createSlice({
       state.view = payload;
       localStorage.setItem('setting', JSON.stringify({ theme: state.theme, view: state.view }));
     },
-    toggleModal: (state, _action?:any) => {
+    toggleModal: (state, action) => {
       state.modal = !state.modal;
     },
-    // toggleSideBar: (state, _action?:any) => {
-    //     const prevStatus = state.isOpenSideBar;
-    //     state.isOpenSideBar = !prevStatus;
-    //     localStorage.setItem('side_bar', String(!prevStatus));
-    // }
   }
 });
 

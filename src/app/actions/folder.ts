@@ -1,46 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { Folder, FolderList, FolderSortType } from "../types/folder";
 
-export type ColorChip = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'pink' | 'none';
-export type SortType = { type: 'create' | 'update' | 'title' | string, sort: 'desc' | 'asc' | string };
-export type FolderDetail = { index: Number, colorChip: ColorChip, length: Number, sort: SortType };
-export type FolderData = { [key: string] : FolderDetail } | {};
-export type FolderDataKey = keyof FolderData | '';
+interface FolderState { folderList: FolderList, defaultSort: FolderSortType, activeFolderId: number }
 
-interface FolderState {
-  activeFolder: FolderDataKey,
-  data: FolderData,
-  dataLength: Number,
-}
-
-const initialData = JSON.parse(localStorage.getItem('folder') ?? '{}');
+const initialData = JSON.parse(localStorage.getItem('folder') ?? '[]');
+const initialSort = JSON.parse(localStorage.getItem('defaultSort') ?? '{"type":"create","sortedAt":"desc"}');
 
 const initialState: FolderState = {
-  activeFolder: '',
-  data: initialData,
-  dataLength: Object.keys(initialData).length,
+  folderList: initialData,
+  defaultSort: initialSort,
+  activeFolderId: -1,
 }
 
 const folder = createSlice({
   name: 'folder',
   initialState,
   reducers: {
-    setActiveFolder: (state, { payload }) => {
-      state.activeFolder = payload || '';
-    },
-    addFolder: (state, { payload }: { payload: { id: keyof FolderData, color: ColorChip } }) => {
-      const { dataLength } = state;
-      const sort = { type: 'create', sort: 'desc' };
-      const newFolder:FolderDetail = { 
-          index: dataLength, colorChip: payload?.color ?? 'none', length: 0, sort
+    addFolder: (state, { payload }) => {
+      const newFolder:Folder = { 
+          id: payload.time, name: payload.name, color: payload?.color ?? 'none', sort: { type: 'create', sortedAt: 'desc' }
       };
-      Object.assign(state.data, { [payload.id]: newFolder });
-      state.dataLength = Number(dataLength) + 1;
-      state.activeFolder = payload.id;
-      localStorage.setItem('folder', JSON.stringify(state.data));
+      state.folderList.push(newFolder);
+      localStorage.setItem('folder', JSON.stringify(state.folderList));
+    },
+    changeSortTypeOfFolder: (state, { payload }) => {
+      if (payload.name === '') {
+        state.defaultSort = payload.sort;
+        localStorage.setItem('defaultSort', JSON.stringify(state.defaultSort));
+      } else {
+        const targetFolderIndex = state.folderList.findIndex(({ name }) => name === payload.name);
+        state.folderList[targetFolderIndex].sort = payload.sort;
+        localStorage.setItem('folder', JSON.stringify(state.folderList));
+      }
     },
   }
 });
 
-export const { setActiveFolder, addFolder } = folder.actions;
+export const { addFolder, changeSortTypeOfFolder } = folder.actions;
 
 export default folder.reducer;

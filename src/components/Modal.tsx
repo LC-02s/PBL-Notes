@@ -1,36 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import FolderAddForm from './folder/FolderAddForm'
+import FolderFormAdd from './SideBar/folder/FolderFormAdd'
 import { useAppSelector } from '../app/hooks'
+import useDelay from '../hooks/useDelay';
 
 export default function Modal() {
 
   const isVisible = useAppSelector(({ ui }) => ui.modal);
-  const [ visibleDelay, setVisibleDelay ] = useState(false);
-  const delayTimer = useRef<number | null>(null);
+  const visibleDelay = useDelay(isVisible);
+  
   useEffect(() => {
-    if (isVisible) {
-      if (delayTimer.current) window.clearTimeout(delayTimer.current);
-      delayTimer.current = window.setTimeout(()=> setVisibleDelay(true), 180);
-      document.body.classList.add('stopScroll');
-    }
-    return () => {
-      document.body.classList.remove('stopScroll');
-      setVisibleDelay(false);
-    }
+    if (isVisible) { document.body.classList.add('stopScroll'); }
+    return () => { document.body.classList.remove('stopScroll'); }
   }, [ isVisible ]);
 
   return (
-    <React.Fragment>
-      <ModalContainer $active={isVisible} $delay={visibleDelay}>
-        <FolderAddForm />
-      </ModalContainer>
+    <ModalContainer>
+      <ModalWrapper $active={isVisible} $delay={visibleDelay}>
+        <FolderFormAdd />
+      </ModalWrapper>
       <ModalDimmed $active={isVisible} $delay={visibleDelay} />
-    </React.Fragment>
+    </ModalContainer>
   )
 }
 
-const ModalContainer = styled.div<{ $active: boolean, $delay: boolean }>`
+const ModalContainer = styled.div`
+    position: absolute;
+    z-index: 99999;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+`;
+
+const ModalWrapper = styled.div<{ $active: boolean, $delay: boolean }>`
   position: relative;
   z-index: 999999;
   width: 100%;
@@ -56,7 +63,7 @@ const ModalDimmed = styled.div<{ $active: boolean, $delay: boolean }>`
   left: 0px;
   right: 0px;
   background-color: rgba(${({ theme }) => theme.current === 'light' ? '0,0,10,0.3' : '250,250,255,0.1'});
-  backdrop-filter: blur(4px);
+  /* backdrop-filter: blur(4px); */
   visibility: ${({ $active }) => $active ? 'visible' : 'hidden'};
   opacity: ${({ $delay }) => $delay ? 1 : 0};
   transition: opacity 0.3s;

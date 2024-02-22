@@ -7,22 +7,28 @@ import WriteBtn from './buttons/WriteBtn';
 import LockBtn from './buttons/LockBtn';
 import PinBtn from './buttons/PinBtn';
 import SearchBar from './SearchBar';
+import SortBtn from './buttons/SortBtn';
 
 export default function MenuBar() {
   return (
     <MenuContainer>
-      <ListMenuWrap>
+      <ListMenuWrapper>
         <ViewBtns /> <DeleteBtn />
-      </ListMenuWrap>
+      </ListMenuWrapper>
       <VerticalLine />
-      <MemoMenuWrap>
-        <div>
+      <NoteMenuWrapper>
+        <NoteMenuDivision $gap={true}>
           <WriteBtn /> 
-          <div><LockBtn /><PinBtn /></div>
-        </div>
-        <SearchBar />
+          <NoteMenuDivision>
+            <LockBtn /><PinBtn />
+          </NoteMenuDivision>
+        </NoteMenuDivision>
+        <SearchMenuWrapper>
+          <SearchBar />
+          <SortBtn />
+        </SearchMenuWrapper>
         <ThemeBtn />
-      </MemoMenuWrap>
+      </NoteMenuWrapper>
     </MenuContainer>
   )
 }
@@ -34,24 +40,26 @@ const MenuContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  font-size: 0px;
   background-color: ${({ theme }) => theme.grayScale000};
   border-bottom: 1px solid ${({ theme }) => theme.grayScale200};
   transition: background 0.3s, border 0.3s;
 `;
 
-const ListMenuWrap = styled.div`
+const ListMenuWrapper = styled.div`
   position: relative;
   display: flex;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
+  font-size: 0px;
   width: 240px;
   height: 100%;
   padding: 8px;
 `;
 
-const MemoMenuWrap = styled.div`
+const NoteMenuWrapper = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -60,15 +68,16 @@ const MemoMenuWrap = styled.div`
   width: calc(100% - 240px);
   height: 100%;
   padding: 8px;
+  font-size: 0px;
+`;
 
-  & > div:first-of-type {gap: 12px !important;}
-  div:first-of-type {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 4px;
-  }
+const NoteMenuDivision = styled.div<{ $gap?: boolean }>`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: ${({ $gap }) => $gap ? '12px' : '4px'};
+  font-size: 0px;
 `;
 
 const VerticalLine = styled.div`
@@ -77,4 +86,14 @@ const VerticalLine = styled.div`
   height: 20px;
   background-color: ${({ theme }) => theme.grayScale200};
   transition: background 0.3s;
+`;
+
+const SearchMenuWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  font-size: 0px;
 `;
