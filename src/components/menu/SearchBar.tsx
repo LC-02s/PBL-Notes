@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export default function SearchBar() {
 
   const [ inputValue, setInputValue ] = useState('')
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     // 검색 관련 로직
   }
