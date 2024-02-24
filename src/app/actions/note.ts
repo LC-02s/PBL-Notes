@@ -26,8 +26,8 @@ const note = createSlice({
   name: 'note',
   initialState,
   reducers: {
-    addTempNote: (state, { payload }) => {
-      const { folder, time }: { folder: string, time: number } = payload;
+    addTempNote: (state, { payload }: { payload: { folder: string, time: number } }) => {
+      const { folder, time } = payload;
       saveTempData(state);
       if (folder) {
         const newNote:Note = {
@@ -47,8 +47,8 @@ const note = createSlice({
         state.notes[targetIndex] = modifyingNote;
       }
     },
-    modifyTempNoteDone: (state, { payload }) => {
-      const { data, time }: { data: string, time: number } = payload;
+    modifyTempNoteDone: (state, { payload }: { payload: { data: string, time: number } }) => {
+      const { data, time } = payload;
       if (state.tempData !== null) {
         const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
         const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
@@ -70,12 +70,11 @@ const note = createSlice({
         state.activeNoteId = -1;
       }
     },
-    selectFolder: (state, { payload }) => {
+    selectFolder: (state, { payload }: { payload: string }) => {
       if (payload === 'trash') saveTempData(state);
     },
-    changeCurrentNoteDataSort: (state, { payload }) => {
-      const { sort }: { sort: string } = payload;
-      state.notes = noteDataSort(state.notes, sort);
+    changeCurrentNoteDataSort: (state, { payload }: { payload: string }) => {
+      state.notes = noteDataSort(state.notes, payload);
     },
     changeActiveNoteId: (state, { payload }: { payload: number }) => {
       saveTempData(state);

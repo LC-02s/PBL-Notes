@@ -46,12 +46,12 @@ export default function SortBtn() {
   const handleTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
     setInputRadioType(e.target.value); 
     dispatch(changeSortTypeOfFolder({ name: targetName, sort: { type: e.target.value, sortedAt: inputRadioSorted } }));
-    dispatch(changeCurrentNoteDataSort({ name: targetName, sort: `${e.target.value}/${inputRadioSorted}` }));
+    dispatch(changeCurrentNoteDataSort(`${e.target.value}/${inputRadioSorted}`));
   }
   const handleSortedRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
     setInputRadioSorted(e.target.value); 
     dispatch(changeSortTypeOfFolder({ name: targetName, sort: { type: inputRadioType, sortedAt: e.target.value } }));
-    dispatch(changeCurrentNoteDataSort({ name: targetName, sort: `${inputRadioType}/${e.target.value}` }));
+    dispatch(changeCurrentNoteDataSort(`${inputRadioType}/${e.target.value}`));
   }
 
   return (

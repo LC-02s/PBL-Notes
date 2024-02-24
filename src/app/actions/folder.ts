@@ -33,8 +33,8 @@ const folder = createSlice({
         localStorage.setItem('folder', JSON.stringify(state.folderList));
       }
     },
-    changeFolderIndex: (state, { payload }) => {
-      const { targetIndex, destination }: { targetIndex: number, destination: number } = payload;
+    changeFolderIndex: (state, { payload }: { payload: { targetIndex: number, destination: number } }) => {
+      const { targetIndex, destination } = payload;
       if (targetIndex !== destination) {
         const newFolderList = [ ...state.folderList ];
         const [ targetFolder ] = newFolderList.splice(targetIndex, 1);
