@@ -14,9 +14,8 @@ const NoteItem: React.FC<NoteItemsProps> = ({ data, targetPath, folderMap }) => 
 
   const { activeNoteId } = useAppSelector(({ note }) => note);
   const dispatch = useAppDispatch();
-  
-  const targetFolder = folderMap.get(data.included);
-  const color = targetFolder?.color ?? '';
+
+  const color = folderMap.get(data.included)?.color ?? '';
 
   return (
     <NoteItemContents $active={activeNoteId === data.createAt}>
@@ -79,7 +78,7 @@ const NoteItemTitle = styled.h3<{ $isPinned: boolean }>`
   ${({ $isPinned, theme }) => $isPinned && css`
     position: relative;
     padding-left: 16px;
-    svg {position: absolute; top: 3px; left: -2px; display: inline-block; font-size: 14px; color: ${theme.grayScale500}; transform: scale(-1, 1);}
+    svg {position: absolute; top: 3px; left: 0px; display: inline-block; font-size: 14px; color: ${theme.grayScale500}; transform: scale(-1, 1);}
   `}
 `;
 
@@ -104,7 +103,7 @@ const FolderTagEl = styled.span<{ $color: string }>`
     position: absolute;
     top: 0px;
     bottom: 0px;
-    left: 0px;
+    left: 2px;
     display: inline-block;
     width: 4px;
     height: 4px;

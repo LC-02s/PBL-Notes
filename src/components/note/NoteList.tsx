@@ -27,12 +27,11 @@ export default function NoteList() {
       targetNotes = noteDataSort(notes.filter(({ modifiable }) => modifiable), `${defaultSort.type}/${defaultSort.sortedAt}`);
     } else {
       if (isNotFound) return navigate('/notfound');
-      const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
-      const targetSort = folderList[targetFolderIndex]?.sort ?? { type: 'create', sortedAt: 'desc' };
+      const targetSort = folderMap.get(targetName)?.sort ?? { type: 'create', sortedAt: 'desc' };
       targetNotes = noteDataSort(notes.filter(({ included, modifiable }) => included === targetName && modifiable), `${targetSort.type}/${targetSort.sortedAt}`);
     }
     setCurrentNotes(targetNotes);
-  }, [ targetPath, targetName, isInvalid, isNotFound, notes, folderList, defaultSort, navigate ]);
+  }, [ targetPath, targetName, isInvalid, isNotFound, notes, folderMap, defaultSort, navigate ]);
 
   const pinnedNotes = isInvalid ? [] : currentNotes.filter(({ isPinned }) => isPinned);
   const filteredNotes = isInvalid ? currentNotes : currentNotes.filter(({ isPinned }) => !isPinned);
