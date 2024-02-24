@@ -74,7 +74,7 @@ const note = createSlice({
       if (payload === 'trash') saveTempData(state);
     },
     changeCurrentNoteDataSort: (state, { payload }: { payload: string }) => {
-      state.notes = noteDataSort(state.notes, payload);
+      if (payload) state.notes.sort(noteDataSortCompareFn[payload]);
     },
     changeActiveNoteId: (state, { payload }: { payload: number }) => {
       saveTempData(state);
@@ -104,30 +104,18 @@ export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, sele
 
 export default note.reducer;
 
-export const noteDataSort = (data: Note[], sortType: string | null) => {
+export const noteDataSortCompareFn: { [compareFn: string]: (a: Note, b: Note) => number } = {
+  'create/desc': (a, b) => Number(a.createAt) - Number(b.createAt),
+  'create/asc': (a, b) => Number(b.createAt) - Number(a.createAt),
+  'update/desc': (a, b) => Number(a.updateAt) - Number(b.updateAt),
+  'update/asc': (a, b) => Number(b.updateAt) - Number(a.updateAt),
+  'title/desc': (a, b) => a.title < b.title ? -1 : (a.title > b.title ? 1 : 0),
+  'title/asc': (a, b) => a.title < b.title ? 1 : (a.title > b.title ? -1 : 0),
+};
+
+export const noteDataSort = (data: Note[], sortType: string) => {
   const sortedData = [...data];
-  switch (sortType) {
-    case 'create/desc':
-      sortedData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
-      break;
-    case 'create/asc':
-      sortedData.sort((a, b) => Number(b.createAt) - Number(a.createAt));
-      break;
-    case 'update/desc':
-      sortedData.sort((a, b) => Number(a.updateAt) - Number(b.updateAt));
-      break;
-    case 'update/asc':
-      sortedData.sort((a, b) => Number(b.updateAt) - Number(a.updateAt));
-      break;
-    case 'title/desc':
-      sortedData.sort((a, b) => a.title < b.title ? -1 : (a.title > b.title ? 1 : 0));
-      break;
-    case 'title/asc':
-      sortedData.sort((a, b) => a.title < b.title ? 1 : (a.title > b.title ? -1 : 0));
-      break;
-    default:
-      sortedData.sort((a, b) => Number(a.createAt) - Number(b.createAt));
-  }
+  if (sortType) sortedData.sort(noteDataSortCompareFn[sortType]);
   return sortedData;
 }
 

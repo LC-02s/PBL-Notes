@@ -15,7 +15,7 @@ export default function SortBtn() {
   const dispatch = useAppDispatch();
 
   const { targetPath, targetName, isInvalid, isNotFound } = usePathname();
-  const isDisabled = isInvalid || (targetPath !== 'all' && isNotFound);
+  const isDisabled = isInvalid || (targetPath === 'folder' && isNotFound);
   
   const [ isClicked, setIsClicked ] = useState(false);
   const [ inputRadioType, setInputRadioType ] = useState<SortType | string>('create');
