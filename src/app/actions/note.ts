@@ -12,12 +12,14 @@ const temp = [
 
 interface NoteState {
   activeNoteId: number,
+  activeNoteIndex: number,
   tempData: Note | null,
   notes: Note[],
 }
 
 const initialState: NoteState = {
   activeNoteId: -1,
+  activeNoteIndex: -1,
   tempData: null,
   notes: temp,
 }
@@ -37,23 +39,22 @@ const note = createSlice({
         state.tempData = newNote;
         state.notes.push(newNote);
         state.activeNoteId = time;
+        state.activeNoteIndex = state.notes.length - 1;
       }
     },
     modifyTempNote: (state, { payload }: { payload: string }) => {
       if (state.tempData !== null) {
         const modifyingNote = { ...state.tempData, markdown: payload, title: extractTitle(payload) };
-        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
         state.tempData = modifyingNote;
-        state.notes[targetIndex] = modifyingNote;
+        state.notes[state.activeNoteIndex] = modifyingNote;
       }
     },
     modifyTempNoteDone: (state, { payload }: { payload: { data: string, time: number } }) => {
       const { data, time } = payload;
       if (state.tempData !== null) {
         const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
-        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
         state.tempData = modifyingNote;
-        state.notes[targetIndex] = modifyingNote;
+        state.notes[state.activeNoteIndex] = modifyingNote;
       }
     },
     deleteNote: (state, action) => {
@@ -61,46 +62,39 @@ const note = createSlice({
         if (extractTitle(state.tempData.markdown) === '') {
           state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
         } else if (state.tempData.modifiable) {
-          const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.activeNoteId);
-          state.notes[targetIndex].modifiable = false;
+          state.notes[state.activeNoteIndex].modifiable = false;
         } else {
           state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
         }
         state.tempData = null;
         state.activeNoteId = -1;
+        state.activeNoteIndex = -1;
       }
-    },
-    selectFolder: (state, { payload }: { payload: string }) => {
-      if (payload === 'trash') saveTempData(state);
-    },
-    changeCurrentNoteDataSort: (state, { payload }: { payload: string }) => {
-      if (payload) state.notes.sort(noteDataSortCompareFn[payload]);
     },
     changeActiveNoteId: (state, { payload }: { payload: number }) => {
       saveTempData(state);
       const targetIndex = state.notes.findIndex(({ createAt }) => createAt === payload);
       state.tempData = state.notes[targetIndex];
       state.activeNoteId = payload;
+      state.activeNoteIndex = targetIndex;
     },
     changePinnedState: (state, action) => {
       if (state.tempData !== null) {
-        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
         state.tempData.isPinned = !state.tempData.isPinned;
-        state.notes[targetIndex].isPinned = state.tempData.isPinned;
+        state.notes[state.activeNoteIndex].isPinned = state.tempData.isPinned;
       }
     },
     changeLockedState: (state, action) => {
       if (state.tempData !== null) {
-        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
         state.tempData.isLocked = !state.tempData.isLocked;
-        state.notes[targetIndex].isLocked = state.tempData.isLocked;
+        state.notes[state.activeNoteIndex].isLocked = state.tempData.isLocked;
       }
     },
-    clickedViewBtnBack: (state, action) => { saveTempData(state); },
+    resetActiveNote: (state, action) => { saveTempData(state); },
   }
 });
 
-export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, selectFolder, changeCurrentNoteDataSort, changeActiveNoteId, changePinnedState, changeLockedState, clickedViewBtnBack } = note.actions;
+export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, resetActiveNote, changeActiveNoteId, changePinnedState, changeLockedState } = note.actions;
 
 export default note.reducer;
 
@@ -126,13 +120,14 @@ export const extractTitle = (str:string) => {
 
 const saveTempData = (state: NoteState) => {
   if (state.tempData !== null && state.tempData.modifiable) {
-    if (extractTitle(state.tempData.markdown) === '') {
-      state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
-    } else {
+    if (extractTitle(state.tempData.markdown)) {
       const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
       state.notes[targetIndex] = state.tempData;
+    } else {
+      state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
     }
   }
   state.tempData = null;
   state.activeNoteId = -1;
+  state.activeNoteIndex = -1;
 }

@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { changeSortTypeOfFolder } from '../../../app/actions/folder';
 import useClickOutOfElement from '../../../hooks/useElementClickOutOfArea';
 import useDelay from '../../../hooks/useDelay';
-import { changeCurrentNoteDataSort } from '../../../app/actions/note';
 import usePathname from '../../../hooks/usePathname';
 
 export default function SortBtn() {
@@ -46,12 +45,10 @@ export default function SortBtn() {
   const handleTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
     setInputRadioType(e.target.value); 
     dispatch(changeSortTypeOfFolder({ name: targetName, sort: { type: e.target.value, sortedAt: inputRadioSorted } }));
-    dispatch(changeCurrentNoteDataSort(`${e.target.value}/${inputRadioSorted}`));
   }
   const handleSortedRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
     setInputRadioSorted(e.target.value); 
     dispatch(changeSortTypeOfFolder({ name: targetName, sort: { type: inputRadioType, sortedAt: e.target.value } }));
-    dispatch(changeCurrentNoteDataSort(`${inputRadioType}/${e.target.value}`));
   }
 
   return (
