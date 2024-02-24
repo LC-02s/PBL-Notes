@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { NavLink } from 'react-router-dom';
 import { selectFolder } from '../../../app/actions/note';
 import usePathname from '../../../hooks/usePathname';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { changeFolderIndex } from '../../../app/actions/folder';
 
 export default function FolderList() {
 
@@ -15,11 +17,17 @@ export default function FolderList() {
   const { isInvalid, isNotFound } = usePathname();
 
   const handleNavLinkClick = (name: string) => { dispatch(selectFolder(name)); }
+  const handleDndEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (destination) {
+      dispatch(changeFolderIndex({ targetIndex: source.index, destination: destination.index }));
+    }
+  }
 
   return (
     <FolderListContainer>
       <FolderListTitle>
-        <span>My Notes</span>
+        <h1>My Notes</h1>
         {
         isInvalid || isNotFound ? 
           <button type='button'>
@@ -36,15 +44,23 @@ export default function FolderList() {
             <span>모든 노트</span><span>{ notes.filter(({ modifiable }) => modifiable).length }</span>
           </NavLink>
         </FolderListIconItem>
-        {
-        folderList.map(({ id, name, color }) => (
-          <FolderListItem key={id} $color={color === 'none' ? 'none' : THEME_COLOR[color]}>
-            <NavLink to={`/folder/${name}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick(name)}>
-              <span>{ name }</span><span>{ notes.filter(({ included, modifiable }) => included === name && modifiable).length }</span>
-            </NavLink>
-          </FolderListItem>
-        ))
-        }
+        <DragDropContext onDragEnd={handleDndEnd}>
+          <Droppable droppableId='folder'>
+            {(provided) => (<li><ul {...provided.droppableProps} ref={provided.innerRef}>
+              {folderList.map(({ id, name, color }, idx) => (
+                <Draggable key={id} draggableId={String(id)} index={idx}>
+                  {(provided, snapshot) => (
+                  <FolderListItem key={id} $color={color === 'none' ? 'none' : THEME_COLOR[color]} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1}>
+                    <NavLink to={`/folder/${name}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick(name)}>
+                      <span>{ name }</span><span>{ notes.filter(({ included, modifiable }) => included === name && modifiable).length }</span>
+                    </NavLink>
+                  </FolderListItem>
+                  )}
+                </Draggable>
+              ))} { provided.placeholder }
+            </ul></li>)}
+          </Droppable>
+        </DragDropContext>
         <FolderListIconItem $type='trash' $color='none'>
           <NavLink to='/trash' state='trash' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => handleNavLinkClick('trash')}>
             <span>최근 삭제한 항목</span><span>{ notes.filter(({ modifiable }) => !modifiable).length }</span>
@@ -153,7 +169,7 @@ const FolderListIconItem = styled(FolderListItem)<{ $type: string }>`
   }
 `;
 
-const FolderListTitle = styled.h1`
+const FolderListTitle = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -162,7 +178,7 @@ const FolderListTitle = styled.h1`
   width: 100%;
   height: auto;
   margin: 0px 0px 8px;
-  & > span {
+  & > h1 {
     font-size: 15px;
     font-weight: 500;
     color: ${({ theme }) => theme.grayScale700};

@@ -33,9 +33,18 @@ const folder = createSlice({
         localStorage.setItem('folder', JSON.stringify(state.folderList));
       }
     },
+    changeFolderIndex: (state, { payload }) => {
+      const { targetIndex, destination }: { targetIndex: number, destination: number } = payload;
+      if (targetIndex !== destination) {
+        const newFolderList = [ ...state.folderList ];
+        const [ targetFolder ] = newFolderList.splice(targetIndex, 1);
+        newFolderList.splice(destination, 0, targetFolder)
+        state.folderList = newFolderList;
+      }
+    },
   }
 });
 
-export const { addFolder, changeSortTypeOfFolder } = folder.actions;
+export const { addFolder, changeSortTypeOfFolder, changeFolderIndex } = folder.actions;
 
 export default folder.reducer;
