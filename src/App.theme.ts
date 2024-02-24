@@ -23,7 +23,7 @@ export const darkTheme = {
     grayScale600: '#A9B5BC',
     grayScale700: '#D8DFE3',
     grayScale800: '#EEF1F3',
-    grayScale900: '#FFFFFF',
+    grayScale900: '#EEF1F3',
 }
 
 export const THEME_COLOR: { [color: string] : string } = {

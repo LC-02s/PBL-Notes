@@ -6,7 +6,7 @@ import usePathname from '../../../hooks/usePathname';
 
 export default function WriteBtn() {
 
-  const [ targetPath, targetName, isInvalid, isNotFound ] = usePathname();
+  const { targetPath, targetName, isInvalid, isNotFound } = usePathname();
   const isDisabled = targetPath === 'all' || isInvalid || isNotFound;
 
   const dispatch = useAppDispatch();

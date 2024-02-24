@@ -1,18 +1,26 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { modifyTempNote, modifyTempNoteDone } from '../../app/actions/note';
+import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
 
 export default function NoteEditor() {
 
   const { tempData } = useAppSelector(({ note }) => note);
-  const isDisabled = (tempData?.isLocked ?? false) || !(tempData?.modifiable ?? true);
-  const prevData = useRef<string>('');
   const dispatch = useAppDispatch();
-  const [ currentEditorId, setCurrentEditorId ] = useState<string>('');
-  console.log(currentEditorId);
+  
+  const isDisabled = (tempData?.isLocked ?? false) || !(tempData?.modifiable ?? true);
+  const [ editorHandler, setEditorHandler ] = useState<BalloonEditor | null>(null);
+  const prevData = useRef<string>('');
+
+  useEffect(() => {
+    if (editorHandler) {
+      if (isDisabled) editorHandler.enableReadOnlyMode(editorHandler.id);
+      else editorHandler.disableReadOnlyMode(editorHandler.id);
+    }
+  }, [ isDisabled, editorHandler ]);
 
   if (tempData !== null) {
     return (
@@ -20,17 +28,9 @@ export default function NoteEditor() {
         <CKEditor
           editor={ CustomEditor }
           data={tempData?.markdown ?? ''}
-          onReady={(editor) => {
-            setCurrentEditorId(editor.id);
-            if (isDisabled) editor.enableReadOnlyMode(editor.id);
-            else editor.disableReadOnlyMode(editor.id);
-          }}
-          onChange={(event, editor) => {
-            dispatch(modifyTempNote(editor.getData()));
-          }}
-          onFocus={(event, editor) => {
-            prevData.current = tempData.markdown;
-          }}
+          onReady={(editor) => { setEditorHandler(editor); }}
+          onFocus={(event, editor) => { prevData.current = tempData.markdown; }}
+          onChange={(event, editor) => { dispatch(modifyTempNote(editor.getData())); }}
           onBlur={(event, editor) => {
             const data = editor.getData();
             if (data !== prevData.current) {

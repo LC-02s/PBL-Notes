@@ -4,13 +4,15 @@ import styled, { css } from 'styled-components'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { NavLink } from 'react-router-dom';
 import { selectFolder } from '../../../app/actions/note';
+import usePathname from '../../../hooks/usePathname';
 
 export default function FolderList() {
 
   const { notes } = useAppSelector(({ note }) => note);
   const { folderList } = useAppSelector(({ folder }) => folder);
-
   const dispatch = useAppDispatch();
+
+  const { isInvalid, isNotFound } = usePathname();
 
   const handleNavLinkClick = (name: string) => { dispatch(selectFolder(name)); }
 
@@ -19,6 +21,11 @@ export default function FolderList() {
       <FolderListTitle>
         <span>My Notes</span>
         {
+        isInvalid || isNotFound ? 
+          <button type='button'>
+            Usage
+            <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"><g fill="none"><circle cx={12} cy={12} r={10} stroke="currentColor" strokeWidth={1.5}></circle><path stroke="currentColor" strokeLinecap="round" strokeWidth={1.5} d="M10.125 8.875a1.875 1.875 0 1 1 2.828 1.615c-.475.281-.953.708-.953 1.26V13"></path><circle cx={12} cy={16} r={1} fill="currentColor"></circle></g></svg>
+          </button> :
         folderList.length > 0 &&
           <button type='button'>Edit</button>
         }
@@ -156,15 +163,19 @@ const FolderListTitle = styled.h1`
   height: auto;
   margin: 0px 0px 8px;
   & > span {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
-    color: ${({ theme }) => theme.grayScale500};
+    color: ${({ theme }) => theme.grayScale700};
     white-space: nowrap;
     transition: color 0.3s;
   }
   & > button {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
     color: ${({ theme }) => theme.grayScale500};
     white-space: nowrap;
     transition: color 0.3s;

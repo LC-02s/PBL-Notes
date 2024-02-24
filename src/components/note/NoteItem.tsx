@@ -6,16 +6,17 @@ import 'moment/locale/ko';
 import { THEME_COLOR } from '../../App.theme';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { changeActiveNoteId } from '../../app/actions/note';
+import { FolderMapValue } from '../../app/types/folder';
 
-type MemoItemsProps = { data: Note, targetPath: string };
+type NoteItemsProps = { data: Note, targetPath: string, folderMap: Map<string, FolderMapValue> };
 
-const NoteItem: React.FC<MemoItemsProps> = ({ data, targetPath }) => {
+const NoteItem: React.FC<NoteItemsProps> = ({ data, targetPath, folderMap }) => {
 
-  const { folderList } = useAppSelector(({ folder }) => folder);
   const { activeNoteId } = useAppSelector(({ note }) => note);
-  const targetFolderIndex = targetPath === 'all' ? folderList.findIndex(({ name }) => name === data.included) : -1;
-  const color = folderList[targetFolderIndex]?.color ?? 'none';
   const dispatch = useAppDispatch();
+  
+  const targetFolder = folderMap.get(data.included);
+  const color = targetFolder?.color ?? '';
 
   return (
     <NoteItemContents $active={activeNoteId === data.createAt}>
@@ -27,7 +28,7 @@ const NoteItem: React.FC<MemoItemsProps> = ({ data, targetPath }) => {
         <p>
           { 
           targetPath === 'all' && 
-            <FolderTagEl $color={color === 'none' ? 'none' : THEME_COLOR[color]}>
+            <FolderTagEl $color={color ? THEME_COLOR[color] : 'none'}>
               { data.included }
             </FolderTagEl>
           }

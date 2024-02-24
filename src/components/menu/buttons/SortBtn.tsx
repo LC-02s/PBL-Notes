@@ -14,7 +14,7 @@ export default function SortBtn() {
   const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
   const dispatch = useAppDispatch();
 
-  const [ targetPath, targetName, isInvalid, isNotFound ] = usePathname();
+  const { targetPath, targetName, isInvalid, isNotFound } = usePathname();
   const isDisabled = isInvalid || (targetPath !== 'all' && isNotFound);
   
   const [ isClicked, setIsClicked ] = useState(false);

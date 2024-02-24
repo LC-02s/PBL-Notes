@@ -3,13 +3,14 @@ import { createSlice } from "@reduxjs/toolkit"
 export type UITheme = 'light' | 'dark';
 export type UIView = 'list' | 'gallary';
 
-export interface UIState { theme:  UITheme, view: UIView, modal: boolean }
+export interface UIState { theme:  UITheme, view: UIView, modal: boolean, tutorial: boolean }
 
 const initialSetting = JSON.parse(localStorage.getItem('setting') ?? '{}');
 const initialState: UIState = {
   theme: initialSetting.theme || 'light',
   view: initialSetting.view || 'list',
   modal: false,
+  tutorial: false,
 }
 
 const ui = createSlice({

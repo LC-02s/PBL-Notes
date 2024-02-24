@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import NoteItem from './NoteItem';
@@ -6,34 +6,36 @@ import { Note } from '../../app/types/note';
 import usePathname from '../../hooks/usePathname';
 import { noteDataSort } from '../../app/actions/note';
 import { useNavigate } from 'react-router-dom';
+import { FolderMapValue } from '../../app/types/folder';
 
 export default function NoteList() {
 
-  const [ targetPath, targetName, isInvaild, isNotFound ] = usePathname();
+  const { targetPath, targetName, isInvalid, isNotFound } = usePathname();
   const navigate = useNavigate();
 
   const { view } = useAppSelector(({ ui }) => ui);
   const { folderList, defaultSort } = useAppSelector(({ folder }) => folder);
   const { notes } = useAppSelector(({ note }) => note);
   
+  const folderMap = useMemo(() => folderList.reduce((map, { name, ...data }) => map.set(name, data), new Map<string, FolderMapValue>()), [ folderList ]);
   const [ currentNotes, setCurrentNotes ] = useState<Note[]>([]);
 
   useEffect(() => {
-    if (isInvaild) { setCurrentNotes(notes.filter(({ modifiable }) => !modifiable)); return }
+    if (isInvalid) { setCurrentNotes(notes.filter(({ modifiable }) => !modifiable)); return }
     let targetNotes;
     if (targetPath === 'all') { 
       targetNotes = noteDataSort(notes.filter(({ modifiable }) => modifiable), `${defaultSort.type}/${defaultSort.sortedAt}`);
     } else {
-      if (isNotFound) { navigate('/notfound'); return }
+      if (isNotFound) return navigate('/notfound');
       const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
       const targetSort = folderList[targetFolderIndex]?.sort ?? { type: 'create', sortedAt: 'desc' };
       targetNotes = noteDataSort(notes.filter(({ included, modifiable }) => included === targetName && modifiable), `${targetSort.type}/${targetSort.sortedAt}`);
     }
     setCurrentNotes(targetNotes);
-  }, [ targetPath, targetName, isInvaild, isNotFound, notes, folderList, defaultSort, navigate ]);
+  }, [ targetPath, targetName, isInvalid, isNotFound, notes, folderList, defaultSort, navigate ]);
 
-  const pinnedNotes = isInvaild ? [] : currentNotes.filter(({ isPinned }) => isPinned);
-  const filteredNotes = isInvaild ? currentNotes : currentNotes.filter(({ isPinned }) => !isPinned);
+  const pinnedNotes = isInvalid ? [] : currentNotes.filter(({ isPinned }) => isPinned);
+  const filteredNotes = isInvalid ? currentNotes : currentNotes.filter(({ isPinned }) => !isPinned);
 
   return (
     <NoteListContainer $viewType={view === 'list'}>
@@ -45,7 +47,7 @@ export default function NoteList() {
           pinnedNotes.length > 0 && 
             <li>
               <h2>Pinned Notes ({ pinnedNotes.length })</h2>
-              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} targetPath={targetPath} />)) }</ul>
+              <ul>{ pinnedNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} targetPath={targetPath} folderMap={folderMap} />)) }</ul>
             </li>
           }
           {
@@ -53,7 +55,7 @@ export default function NoteList() {
           filteredNotes.length > 0 && 
             <li>
               <h2>All Notes ({ filteredNotes.length })</h2>
-              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} targetPath={targetPath} />)) }</ul>
+              <ul>{ filteredNotes.map((data, idx) => (<NoteItem key={data.createAt} data={data} targetPath={targetPath} folderMap={folderMap} />)) }</ul>
             </li>
           }
         </React.Fragment> :

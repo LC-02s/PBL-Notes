@@ -8,5 +8,6 @@ export type FolderSortType = { type: SortType, sortedAt: SortedAt };
 export type Folder = { 
   id: number, name: string, color: ColorChip, sort: FolderSortType 
 };
+export type FolderMapValue = Omit<Folder, 'name'>;
 
 export type FolderList = Folder[];
