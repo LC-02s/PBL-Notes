@@ -7,6 +7,7 @@ import { resetActiveNote } from '../../../app/actions/note';
 import usePathname from '../../../hooks/usePathname';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { changeFolderIndex } from '../../../app/actions/folder';
+import { modalOn } from '../../../app/actions/ui';
 
 export default function FolderList() {
 
@@ -14,25 +15,21 @@ export default function FolderList() {
   const { folderList } = useAppSelector(({ folder }) => folder);
   const dispatch = useAppDispatch();
 
-  const { isInvalid, isNotFound } = usePathname();
+  const { targetPath, isNotFound } = usePathname();
 
   const handleDndEnd = (result: DropResult) => {
     const { destination, source } = result;
     if (destination) dispatch(changeFolderIndex({ targetIndex: source.index, destination: destination.index }));
   }
+  const handleEditBtnClick = () => { dispatch(modalOn('folder/modify')); }
 
   return (
     <FolderListContainer>
       <FolderListTitle>
         <h1>My Notes</h1>
         {
-        isInvalid || isNotFound ? 
-          <button type='button'>
-            Usage
-            <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"><g fill="none"><circle cx={12} cy={12} r={10} stroke="currentColor" strokeWidth={1.5}></circle><path stroke="currentColor" strokeLinecap="round" strokeWidth={1.5} d="M10.125 8.875a1.875 1.875 0 1 1 2.828 1.615c-.475.281-.953.708-.953 1.26V13"></path><circle cx={12} cy={16} r={1} fill="currentColor"></circle></g></svg>
-          </button> :
-        folderList.length > 0 &&
-          <button type='button'>Edit</button>
+        (targetPath === 'folder' && !isNotFound) &&
+          <button type='button' onClick={handleEditBtnClick}>Edit</button>
         }
       </FolderListTitle>
       <ul>
@@ -46,13 +43,12 @@ export default function FolderList() {
             {(provided) => (<li><ul {...provided.droppableProps} ref={provided.innerRef}>
               {folderList.map(({ id, name, color }, idx) => (
                 <Draggable key={id} draggableId={String(id)} index={idx}>
-                  {(provided, snapshot) => (
-                  <FolderListItem key={id} $color={color === 'none' ? 'none' : THEME_COLOR[color]} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1}>
+                  {(provided, snapshot) => ( 
+                  <FolderListItem key={id} $color={color === 'none' ? 'none' : THEME_COLOR[color] ?? 'none'} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1}>
                     <NavLink to={`/folder/${name}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''}>
                       <span>{ name }</span><span>{ notes.filter(({ included, modifiable }) => included === name && modifiable).length }</span>
                     </NavLink>
-                  </FolderListItem>
-                  )}
+                  </FolderListItem> )}
                 </Draggable>
               ))} { provided.placeholder }
             </ul></li>)}
@@ -95,12 +91,10 @@ const FolderListItem = styled.li<{ $color: string }>`
     font-size: 14px;
     border-radius: 4px;
     transition: background 0.2s;
-    &:hover,
-    &:focus {background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.12);}
+    &:hover {background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.12);}
   }
   & > a.active,
-  & > a.active:hover,
-  & > a.active:focus {
+  & > a.active:hover {
     background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.32);
   }
   & > a > span {display: inline-block; white-space: nowrap;}

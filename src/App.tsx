@@ -29,7 +29,6 @@ export default function App() {
               <Route path='/' element={<NoteView />} />
               <Route path='/trash' element={<NoteView />} />
               <Route path='/folder/:name' element={<NoteView />} />
-              <Route path='/notfound' element={<NotFound />} />
               <Route path='/*' element={<NotFound />} />
             </Routes>
           </section>

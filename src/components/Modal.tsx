@@ -1,12 +1,21 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import FolderFormAdd from './SideBar/folder/FolderFormAdd'
+import FolderForm from './SideBar/folder/FolderForm'
 import { useAppSelector } from '../app/hooks'
 import useDelay from '../hooks/useDelay';
 
+const MODAL_COMPONENTS: { [type: string]: React.FC } = {
+  'folder/add': () => <FolderForm isModify={false} />,
+  'folder/modify': () => <FolderForm isModify={true} />,
+};
+
+console.log(MODAL_COMPONENTS);
+
 export default function Modal() {
 
-  const isVisible = useAppSelector(({ ui }) => ui.modal);
+  const { type, active } = useAppSelector(({ ui }) => ui.modal);
+  const isVisible = active;
+  const Component = MODAL_COMPONENTS[type];
   const visibleDelay = useDelay(isVisible);
   
   useEffect(() => {
@@ -17,7 +26,7 @@ export default function Modal() {
   return (
     <ModalContainer>
       <ModalWrapper $active={isVisible} $delay={visibleDelay}>
-        <FolderFormAdd />
+        <Component />
       </ModalWrapper>
       <ModalDimmed $active={isVisible} $delay={visibleDelay} />
     </ModalContainer>

@@ -66,9 +66,7 @@ const note = createSlice({
         } else {
           state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
         }
-        state.tempData = null;
-        state.activeNoteId = -1;
-        state.activeNoteIndex = -1;
+        initActiveNote(state);
       }
     },
     changeActiveNoteId: (state, { payload }: { payload: number }) => {
@@ -99,23 +97,25 @@ export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, rese
 export default note.reducer;
 
 export const noteDataSortCompareFn: { [compareFn: string]: (a: Note, b: Note) => number } = {
-  'create/desc': (a, b) => Number(a.createAt) - Number(b.createAt),
-  'create/asc': (a, b) => Number(b.createAt) - Number(a.createAt),
-  'update/desc': (a, b) => Number(a.updateAt) - Number(b.updateAt),
-  'update/asc': (a, b) => Number(b.updateAt) - Number(a.updateAt),
+  'create/desc': (a, b) => a.createAt - b.createAt,
+  'create/asc': (a, b) => b.createAt - a.createAt,
+  'update/desc': (a, b) => a.updateAt - b.updateAt,
+  'update/asc': (a, b) => b.updateAt - a.updateAt,
   'title/desc': (a, b) => a.title < b.title ? -1 : (a.title > b.title ? 1 : 0),
   'title/asc': (a, b) => a.title < b.title ? 1 : (a.title > b.title ? -1 : 0),
 };
 
-export const noteDataSort = (data: Note[], sortType: string) => {
-  const sortedData = [...data];
-  if (sortType) sortedData.sort(noteDataSortCompareFn[sortType]);
-  return sortedData;
-}
+export const noteDataSort = (data: Note[], sortType: string) => data.sort(noteDataSortCompareFn[sortType] ?? ((a, b) => a.createAt - b.createAt));
 
-export const extractTitle = (str:string) => {
+export const extractTitle = (str: string) => {
   const match = (/# (.*?)\n/g).exec(str);
   return match && match[1] ? match[1] : '';
+}
+
+const initActiveNote = (state: NoteState) => {
+  state.tempData = null;
+  state.activeNoteId = -1;
+  state.activeNoteIndex = -1;
 }
 
 const saveTempData = (state: NoteState) => {
@@ -127,7 +127,5 @@ const saveTempData = (state: NoteState) => {
       state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
     }
   }
-  state.tempData = null;
-  state.activeNoteId = -1;
-  state.activeNoteIndex = -1;
+  initActiveNote(state);
 }

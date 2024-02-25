@@ -1,6 +1,98 @@
+import React, { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { modalOff } from '../../../app/actions/ui';
+import { addFolder, modifyFolder } from '../../../app/actions/folder';
+import { THEME_COLOR } from '../../../App.theme';
+import { ColorChip } from '../../../app/types/folder';
 import styled, { css } from "styled-components";
+import usePathname from '../../../hooks/usePathname';
+import { useNavigate } from 'react-router-dom';
 
-export const FormFieldset = styled.fieldset<{ $error: boolean }>`
+type FolderFormProps = { isModify: boolean };
+type FolderFormValues = { title: string };
+
+export default function FolderForm({ isModify }: FolderFormProps) {
+
+  const { folderList } = useAppSelector(({ folder }) => folder);
+  const { active } = useAppSelector(({ ui }) => ui.modal);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  
+  const { register, formState: { errors }, reset, handleSubmit } = useForm<FolderFormValues>({ mode: 'onSubmit' });
+
+  const { targetName } = usePathname();
+  const [ currentColorChip, setCurrentColorChip ] = useState<ColorChip | string>('none');
+
+  const targetFolderIndex = isModify ? folderList.findIndex(({ name }) => name === targetName) : -1;
+  const defaultColorChip = isModify ? folderList[targetFolderIndex]?.color ?? 'none' : 'none';
+
+  useEffect(() => { 
+    if (active) { reset(); setCurrentColorChip(defaultColorChip); } 
+  }, [active, defaultColorChip, reset]); 
+  
+  const handleColorSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => { setCurrentColorChip(e.target.value); }
+  const handleDeleteBtnClick = () => {
+    
+  }
+  const handleFormSubmit: SubmitHandler<FolderFormValues> = ({ title }, e: any) => {
+    e.preventDefault();
+
+    if (isModify) {
+      dispatch(modifyFolder({ targetIndex: targetFolderIndex, name: title.trim(), color: currentColorChip }));
+      dispatch(modalOff(null));
+      navigate('/');
+    } else {
+      const time = Number(new Date().getTime());
+      dispatch(addFolder({ name: title.trim(), time, color: currentColorChip }));
+      dispatch(modalOff(null));
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
+      <FormFieldset $error={errors.title ? true : false}>
+        <legend>{ isModify ? '폴더 정보 수정' : '새로운 폴더' }</legend>
+        <label htmlFor="title">이름</label>
+        <BasicFolderInputWrapper>
+          <input 
+            type='text'
+            placeholder='폴더명을 입력해주세요'
+            defaultValue={isModify ? targetName : ''}
+            {...register('title', {
+              required: '폴더명을 입력해주세요',
+              maxLength: { value: 12, message: '폴더명은 최대 12자까지 입력할 수 있습니다' },
+              validate: {overlap: (value) => {
+                const errerTxt = '이미 사용중인 폴더명입니다';
+                if (isModify) return folderList.some(({ name }) => name !== targetName && name === value) ? errerTxt : undefined;
+                else return folderList.some(({ name }) => name === value) ? errerTxt : undefined;
+              }}
+            })}
+          />
+          <FormColorSelectEl $color={currentColorChip === 'none' ? 'none' : THEME_COLOR[currentColorChip]}>
+            <select name="color" value={currentColorChip} onChange={handleColorSelectChange}>
+              <option value="none">none</option>
+              {Object.keys(THEME_COLOR).map((colorType) => (
+                <option key={colorType} value={colorType}>{ colorType }</option>
+              ))}
+            </select>
+          </FormColorSelectEl>
+        </BasicFolderInputWrapper>
+        { errors.title && <FormErrorMessage>{ String(errors.title?.message) }</FormErrorMessage> }
+      </FormFieldset>
+      <FormBtnWrap $hasDeleteBtn={isModify}>
+        { isModify && <button type='button' className='delete' onClick={handleDeleteBtnClick}>삭제</button> }
+        <div>
+          <button type='button' onClick={() => dispatch(modalOff(null))}>취소</button>
+          <button type='submit'>{ isModify ? '저장' : '확인' }</button>
+        </div>
+      </FormBtnWrap>
+    </form>
+  )
+}
+
+// styled components
+const FormFieldset = styled.fieldset<{ $error: boolean }>`
   display: block;
   width: 100%;
   height: auto;
@@ -52,7 +144,7 @@ export const FormFieldset = styled.fieldset<{ $error: boolean }>`
   }
 `;
 
-export const BasicFolderInputWrapper = styled.div`
+const BasicFolderInputWrapper = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -60,7 +152,7 @@ export const BasicFolderInputWrapper = styled.div`
   gap: 8px;
 `;
 
-export const FormColorSelectEl = styled.p<{ $color: string }>`
+const FormColorSelectEl = styled.p<{ $color: string }>`
   position: relative;
   display: block;
   width: auto;
@@ -101,7 +193,7 @@ export const FormColorSelectEl = styled.p<{ $color: string }>`
   }
 `;
 
-export const FormErrorMessage = styled.p`
+const FormErrorMessage = styled.p`
   position: relative;
   display: block;
   width: 100%;
@@ -127,10 +219,10 @@ export const FormErrorMessage = styled.p`
   }
 `;
 
-export const FormBtnWrap = styled.p`
+const FormBtnWrap = styled.div<{ $hasDeleteBtn: boolean }>`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: flex-end;
+  justify-content: ${({ $hasDeleteBtn }) => $hasDeleteBtn ? 'space-between' : 'flex-end'};
   align-items: center;
   gap: 8px;
   width: 100%;
@@ -139,12 +231,22 @@ export const FormBtnWrap = styled.p`
   margin: 24px 0px 0px;
   border-top: 1px solid ${({ theme }) => theme.grayScale200};
 
+  div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+    height: auto;
+  }
+
   button {
     display: block;
     width: auto;
     height: auto;
     padding: 4px;
-    min-width: 86px;
+    min-width: 78px;
     font-size: 15px;
     color: ${({ theme }) => theme.grayScale700};
     text-align: center;
@@ -152,6 +254,7 @@ export const FormBtnWrap = styled.p`
     background-color: ${({ theme }) => theme.grayScale100};
     transition: background 0.3s, color 0.3s;
   }
+  button.delete { color: #E14B4D;}
   button:hover,
   button:focus {
     background-color: ${({ theme }) => theme.grayScale200};

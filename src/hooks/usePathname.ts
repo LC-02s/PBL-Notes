@@ -10,7 +10,7 @@ export default function usePathname() {
   const targetPath = state ?? (pathname.split('/')[1] ?? 'all');
   const isInvalid = targetPath === 'trash';
   const targetName = targetPath === 'folder' ? decodeURI(pathname.split('/')[2]) : '';
-  const isNotFound = useMemo(() => !folderList.some(({ name }) => name === targetName), [ folderList, targetName ]);
+  const isNotFound = useMemo(() => targetPath === 'folder' && !folderList.some(({ name }) => name === targetName), [ folderList, targetPath, targetName ]);
 
   return { targetPath, targetName, isInvalid, isNotFound };
 }

@@ -2,14 +2,16 @@ import { createSlice } from "@reduxjs/toolkit"
 
 export type UITheme = 'light' | 'dark';
 export type UIView = 'list' | 'gallary';
+export type ModalType = 'folder/add' | 'folder/modify';
+export type UIModal = { type: ModalType, active: boolean };
 
-export interface UIState { theme:  UITheme, view: UIView, modal: boolean, tutorial: boolean }
+export interface UIState { theme:  UITheme, view: UIView, modal: UIModal, tutorial: boolean }
 
 const initialSetting = JSON.parse(localStorage.getItem('setting') ?? '{}');
 const initialState: UIState = {
   theme: initialSetting.theme || 'light',
   view: initialSetting.view || 'list',
-  modal: false,
+  modal: { type: 'folder/add', active: false },
   tutorial: false,
 }
 
@@ -26,12 +28,16 @@ const ui = createSlice({
       state.view = payload;
       localStorage.setItem('setting', JSON.stringify({ theme: state.theme, view: state.view }));
     },
-    toggleModal: (state, action) => {
-      state.modal = !state.modal;
+    modalOff: (state, action) => {
+      state.modal.active = false;
+    },
+    modalOn: (state, { payload }: { payload: ModalType }) => {
+      state.modal.type = payload;
+      state.modal.active = true;
     },
   }
 });
 
-export const { changeTheme, changeView, toggleModal } = ui.actions;
+export const { changeTheme, changeView, modalOn, modalOff } = ui.actions;
 
 export default ui.reducer;

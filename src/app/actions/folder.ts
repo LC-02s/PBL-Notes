@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { Folder, FolderList, FolderSortType } from "../types/folder";
+import { Folder, FolderSortType } from "../types/folder";
 
-interface FolderState { folderList: FolderList, defaultSort: FolderSortType }
+interface FolderState { folderList: Folder[], defaultSort: FolderSortType }
+
+export const defaultSortType: FolderSortType = { type: 'create', sortedAt: 'desc' };
 
 const initialData = JSON.parse(localStorage.getItem('folder') ?? '[]');
-const initialSort = JSON.parse(localStorage.getItem('defaultSort') ?? '{"type":"create","sortedAt":"desc"}');
+const initialSort = JSON.parse(localStorage.getItem('defaultSort') ?? String(defaultSortType));
 
 const initialState: FolderState = {
   folderList: initialData,
@@ -15,12 +17,22 @@ const folder = createSlice({
   name: 'folder',
   initialState,
   reducers: {
-    addFolder: (state, { payload }) => {
+    addFolder: (state, { payload } : { payload: { time: number, name: string, color: string } }) => {
       const newFolder:Folder = { 
-          id: payload.time, name: payload.name, color: payload?.color ?? 'none', sort: { type: 'create', sortedAt: 'desc' }
+          id: payload.time, name: payload.name, color: payload.color, sort: defaultSortType
       };
       state.folderList.push(newFolder);
       localStorage.setItem('folder', JSON.stringify(state.folderList));
+    },
+    modifyFolder: (state, { payload }: { payload: { targetIndex: number, name: string, color: string } }) => {
+      const { targetIndex, name, color } = payload;
+      if (targetIndex >= 0) {
+        state.folderList[targetIndex].name = name;
+        state.folderList[targetIndex].color = color;
+      }
+    },
+    deleteFolder: (state, { payload }: { payload: number }) => {
+      state.folderList = state.folderList.filter(({ id }) => id !== payload);
     },
     changeSortTypeOfFolder: (state, { payload }) => {
       if (payload.name === '') {
@@ -44,6 +56,6 @@ const folder = createSlice({
   }
 });
 
-export const { addFolder, changeSortTypeOfFolder, changeFolderIndex } = folder.actions;
+export const { addFolder, modifyFolder, deleteFolder, changeSortTypeOfFolder, changeFolderIndex } = folder.actions;
 
 export default folder.reducer;
