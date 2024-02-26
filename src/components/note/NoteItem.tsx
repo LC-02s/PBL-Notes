@@ -28,9 +28,7 @@ const NoteItem: React.FC<NoteItemsProps> = ({ data, targetPath, folderMap }) => 
         <p>
           { 
           targetPath === 'all' && 
-            <FolderTagEl $color={color ? THEME_COLOR[color] : 'none'}>
-              { data.included }
-            </FolderTagEl>
+            <FolderTagEl $color={THEME_COLOR[color] ?? 'none'}>{ data.included }</FolderTagEl>
           }
           <TimeStampEl>{ moment(new Date(+data.updateAt)).fromNow() }</TimeStampEl>
         </p>

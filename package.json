@@ -20,6 +20,7 @@
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.17",
     "ckeditor5-custom-build": "file:ckeditor5",
+    "localforage": "^1.10.0",
     "moment": "^2.30.1",
     "postcss": "^8.4.35",
     "react": "^18.2.0",

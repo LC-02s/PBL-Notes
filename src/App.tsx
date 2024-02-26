@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { useAppSelector } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import { lightTheme, darkTheme } from './App.theme';
 import MenuBar from './components/menu/MenuBar';
 import Modal from './components/Modal';
@@ -8,11 +8,22 @@ import SideBar from './components/SideBar/SideBar';
 import { Route, Routes } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import NoteView from './components/note/NoteView';
+import { getNotesFromDB } from './app/actions/note';
+import { getFoldersFromDB } from './app/actions/folder';
 
 
 export default function App() {
 
     const currentTheme = useAppSelector(({ ui }) => ui.theme) === 'light';
+    const { noteSession } = useAppSelector(({ note }) => note);
+    const { folderSession } = useAppSelector(({ folder }) => folder);
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+      if (!noteSession) dispatch(getNotesFromDB());
+      if (!folderSession) dispatch(getFoldersFromDB());
+    }, [ noteSession, folderSession, dispatch ]);
 
     useEffect(() => {
       if (currentTheme) document.body.classList.remove('darkTheme'); 

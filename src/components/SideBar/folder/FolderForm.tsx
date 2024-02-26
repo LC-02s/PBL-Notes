@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { modalOff } from '../../../app/actions/ui';
-import { addFolder, modifyFolder } from '../../../app/actions/folder';
+import { addFolder, deleteFolder, modifyFolder } from '../../../app/actions/folder';
 import { THEME_COLOR } from '../../../App.theme';
 import { ColorChip } from '../../../app/types/folder';
 import styled, { css } from "styled-components";
 import usePathname from '../../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
+import { changeIncluded, deleteNoteToFolder } from '../../../app/actions/note';
 
 type FolderFormProps = { isModify: boolean };
 type FolderFormValues = { title: string };
@@ -24,8 +25,8 @@ export default function FolderForm({ isModify }: FolderFormProps) {
   const { targetName } = usePathname();
   const [ currentColorChip, setCurrentColorChip ] = useState<ColorChip | string>('none');
 
-  const targetFolderIndex = isModify ? folderList.findIndex(({ name }) => name === targetName) : -1;
-  const defaultColorChip = isModify ? folderList[targetFolderIndex]?.color ?? 'none' : 'none';
+  const targetIndex = isModify ? folderList.findIndex(({ name }) => name === targetName) : -1;
+  const defaultColorChip = isModify ? folderList[targetIndex]?.color ?? 'none' : 'none';
 
   useEffect(() => { 
     if (active) { reset(); setCurrentColorChip(defaultColorChip); } 
@@ -33,15 +34,25 @@ export default function FolderForm({ isModify }: FolderFormProps) {
   
   const handleColorSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => { setCurrentColorChip(e.target.value); }
   const handleDeleteBtnClick = () => {
-    
+    const confirmTxt = '삭제 시 폴더에 포함된 노트도 함께 삭제되며, \n삭제한 폴더는 다시는 복구할 수 없습니다. \n삭제하시겠습니까?';
+    if (window.confirm(confirmTxt)) { 
+      const { id, name } = folderList[targetIndex];
+      dispatch(deleteFolder(id));
+      dispatch(deleteNoteToFolder(name));
+      dispatch(modalOff(null));
+      navigate(`/trash`);
+    }
   }
   const handleFormSubmit: SubmitHandler<FolderFormValues> = ({ title }, e: any) => {
     e.preventDefault();
 
     if (isModify) {
-      dispatch(modifyFolder({ targetIndex: targetFolderIndex, name: title.trim(), color: currentColorChip }));
+      dispatch(modifyFolder({ targetIndex, name: title.trim(), color: currentColorChip }));
       dispatch(modalOff(null));
-      navigate('/');
+      if (title !== targetName) {
+        dispatch(changeIncluded({ targetName, newName: title.trim() }));
+        navigate(`/folder/${title.trim()}`);
+      }
     } else {
       const time = Number(new Date().getTime());
       dispatch(addFolder({ name: title.trim(), time, color: currentColorChip }));

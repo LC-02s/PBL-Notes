@@ -11,8 +11,8 @@ import { modalOn } from '../../../app/actions/ui';
 
 export default function FolderList() {
 
-  const { notes } = useAppSelector(({ note }) => note);
-  const { folderList } = useAppSelector(({ folder }) => folder);
+  const { noteStatus, notes } = useAppSelector(({ note }) => note);
+  const { folderStatus, folderList } = useAppSelector(({ folder }) => folder);
   const dispatch = useAppDispatch();
 
   const { targetPath, isNotFound } = usePathname();
@@ -26,7 +26,10 @@ export default function FolderList() {
   return (
     <FolderListContainer>
       <FolderListTitle>
-        <h1>My Notes</h1>
+        <h1>
+          My Notes 
+          { (noteStatus === 'pending' || folderStatus === 'pending') && <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g><rect width={2} height={5} x={11} y={1} fill="currentColor" opacity={0.14}></rect><rect width={2} height={5} x={11} y={1} fill="currentColor" opacity={0.29} transform="rotate(30 12 12)"></rect><rect width={2} height={5} x={11} y={1} fill="currentColor" opacity={0.43} transform="rotate(60 12 12)"></rect><rect width={2} height={5} x={11} y={1} fill="currentColor" opacity={0.57} transform="rotate(90 12 12)"></rect><rect width={2} height={5} x={11} y={1} fill="currentColor" opacity={0.71} transform="rotate(120 12 12)"></rect><rect width={2} height={5} x={11} y={1} fill="currentColor" opacity={0.86} transform="rotate(150 12 12)"></rect><rect width={2} height={5} x={11} y={1} fill="currentColor" transform="rotate(180 12 12)"></rect><animateTransform attributeName="transform" calcMode="discrete" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12"></animateTransform></g></svg> }
+        </h1>
         {
         (targetPath === 'folder' && !isNotFound) &&
           <button type='button' onClick={handleEditBtnClick}>Edit</button>
@@ -170,11 +173,22 @@ const FolderListTitle = styled.div`
   height: auto;
   margin: 0px 0px 8px;
   & > h1 {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    width: auto;
     font-size: 15px;
     font-weight: 500;
     color: ${({ theme }) => theme.grayScale700};
     white-space: nowrap;
     transition: color 0.3s;
+
+    svg {
+      font-size: 16px;
+      color: ${({ theme }) => theme.grayScale600};
+    }
   }
   & > button {
     display: inline-flex;

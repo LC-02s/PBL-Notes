@@ -1,16 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { Note } from "../types/note";
+import { getDataFromDB, saveDataToDB } from "../database";
 
-// const initialBasicNote = JSON.parse(localStorage.getItem('basicNotes') ?? '[]');
-
-const temp = [
-  {createAt: 1708310444782, included: "fasdf", isLocked: false, isPinned: false, markdown: "# asdf\n\nasdf", modifiable: true, title: "asdf", updateAt: 1708310449173},
-  {createAt: 1708310603468, included: "qwefasd", isLocked: false, isPinned: true, markdown: "# asdfdf\n\nasdfsadf", modifiable: true, title: "asdfdf", updateAt: 1708310607067},
-  {createAt: 1708310640750, included: "fasdf", isLocked: false, isPinned: true, markdown: "# asdfasdf\n\nasdfasdfasdfsadf", modifiable: true, title: "asdfasdf", updateAt: 1708310645586},
-  {createAt: 1708310675862, included: "fasdf", isLocked: false, isPinned: false, markdown: "# 12312\n\nasdfasd", modifiable: true, title: "12312", updateAt: 1708310678827},
-]
+export const getNotesFromDB = createAsyncThunk(
+  'note/getNotesFromDB',
+  async () => {
+    try {
+      const data: Note[] = await getDataFromDB('notes');
+      return { data, status: true, errCode: null }
+    } 
+    catch(err) { return { data: null, status: false, errCode: err } }
+  }
+);
 
 interface NoteState {
+  noteSession: boolean,
+  noteStatus: 'pending' | 'fulfilled' | 'rejected'
   activeNoteId: number,
   activeNoteIndex: number,
   tempData: Note | null,
@@ -18,10 +23,12 @@ interface NoteState {
 }
 
 const initialState: NoteState = {
+  noteSession: false,
+  noteStatus: 'pending',
   activeNoteId: -1,
   activeNoteIndex: -1,
   tempData: null,
-  notes: temp,
+  notes: [],
 }
 
 const note = createSlice({
@@ -55,6 +62,7 @@ const note = createSlice({
         const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
         state.tempData = modifyingNote;
         state.notes[state.activeNoteIndex] = modifyingNote;
+        saveDataToDB('notes', state.notes);
       }
     },
     deleteNote: (state, action) => {
@@ -66,6 +74,7 @@ const note = createSlice({
         } else {
           state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
         }
+        saveDataToDB('notes', state.notes);
         initActiveNote(state);
       }
     },
@@ -76,23 +85,52 @@ const note = createSlice({
       state.activeNoteId = payload;
       state.activeNoteIndex = targetIndex;
     },
+    changeIncluded: (state, { payload }: { payload: { targetName: string, newName: string } }) => {
+      const { targetName, newName } = payload;
+      state.notes = state.notes.map((note) => note.included === targetName ? { ...note, included: newName } : note);
+      saveDataToDB('notes', state.notes);
+      initActiveNote(state);
+    },
     changePinnedState: (state, action) => {
       if (state.tempData !== null) {
         state.tempData.isPinned = !state.tempData.isPinned;
         state.notes[state.activeNoteIndex].isPinned = state.tempData.isPinned;
+        saveDataToDB('notes', state.notes);
       }
     },
     changeLockedState: (state, action) => {
       if (state.tempData !== null) {
         state.tempData.isLocked = !state.tempData.isLocked;
         state.notes[state.activeNoteIndex].isLocked = state.tempData.isLocked;
+        saveDataToDB('notes', state.notes);
       }
     },
     resetActiveNote: (state, action) => { saveTempData(state); },
-  }
+    deleteNoteToFolder: (state, { payload }: { payload: string }) => {
+      state.notes = state.notes.map((note) => note.included === payload ? { ...note, included: '', modifiable: false } : note);
+      saveDataToDB('notes', state.notes);
+      initActiveNote(state);
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(getNotesFromDB.pending, (state) => {
+        state.noteStatus = 'pending';
+      })
+      .addCase(getNotesFromDB.fulfilled, (state, { payload }) => {
+        state.notes = payload.data ?? [];
+        state.noteSession = true;
+        state.noteStatus = 'fulfilled';
+      })
+      .addCase(getNotesFromDB.rejected, (state) => {
+        state.notes = [];
+        state.noteSession = true;
+        state.noteStatus = 'rejected';
+      })
+  },
 });
 
-export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, resetActiveNote, changeActiveNoteId, changePinnedState, changeLockedState } = note.actions;
+export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, resetActiveNote, changeActiveNoteId, changeIncluded, changePinnedState, changeLockedState, deleteNoteToFolder } = note.actions;
 
 export default note.reducer;
 
@@ -126,6 +164,7 @@ const saveTempData = (state: NoteState) => {
     } else {
       state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
     }
+    saveDataToDB('notes', state.notes);
   }
   initActiveNote(state);
 }

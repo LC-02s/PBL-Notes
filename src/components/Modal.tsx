@@ -9,8 +9,6 @@ const MODAL_COMPONENTS: { [type: string]: React.FC } = {
   'folder/modify': () => <FolderForm isModify={true} />,
 };
 
-console.log(MODAL_COMPONENTS);
-
 export default function Modal() {
 
   const { type, active } = useAppSelector(({ ui }) => ui.modal);
@@ -35,7 +33,7 @@ export default function Modal() {
 
 const ModalContainer = styled.div`
     position: absolute;
-    z-index: 99999;
+    z-index: 998;
     top: 0px;
     bottom: 0px;
     left: 0px;
@@ -48,7 +46,7 @@ const ModalContainer = styled.div`
 
 const ModalWrapper = styled.div<{ $active: boolean, $delay: boolean }>`
   position: relative;
-  z-index: 999999;
+  z-index: 999;
   width: 100%;
   max-width: 420px;
   padding: 24px;
@@ -66,7 +64,7 @@ const ModalWrapper = styled.div<{ $active: boolean, $delay: boolean }>`
 
 const ModalDimmed = styled.div<{ $active: boolean, $delay: boolean }>`
   position: absolute;
-  z-index: 99999;
+  z-index: 997;
   top: 0px;
   bottom: 0px;
   left: 0px;
