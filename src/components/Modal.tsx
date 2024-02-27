@@ -57,8 +57,8 @@ const ModalWrapper = styled.div<{ $active: boolean, $delay: boolean }>`
   transform: translateY(-20%);
   ${({ $delay }) => $delay && css`transform: translateY(-8%);`}
   opacity: ${({ $delay }) => $delay ? 1 : 0};
-  transition: transform 0.3s ease-out, opacity 0.3s;
-  transition-delay: 0.18s;
+  transition: transform 0.3s ease-out, opacity 0.3s, background 0.3s, border 0.3s;
+  transition-delay: transform 0.18s, opacity 0.18s;
   pointer-events: ${({ $active }) => $active ? 'all' : 'none'};
 `
 
@@ -73,6 +73,6 @@ const ModalDimmed = styled.div<{ $active: boolean, $delay: boolean }>`
   /* backdrop-filter: blur(4px); */
   visibility: ${({ $active }) => $active ? 'visible' : 'hidden'};
   opacity: ${({ $delay }) => $delay ? 1 : 0};
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, background 0.3s,;
   pointer-events: ${({ $active }) => $active ? 'all' : 'none'};
 `

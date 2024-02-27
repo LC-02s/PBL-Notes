@@ -103,7 +103,7 @@ const SearchContainer = styled.div<{ $isFocused: boolean }>`
     border-radius: 4px;
     background-color: ${({ theme }) => theme.grayScale100};
     outline: none;
-    transition: background 0.3s, border 0.3s, box-shadow 0.3s;
+    transition: color 0.3s, background 0.3s, border 0.3s, box-shadow 0.3s;
     ${({ $isFocused }) => $isFocused && css`
       background-color: ${({ theme }) => theme.grayScale000};
       border-color: ${({ theme }) => theme.grayScale200};

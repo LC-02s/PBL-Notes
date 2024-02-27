@@ -20,7 +20,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   
-  const { register, formState: { errors }, reset, handleSubmit } = useForm<FolderFormValues>({ mode: 'onSubmit' });
+  const { register, formState: { errors }, reset, handleSubmit, setFocus } = useForm<FolderFormValues>({ mode: 'onSubmit' });
 
   const { targetName } = usePathname();
   const [ currentColorChip, setCurrentColorChip ] = useState<ColorChip | string>('none');
@@ -29,8 +29,8 @@ export default function FolderForm({ isModify }: FolderFormProps) {
   const defaultColorChip = isModify ? folderList[targetIndex]?.color ?? 'none' : 'none';
 
   useEffect(() => { 
-    if (active) { reset(); setCurrentColorChip(defaultColorChip); } 
-  }, [active, defaultColorChip, reset]); 
+    if (active) { reset(); setCurrentColorChip(defaultColorChip); setFocus('title'); } 
+  }, [active, defaultColorChip, reset, setFocus]); 
   
   const handleColorSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => { setCurrentColorChip(e.target.value); }
   const handleDeleteBtnClick = () => {
@@ -81,7 +81,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
             })}
           />
           <FormColorSelectEl $color={currentColorChip === 'none' ? 'none' : THEME_COLOR[currentColorChip]}>
-            <select name="color" value={currentColorChip} onChange={handleColorSelectChange}>
+            <select name="color" value={currentColorChip} onChange={handleColorSelectChange} tabIndex={0}>
               <option value="none">none</option>
               {Object.keys(THEME_COLOR).map((colorType) => (
                 <option key={colorType} value={colorType}>{ colorType }</option>
@@ -95,7 +95,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
         { isModify && <button type='button' className='delete' onClick={handleDeleteBtnClick}>삭제</button> }
         <div>
           <button type='button' onClick={() => dispatch(modalOff(null))}>취소</button>
-          <button type='submit'>{ isModify ? '저장' : '확인' }</button>
+          <button type='submit'>{ isModify ? '저장' : '생성' }</button>
         </div>
       </FormBtnWrap>
     </form>
@@ -117,6 +117,7 @@ const FormFieldset = styled.fieldset<{ $error: boolean }>`
     font-size: 16px;
     font-weight: 600;
     color: ${({ theme }) => theme.grayScale700};
+    transition: color 0.3s;
   }
   label {
     display: block;
@@ -127,6 +128,7 @@ const FormFieldset = styled.fieldset<{ $error: boolean }>`
     font-size: 14px;
     font-weight: 500;
     color: ${({ theme }) => theme.grayScale600};
+    transition: color 0.3s;
   }
   input {
     display: block;
@@ -140,7 +142,7 @@ const FormFieldset = styled.fieldset<{ $error: boolean }>`
     border-radius: 6px;
     background-color: ${({ theme }) => theme.grayScale000};
     outline: none;
-    transition: border 0.2s, box-shadow 0.2s;
+    transition: background 0.3s, border 0.3s, box-shadow 0.3s;
     ${({ $error }) => $error && css`
       border-color: #E14B4D !important;
     `}
@@ -182,6 +184,7 @@ const FormColorSelectEl = styled.p<{ $color: string }>`
     margin: auto 0px;
     background-color: ${({ theme, $color }) => $color === 'none' ? theme.grayScale500 : $color};
     border-radius: 50%;
+    transition: background 0.3s;
   }
   select {
     position: relative;
@@ -193,15 +196,17 @@ const FormColorSelectEl = styled.p<{ $color: string }>`
     font-size: 14px;
     font-weight: 400;
     color: ${({ theme }) => theme.grayScale700};
+    line-height: 26px;
     border-radius: 6px;
     background-color: ${({ theme }) => theme.grayScale000};
     outline: none;
-    transition: border 0.2s;
+    transition: background 0.3s, border 0.3s, color 0.3s;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     cursor: pointer;
   }
+  select:focus {border-color: #3B84D8;}
 `;
 
 const FormErrorMessage = styled.p`
@@ -241,6 +246,7 @@ const FormBtnWrap = styled.div<{ $hasDeleteBtn: boolean }>`
   padding: 18px 0px 0px;
   margin: 24px 0px 0px;
   border-top: 1px solid ${({ theme }) => theme.grayScale200};
+  transition: border 0.3s;
 
   div {
     display: flex;
@@ -265,7 +271,14 @@ const FormBtnWrap = styled.div<{ $hasDeleteBtn: boolean }>`
     background-color: ${({ theme }) => theme.grayScale100};
     transition: background 0.3s, color 0.3s;
   }
-  button.delete { color: #E14B4D;}
+  button.delete { 
+    color: #E14B4D;
+    background-color: ${({ theme }) => theme.current === 'light' && '#FFE1E2'};
+  }
+  button.delete:hover,
+  button.delete:focus { 
+    background-color: ${({ theme }) => theme.current === 'light' && '#FAD1D2'};
+  }
   button:hover,
   button:focus {
     background-color: ${({ theme }) => theme.grayScale200};
@@ -276,6 +289,6 @@ const FormBtnWrap = styled.div<{ $hasDeleteBtn: boolean }>`
   }
   button[type="submit"]:hover,
   button[type="submit"]:focus {
-    background-color: #2870C3;
+    background-color: ${({ theme }) => theme.current === '#2870C3' && '#3B84D8'};
   }
 `;

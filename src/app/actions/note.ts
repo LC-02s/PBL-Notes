@@ -72,7 +72,8 @@ const note = createSlice({
         } else if (state.tempData.modifiable) {
           state.notes[state.activeNoteIndex].modifiable = false;
         } else {
-          state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
+          const confirmTxt = '노트 삭제 시 다시는 복구할 수 없습니다. \n삭제하시겠습니까?';
+          if (window.confirm(confirmTxt)) state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
         }
         saveDataToDB('notes', state.notes);
         initActiveNote(state);
