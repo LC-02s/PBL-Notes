@@ -28,7 +28,7 @@ export default function SearchBar() {
     setSearchResult(value ? notes.filter(({ title, modifiable }) => modifiable && title.includes(e.target.value)) : []);
   }
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === 'Tab' && e.shiftKey) setIsFouced(false);
+    if (e.key === 'Tab' && e.shiftKey) setIsFouced(false);
   }
   const handleInitSearchValueBtnClick = () => {
     initState();
@@ -43,8 +43,8 @@ export default function SearchBar() {
     inputRef.current?.blur();
   }
   const handleSearchResultBtnKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
-    if (e.code === 'Tab' && e.shiftKey) return;
-    else if (e.code === 'Tab' && index === searchResult.length - 1) setIsFouced(false);
+    if (e.key === 'Tab' && e.shiftKey) return;
+    else if (e.key === 'Tab' && index === searchResult.length - 1) setIsFouced(false);
   }
 
   return (
