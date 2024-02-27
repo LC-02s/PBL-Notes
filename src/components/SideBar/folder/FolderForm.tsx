@@ -8,7 +8,7 @@ import { ColorChip } from '../../../app/types/folder';
 import styled, { css } from "styled-components";
 import usePathname from '../../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
-import { changeIncluded, deleteNoteToFolder } from '../../../app/actions/note';
+import { overwriteNotesIncluded, deleteNoteToFolder } from '../../../app/actions/note';
 
 type FolderFormProps = { isModify: boolean };
 type FolderFormValues = { title: string };
@@ -50,7 +50,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
       dispatch(modifyFolder({ targetIndex, name: title.trim(), color: currentColorChip }));
       dispatch(modalOff(null));
       if (title !== targetName) {
-        dispatch(changeIncluded({ targetName, newName: title.trim() }));
+        dispatch(overwriteNotesIncluded({ targetName, newName: title.trim() }));
         navigate(`/folder/${title.trim()}`);
       }
     } else {

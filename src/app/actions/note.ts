@@ -79,18 +79,18 @@ const note = createSlice({
         initActiveNote(state);
       }
     },
+    overwriteNotesIncluded: (state, { payload }: { payload: { targetName: string, newName: string } }) => {
+      const { targetName, newName } = payload;
+      state.notes = state.notes.map((note) => note.included === targetName ? { ...note, included: newName } : note);
+      saveDataToDB('notes', state.notes);
+      initActiveNote(state);
+    },
     changeActiveNoteId: (state, { payload }: { payload: number }) => {
       saveTempData(state);
       const targetIndex = state.notes.findIndex(({ createAt }) => createAt === payload);
       state.tempData = state.notes[targetIndex];
       state.activeNoteId = payload;
       state.activeNoteIndex = targetIndex;
-    },
-    changeIncluded: (state, { payload }: { payload: { targetName: string, newName: string } }) => {
-      const { targetName, newName } = payload;
-      state.notes = state.notes.map((note) => note.included === targetName ? { ...note, included: newName } : note);
-      saveDataToDB('notes', state.notes);
-      initActiveNote(state);
     },
     changePinnedState: (state, action) => {
       if (state.tempData !== null) {
@@ -104,6 +104,17 @@ const note = createSlice({
         state.tempData.isLocked = !state.tempData.isLocked;
         state.notes[state.activeNoteIndex].isLocked = state.tempData.isLocked;
         saveDataToDB('notes', state.notes);
+      }
+    },
+    changeIncluded: (state, { payload }: { payload: { noteId: number, newName: string } }) => {
+      const { noteId, newName } = payload;
+      if (newName !== '' && noteId > 0) {
+        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === noteId);
+        if (targetIndex >= 0) {
+          state.notes[targetIndex].included = newName;
+          state.notes[targetIndex].modifiable = true;
+          saveDataToDB('notes', state.notes);
+        }
       }
     },
     resetActiveNote: (state, action) => { saveTempData(state); },
@@ -131,7 +142,7 @@ const note = createSlice({
   },
 });
 
-export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, resetActiveNote, changeActiveNoteId, changeIncluded, changePinnedState, changeLockedState, deleteNoteToFolder } = note.actions;
+export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, overwriteNotesIncluded, resetActiveNote, changeActiveNoteId, changePinnedState, changeLockedState, changeIncluded, deleteNoteToFolder } = note.actions;
 
 export default note.reducer;
 

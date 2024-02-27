@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { THEME_COLOR } from '../../../App.theme'
 import styled, { css } from 'styled-components'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { NavLink } from 'react-router-dom';
-import { resetActiveNote } from '../../../app/actions/note';
+import { changeIncluded, resetActiveNote } from '../../../app/actions/note';
 import usePathname from '../../../hooks/usePathname';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { changeFolderIndex } from '../../../app/actions/folder';
@@ -14,14 +14,32 @@ export default function FolderList() {
   const { noteStatus, notes } = useAppSelector(({ note }) => note);
   const { folderStatus, folderList } = useAppSelector(({ folder }) => folder);
   const dispatch = useAppDispatch();
-
+  
   const { targetPath, isNotFound } = usePathname();
+  
+  const isDragging = useAppSelector(({ ui }) => ui.isDrag);
+  const [ hoveringFolder, setHoveringFolder ] = useState(-1);
+  useEffect(() => { if (!isDragging) setHoveringFolder(-1); }, [isDragging]);
 
   const handleDndEnd = (result: DropResult) => {
     const { destination, source } = result;
     if (destination) dispatch(changeFolderIndex({ targetIndex: source.index, destination: destination.index }));
   }
   const handleEditBtnClick = () => { dispatch(modalOn('folder/modify')); }
+
+  const handleFolderDragOver = (e: React.DragEvent) => { e.preventDefault(); }
+  const handleFolderDragEnter = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    setHoveringFolder(index);
+  }
+  const handleFolderDrop = (e: React.DragEvent, folderIndex: number) => {
+    e.preventDefault();
+    const id = Number(e.dataTransfer.getData('note/id')) || 0;
+    if (id > 0 && folderList[folderIndex]) {
+      dispatch(changeIncluded({ noteId: id, newName: folderList[folderIndex]?.name ?? '' }));
+    }
+    setHoveringFolder(-1);
+  }
 
   return (
     <FolderListContainer>
@@ -36,7 +54,7 @@ export default function FolderList() {
         }
       </FolderListTitle>
       <ul>
-        <FolderListIconItem $type='' $color='none'>
+        <FolderListIconItem $type='' $color='none' $isHovering={false}>
           <NavLink to='/' state='all' className={({ isActive }) => isActive ? 'active' : ''}>
             <span>모든 노트</span><span>{ notes.filter(({ modifiable }) => modifiable).length }</span>
           </NavLink>
@@ -47,7 +65,7 @@ export default function FolderList() {
               {folderList.map(({ id, name, color }, idx) => (
                 <Draggable key={id} draggableId={String(id)} index={idx}>
                   {(provided, snapshot) => ( 
-                  <FolderListItem key={id} $color={color === 'none' ? 'none' : THEME_COLOR[color] ?? 'none'} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1}>
+                  <FolderListItem key={id} $color={THEME_COLOR[color] ?? 'none'} $isHovering={isDragging && hoveringFolder === idx} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1} onDragEnter={(e) => handleFolderDragEnter(e, idx)} onDragOver={handleFolderDragOver} onDrop={(e) => handleFolderDrop(e, idx)}>
                     <NavLink to={`/folder/${name}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''}>
                       <span>{ name }</span><span>{ notes.filter(({ included, modifiable }) => included === name && modifiable).length }</span>
                     </NavLink>
@@ -57,7 +75,7 @@ export default function FolderList() {
             </ul></li>)}
           </Droppable>
         </DragDropContext>
-        <FolderListIconItem $type='trash' $color='none'>
+        <FolderListIconItem $type='trash' $color='none' $isHovering={false}>
           <NavLink to='/trash' state='trash' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => dispatch(resetActiveNote(null))}>
             <span>최근 삭제한 항목</span><span>{ notes.filter(({ modifiable }) => !modifiable).length }</span>
           </NavLink>
@@ -77,7 +95,7 @@ const FolderListContainer = styled.div`
   & + & {margin: 12px 0px 0px;}
 `;
 
-const FolderListItem = styled.li<{ $color: string }>`
+const FolderListItem = styled.li<{ $color: string, $isHovering: boolean }>`
   display: block;
   width: 100%;
   height: auto;
@@ -95,6 +113,9 @@ const FolderListItem = styled.li<{ $color: string }>`
     border-radius: 4px;
     transition: background 0.2s;
     &:hover {background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.12);}
+    ${({ $isHovering }) => $isHovering && css`
+      background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.32);
+    `}
   }
   & > a.active,
   & > a.active:hover {

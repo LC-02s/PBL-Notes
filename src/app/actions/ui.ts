@@ -6,7 +6,7 @@ export type UIView = 'list' | 'gallary';
 export type ModalType = 'folder/add' | 'folder/modify';
 export type UIModal = { type: ModalType, active: boolean };
 
-export interface UIState { theme:  UITheme, view: UIView, modal: UIModal }
+export interface UIState { theme:  UITheme, view: UIView, modal: UIModal, isDrag: boolean }
 
 const initialSetting = JSON.parse(localStorage.getItem('setting') ?? '{}');
 
@@ -14,6 +14,7 @@ const initialState: UIState = {
   theme: initialSetting.theme || 'light',
   view: initialSetting.view || 'list',
   modal: { type: 'folder/add', active: false },
+  isDrag: false,
 }
 
 const ui = createSlice({
@@ -36,9 +37,12 @@ const ui = createSlice({
       state.modal.type = payload;
       state.modal.active = true;
     },
+    toggleIsDragging: (state) => {
+      state.isDrag = !state.isDrag;
+    }
   }
 });
 
-export const { changeTheme, changeView, modalOn, modalOff } = ui.actions;
+export const { changeTheme, changeView, modalOn, modalOff, toggleIsDragging } = ui.actions;
 
 export default ui.reducer;
