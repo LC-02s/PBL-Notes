@@ -15,7 +15,7 @@ export const getNotesFromDB = createAsyncThunk(
 
 interface NoteState {
   noteSession: boolean,
-  noteStatus: 'pending' | 'fulfilled' | 'rejected'
+  noteStatus: 'pending' | 'fulfilled' | 'rejected',
   activeNoteId: number,
   activeNoteIndex: number,
   tempData: Note | null,

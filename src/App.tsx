@@ -21,8 +21,8 @@ export default function App() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-      if (!noteSession) dispatch(getNotesFromDB());
       if (!folderSession) dispatch(getFoldersFromDB());
+      if (folderSession && !noteSession) dispatch(getNotesFromDB());
     }, [ noteSession, folderSession, dispatch ]);
 
     useEffect(() => {
