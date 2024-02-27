@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { Note } from '../../app/types/note';
 import { changeActiveNoteId } from '../../app/actions/note';
@@ -104,14 +104,14 @@ const SearchContainer = styled.div<{ $isFocused: boolean }>`
     background-color: ${({ theme }) => theme.grayScale100};
     outline: none;
     transition: background 0.3s, border 0.3s, box-shadow 0.3s;
+    ${({ $isFocused }) => $isFocused && css`
+      background-color: ${({ theme }) => theme.grayScale000};
+      border-color: ${({ theme }) => theme.grayScale200};
+    `}
   }
+  input:focus {border-color: #3B84D8;}
   input::placeholder {color: ${({ theme }) => theme.grayScale400};}
-  input:focus {
-    background-color: ${({ theme }) => theme.grayScale000};
-    border-color: ${({ theme }) => theme.grayScale200};
-    border-color: #3B84D8;
-    /* box-shadow: 0px 0px 0px 2px rgba(59,132,216,0.3); */
-  }
+
   & > button {
     position: absolute;
     top: 0px;
