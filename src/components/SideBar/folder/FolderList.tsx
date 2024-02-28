@@ -76,7 +76,7 @@ export default function FolderList() {
           </Droppable>
         </DragDropContext>
         <FolderListIconItem $type='trash' $color='none' $isHovering={false}>
-          <NavLink to='/trash' state='trash' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => dispatch(resetActiveNote(null))}>
+          <NavLink to='/trash' state='trash' className={({ isActive }) => isActive ? 'active' : ''} onClick={() => dispatch(resetActiveNote())}>
             <span>최근 삭제한 항목</span><span>{ notes.filter(({ modifiable }) => !modifiable).length }</span>
           </NavLink>
         </FolderListIconItem>

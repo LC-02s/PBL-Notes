@@ -39,7 +39,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
       const { id, name } = folderList[targetIndex];
       dispatch(deleteFolder(id));
       dispatch(deleteNoteToFolder(name));
-      dispatch(modalOff(null));
+      dispatch(modalOff());
       navigate(`/trash`);
     }
   }
@@ -48,7 +48,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
 
     if (isModify) {
       dispatch(modifyFolder({ targetIndex, name: title.trim(), color: currentColorChip }));
-      dispatch(modalOff(null));
+      dispatch(modalOff());
       if (title !== targetName) {
         dispatch(overwriteNotesIncluded({ targetName, newName: title.trim() }));
         navigate(`/folder/${title.trim()}`);
@@ -56,7 +56,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
     } else {
       const time = Number(new Date().getTime());
       dispatch(addFolder({ name: title.trim(), time, color: currentColorChip }));
-      dispatch(modalOff(null));
+      dispatch(modalOff());
     }
   }
 
@@ -94,7 +94,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
       <FormBtnWrap $hasDeleteBtn={isModify}>
         { isModify && <button type='button' className='delete' onClick={handleDeleteBtnClick}>삭제</button> }
         <div>
-          <button type='button' onClick={() => dispatch(modalOff(null))}>취소</button>
+          <button type='button' onClick={() => dispatch(modalOff())}>취소</button>
           <button type='submit'>{ isModify ? '저장' : '생성' }</button>
         </div>
       </FormBtnWrap>
