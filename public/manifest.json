@@ -1,6 +1,6 @@
 {
   "short_name": "PBL Notes",
-  "name": "PBL Notes : Web Based Note App",
+  "name": "PBL Notes",
   "icons": [
     {
       "src": "img/logo512.png",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#131517",
-  "background_color": "#ffffff"
+  "theme_color": "#ffffff",
+  "background_color": "#eef1f3"
 }
