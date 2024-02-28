@@ -80,12 +80,13 @@ const NoteListContainer = styled.ul<{ $viewType: boolean }>`
   width: 100%;
   height: 100%;
   padding: ${({ $viewType }) => $viewType ? '12px' : '24px'};
+  border-right: 1px solid ${({ theme }) => theme.grayScale000};
   overflow-y: auto;
   transition: border 0.3s;
   
   ${({ $viewType }) => $viewType ? css`
     width: 241px;
-    border-right: 1px solid ${({ theme }) => theme.grayScale200};
+    border-color: ${({ theme }) => theme.grayScale200};
     & > li + li {margin: 14px 0px 0px;}
   ` : css`
     & > li + li {margin: 20px 0px 0px;}
