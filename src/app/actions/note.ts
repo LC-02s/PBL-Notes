@@ -113,6 +113,10 @@ const note = createSlice({
         if (targetIndex >= 0) {
           state.notes[targetIndex].included = newName;
           state.notes[targetIndex].modifiable = true;
+          if (state.tempData !== null) {
+            state.tempData.included = newName;
+            state.tempData.modifiable = true;
+          }
           saveDataToDB('notes', state.notes);
         }
       }
