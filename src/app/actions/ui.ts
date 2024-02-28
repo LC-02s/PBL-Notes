@@ -37,8 +37,8 @@ const ui = createSlice({
       state.modal.type = payload;
       state.modal.active = true;
     },
-    toggleIsDragging: (state) => {
-      state.isDrag = !state.isDrag;
+    toggleIsDragging: (state, { payload }: { payload: boolean }) => {
+      state.isDrag = payload;
     }
   }
 });

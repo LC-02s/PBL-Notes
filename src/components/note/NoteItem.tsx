@@ -26,10 +26,10 @@ const NoteItem: React.FC<NoteItemsProps> = ({ data, targetPath, folderMap }) => 
   const handleBtnDragStart = (e: React.DragEvent, id: number) => {
     e.dataTransfer.setDragImage(img, 20, 20);
     e.dataTransfer.setData('note/id', String(id));
-    dispatch(toggleIsDragging());
+    dispatch(toggleIsDragging(true));
   }
   const handleBtnDragEnd = (e: React.DragEvent) => {
-    dispatch(toggleIsDragging());
+    dispatch(toggleIsDragging(false));
   }
 
   return (

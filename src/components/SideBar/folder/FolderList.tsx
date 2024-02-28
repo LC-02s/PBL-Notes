@@ -19,7 +19,7 @@ export default function FolderList() {
   
   const isDragging = useAppSelector(({ ui }) => ui.isDrag);
   const [ hoveringFolder, setHoveringFolder ] = useState(-1);
-  useEffect(() => { if (!isDragging) setHoveringFolder(-1); }, [isDragging]);
+  useEffect(() => { setHoveringFolder(-1); }, [isDragging]);
 
   const handleDndEnd = (result: DropResult) => {
     const { destination, source } = result;
