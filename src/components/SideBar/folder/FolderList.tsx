@@ -32,12 +32,11 @@ export default function FolderList() {
     e.preventDefault();
     setHoveringFolder(index);
   }
-  const handleFolderDrop = (e: React.DragEvent, folderIndex: number) => {
+  const handleFolderDrop = (e: React.DragEvent, folderIndex?: number) => {
     e.preventDefault();
     const id = Number(e.dataTransfer.getData('note/id')) || 0;
-    if (id > 0 && folderList[folderIndex]) {
-      dispatch(changeIncluded({ noteId: id, newName: folderList[folderIndex]?.name ?? '' }));
-    }
+    if (id > 0) dispatch(changeIncluded({ noteId: id, 
+      newName: (folderIndex !== undefined && folderList[folderIndex]) ? folderList[folderIndex].name : '' }));
     setHoveringFolder(-1);
   }
 
@@ -54,7 +53,7 @@ export default function FolderList() {
         }
       </FolderListTitle>
       <ul>
-        <FolderListIconItem $type='' $color='none' $isHovering={false}>
+        <FolderListIconItem key={'all'} $type='' $color='none' $isHovering={isDragging && hoveringFolder === 0} onDragEnter={(e) => handleFolderDragEnter(e, 0)} onDragOver={handleFolderDragOver} onDrop={handleFolderDrop}>
           <NavLink to='/' state='all' className={({ isActive }) => isActive ? 'active' : ''}>
             <span>모든 노트</span><span>{ notes.filter(({ modifiable }) => modifiable).length }</span>
           </NavLink>
@@ -65,7 +64,7 @@ export default function FolderList() {
               {folderList.map(({ id, name, color }, idx) => (
                 <Draggable key={id} draggableId={String(id)} index={idx}>
                   {(provided, snapshot) => ( 
-                  <FolderListItem key={id} $color={THEME_COLOR[color] ?? 'none'} $isHovering={isDragging && hoveringFolder === idx} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1} onDragEnter={(e) => handleFolderDragEnter(e, idx)} onDragOver={handleFolderDragOver} onDrop={(e) => handleFolderDrop(e, idx)}>
+                  <FolderListItem key={id} $color={THEME_COLOR[color] ?? 'none'} $isHovering={isDragging && hoveringFolder === idx + 1} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1} onDragEnter={(e) => handleFolderDragEnter(e, idx + 1)} onDragOver={handleFolderDragOver} onDrop={(e) => handleFolderDrop(e, idx)}>
                     <NavLink to={`/folder/${name}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''}>
                       <span>{ name }</span><span>{ notes.filter(({ included, modifiable }) => included === name && modifiable).length }</span>
                     </NavLink>

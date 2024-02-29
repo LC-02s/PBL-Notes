@@ -106,7 +106,7 @@ const note = createSlice({
     },
     changeIncluded: (state, { payload }: { payload: { noteId: number, newName: string } }) => {
       const { noteId, newName } = payload;
-      if (newName !== '' && noteId > 0) {
+      if (noteId > 0) {
         const targetIndex = state.notes.findIndex(({ createAt }) => createAt === noteId);
         if (targetIndex >= 0) {
           state.notes[targetIndex].included = newName;
