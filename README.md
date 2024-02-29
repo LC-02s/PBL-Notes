@@ -18,6 +18,10 @@
 
 ## 개발 환경 (Only FE)
 
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
 ### React
 > 브라우저 내에서 불필요한 리로딩을 최소화하여 네이티브 앱과 비슷한 UX를 구현하기 위해 도입하였습니다.
 
