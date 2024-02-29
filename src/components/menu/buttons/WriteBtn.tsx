@@ -8,8 +8,8 @@ import { useLocation } from 'react-router-dom';
 export default function WriteBtn() {
 
   const { pathname } = useLocation();
-  const { targetPath, targetName, isInvalid, isNotFound } = usePathname();
-  const isDisabled = targetPath === 'all' || isInvalid || isNotFound || pathname === '/notfound';
+  const { targetName, isInvalid, isNotFound } = usePathname();
+  const isDisabled = isInvalid || isNotFound || pathname === '/notfound';
 
   const dispatch = useAppDispatch();
 

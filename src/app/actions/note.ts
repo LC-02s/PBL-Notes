@@ -38,16 +38,14 @@ const note = createSlice({
     addTempNote: (state, { payload }: { payload: { folder: string, time: number } }) => {
       const { folder, time } = payload;
       saveTempData(state);
-      if (folder) {
-        const newNote:Note = {
-          included: folder, title: '', createAt: time, updateAt: time, markdown: '', 
-          isPinned: false, isLocked: false, modifiable: true,
-        }
-        state.tempData = newNote;
-        state.notes.push(newNote);
-        state.activeNoteId = time;
-        state.activeNoteIndex = state.notes.length - 1;
+      const newNote:Note = {
+        included: folder, title: '', createAt: time, updateAt: time, markdown: '', 
+        isPinned: false, isLocked: false, modifiable: true,
       }
+      state.tempData = newNote;
+      state.notes.push(newNote);
+      state.activeNoteId = time;
+      state.activeNoteIndex = state.notes.length - 1;
     },
     modifyTempNote: (state, { payload }: { payload: string }) => {
       if (state.tempData !== null) {
