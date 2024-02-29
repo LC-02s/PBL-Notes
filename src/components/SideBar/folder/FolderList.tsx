@@ -111,14 +111,14 @@ const FolderListItem = styled.li<{ $color: string, $isHovering: boolean }>`
     font-size: 14px;
     border-radius: 4px;
     transition: background 0.2s;
-    &:hover {background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.12);}
+    &:hover {background-color: ${({ theme, $isHovering }) => $isHovering ? '#3B84D8' : `rgba(${theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.12)`}}
     ${({ $isHovering }) => $isHovering && css`
-      background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.32);
+      background-color: #3B84D8;
     `}
   }
   & > a.active,
   & > a.active:hover {
-    background-color: rgba(${({ theme }) => theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.32);
+    background-color: rgba(${({ theme, $isHovering }) => $isHovering ? '#3B84D8' : theme.current === 'light' ? '255,255,255' : '0,0,0'}, 0.32);
   }
   & > a > span {display: inline-block; white-space: nowrap;}
   & > a > span:first-of-type {
@@ -127,7 +127,7 @@ const FolderListItem = styled.li<{ $color: string, $isHovering: boolean }>`
     padding-left: 18px;
     font-size: inherit;
     font-weight: 400;
-    color: ${({ theme }) => theme.grayScale700};
+    color: ${({ theme, $isHovering }) => $isHovering ? '#FFF' : theme.grayScale700};
     text-overflow: ellipsis;
     overflow: hidden;
 
@@ -142,13 +142,13 @@ const FolderListItem = styled.li<{ $color: string, $isHovering: boolean }>`
       height: 4px;
       margin: auto 0px;
       border-radius: 50%;
-      background-color: ${({ theme, $color }) => $color === 'none' ? theme.grayScale500 : $color};
+      background-color: ${({ theme, $color, $isHovering }) => $isHovering ? '#FFF' : $color === 'none' ? theme.grayScale500 : $color};
     }
   }
   & > a > span:last-of-type {
     font-size: 14px;
     font-weight: 400;
-    color: ${({ theme }) => theme.grayScale500};
+    color: ${({ theme, $isHovering }) => $isHovering ? '#FFF' : theme.grayScale500};
   }
 `;
 
@@ -162,7 +162,7 @@ const FolderListIconItem = styled(FolderListItem)<{ $type: string }>`
     width: var(--icon-size);
     height: var(--icon-size);
     font-size: var(--icon-size);
-    color: ${({ theme }) => theme.grayScale600};
+    color: ${({ theme, $isHovering }) => $isHovering ? '#FFF' : theme.grayScale600};
     border-radius: 0px;
     background-color: transparent;
     --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' d='M22 11H2'/%3E%3Cpath d='M2 6.95c0-.883 0-1.324.07-1.692A4 4 0 0 1 5.257 2.07C5.626 2 6.068 2 6.95 2c.386 0 .58 0 .766.017a4 4 0 0 1 2.18.904c.144.119.28.255.554.529L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z'/%3E%3C/g%3E%3C/svg%3E");

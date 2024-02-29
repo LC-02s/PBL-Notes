@@ -1,6 +1,6 @@
 # PBL Notes
 
-![intro image](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F7945ce06-31b8-485f-a423-8a34ee0101a2%2Fc0686b48-3e5b-4a68-9997-1e10e2798106%2F%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2024-02-28_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_11.21.20.png?table=block&id=fdca3b46-0819-4d16-96ee-c1c1bc100d31&spaceId=7945ce06-31b8-485f-a423-8a34ee0101a2&width=2000&userId=9ac6e46f-eb3f-4360-ba9b-d2b06414fced&cache=v2)
+![intro image](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F7945ce06-31b8-485f-a423-8a34ee0101a2%2Fc5bf3d33-749a-4509-ba8a-594ac95bdee8%2Fpbl-notes-intro.jpg?table=block&id=60ab8fdb-69ed-43ca-8b51-3945572eb65a&spaceId=7945ce06-31b8-485f-a423-8a34ee0101a2&width=2000&userId=9ac6e46f-eb3f-4360-ba9b-d2b06414fced&cache=v2)
 
 - **배포 URL** : [https://pbl-notes.netlify.app/](https://pbl-notes.netlify.app/)
 - **개발 기간** : 2024.02.08 ~ 2024.02.28 (20일)
@@ -19,25 +19,24 @@
 ## 개발 환경 (Only FE)
 
 ### React
-> 브라우저 내에서 불필요한 리로딩을 최소화 하여 네이티브 앱과 비슷한 UX를 구현하기 위해 도입하였습니다.
+> 브라우저 내에서 불필요한 리로딩을 최소화하여 네이티브 앱과 비슷한 UX를 구현하기 위해 도입하였습니다.
 
 ### Redux (RTK)
-> ( 작성중... )
+> 서비스 특성상 전역 상태 변경이 빈번하게 일어나기에 복잡한 상태들을 조금 더 쉽게 중앙 집중적으로 관리하기 위해 도입하였습니다.
 
 ### TypeScript
 > 복잡한 어플리케이션을 구현함에 있어 실수로 인해 예상하지 못한 런타임에러를 최대한 방지하고자 도입하였습니다.
 
 ### React Router Dom
-> ( 작성중... )
+> 프로젝트 초기에는 라우터 없이 폴더 기능 구현을 시도했었지만, 폴더와 노트에 대한 여러 상태를 저 혼자 모두 커버하기에는 무리가 있다고 판단되어 도입하였습니다.  
+도입 후 라우터의 도움을 받아 폴더 기능을 구현하여 기존에 사용했던 불필요한 중간 변수들과 액션 함수들을 최소화할 수 있었습니다.
 
 ### React Hook Form
-> 폴더를 생성함에 있어 
+> 폴더 생성 및 수정 시 이름에 대한 유효성 검사를 쉽게 구현할 수 있고, `useRef` 기반으로 동작하여 불필요한 컴포넌트의 리렌더링을 줄여 성능을 개선할 수 있기에 쓰지 않을 이유가 없었습니다.
 
 ### Styled Components
-> 유지보수를 고려해서 테마 별 스타일을 관리하기 위해 `theme provider` 을 사용하였습니다.  
-또한 
-
-
+> 유지보수를 고려해서 테마 별 스타일을 편리하게 관리하기 위해 `theme provider` 을 사용하였습니다.  
+서비스 특성상 전역 상태 변경이 다수 발생되어 그에 따른 스타일 변경을 쉽게 조건부로 관리할 수 있다는 것 또한 매력적이었습니다.
 
 <br>
 
