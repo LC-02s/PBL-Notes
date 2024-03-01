@@ -29,7 +29,6 @@ export default function SortBtn() {
       setInputRadioType(defaultSort.type);
       setInputRadioSorted(defaultSort.sortedAt);
     } else {
-      if (targetName === '') return;
       const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
       if (targetFolderIndex >= 0) {
         const { type, sortedAt } = folderList[targetFolderIndex].sort;
@@ -46,10 +45,12 @@ export default function SortBtn() {
     if (e.key === 'Tab' && e.shiftKey) setIsClicked(false);
   }
   const handleTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+    console.log('change 1: ', e.target.value);
     setInputRadioType(e.target.value); 
     dispatch(changeSortTypeOfFolder({ name: targetName, sort: { type: e.target.value, sortedAt: inputRadioSorted } }));
   }
   const handleSortedRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+    console.log('change 2: ', e.target.value);
     setInputRadioSorted(e.target.value); 
     dispatch(changeSortTypeOfFolder({ name: targetName, sort: { type: inputRadioType, sortedAt: e.target.value } }));
   }
@@ -68,25 +69,25 @@ export default function SortBtn() {
       <SortBtnTool $isVisible={isClicked}>
         <div>
           <SortRadioBtn as='label' title='기준: 생성일' $active={inputRadioType === 'create'} $hidden={!visibleDelay} tabIndex={0} onKeyDown={handleLabelKeyDown}>
-            <input name='type' type='radio' value='create' onChange={handleTypeRadioChange} />
+            <input name='type' type='radio' value='create' checked={inputRadioType === 'create'} onChange={handleTypeRadioChange} />
             <svg xmlns="http://www.w3.org/2000/svg" width="0.9em" height="0.9em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeWidth={1.5}><circle cx={12} cy={12} r={10}></circle><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l2.5 2.5"></path></g></svg>
           </SortRadioBtn>
           <SortRadioBtn as='label' title='기준: 편집일' $active={inputRadioType === 'update'} $hidden={!visibleDelay} tabIndex={0} onKeyDown={handleLabelKeyDown}>
-            <input name='type' type='radio' value='update' onChange={handleTypeRadioChange} />
+            <input name='type' type='radio' value='update' checked={inputRadioType === 'update'} onChange={handleTypeRadioChange} />
             <svg xmlns="http://www.w3.org/2000/svg" width="0.9em" height="0.9em" viewBox="0 0 24 24"><path fill="currentColor" d="M3.68 11.333h-.75zm0 1.667l-.528.532a.75.75 0 0 0 1.056 0zm2.208-1.134A.75.75 0 1 0 4.83 10.8zM2.528 10.8a.75.75 0 0 0-1.056 1.065zm16.088-3.408a.75.75 0 1 0 1.277-.786zM12.079 2.25c-5.047 0-9.15 4.061-9.15 9.083h1.5c0-4.182 3.42-7.583 7.65-7.583zm-9.15 9.083V13h1.5v-1.667zm1.28 2.2l1.679-1.667L4.83 10.8l-1.68 1.667zm0-1.065L2.528 10.8l-1.057 1.065l1.68 1.666zm15.684-5.86A9.158 9.158 0 0 0 12.08 2.25v1.5a7.658 7.658 0 0 1 6.537 3.643zM20.314 11l.527-.533a.75.75 0 0 0-1.054 0zM18.1 12.133a.75.75 0 0 0 1.055 1.067zm3.373 1.067a.75.75 0 1 0 1.054-1.067zM5.318 16.606a.75.75 0 1 0-1.277.788zm6.565 5.144c5.062 0 9.18-4.058 9.18-9.083h-1.5c0 4.18-3.43 7.583-7.68 7.583zm9.18-9.083V11h-1.5v1.667zm-1.276-2.2L18.1 12.133l1.055 1.067l1.686-1.667zm0 1.066l1.686 1.667l1.054-1.067l-1.686-1.666zM4.04 17.393a9.197 9.197 0 0 0 7.842 4.357v-1.5a7.697 7.697 0 0 1-6.565-3.644z"></path></svg>
           </SortRadioBtn>
           <SortRadioBtn as='label' title='기준: 제목' $active={inputRadioType === 'title'} $hidden={!visibleDelay} tabIndex={0} onKeyDown={handleLabelKeyDown}>
-            <input name='type' type='radio' value='title' onChange={handleTypeRadioChange} />
+            <input name='type' type='radio' value='title' checked={inputRadioType === 'title'} onChange={handleTypeRadioChange} />
             <svg xmlns="http://www.w3.org/2000/svg" width="0.8em" height="0.8em" viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" fillRule="evenodd" d="M7.934 2h8.132c.886 0 1.65 0 2.262.082c.655.088 1.284.287 1.793.797c.51.51.709 1.138.797 1.793C21 5.284 21 6.048 21 6.934V7.95a1 1 0 1 1-2 0V7c0-.971-.002-1.599-.064-2.061c-.059-.434-.153-.57-.229-.646c-.076-.076-.212-.17-.646-.229C17.6 4.002 16.971 4 16 4h-3v17a1 1 0 1 1-2 0V4H8c-.971 0-1.599.002-2.061.064c-.434.059-.57.153-.646.229c-.076.076-.17.212-.229.646C5.002 5.4 5 6.029 5 7v.95a1 1 0 1 1-2 0V6.934c0-.886 0-1.65.082-2.262c.088-.655.287-1.284.797-1.793c.51-.51 1.138-.709 1.793-.797C6.284 2 7.048 2 7.934 2" clipRule="evenodd"></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10"></path></g></svg>
           </SortRadioBtn>
         </div>
         <div>
           <SortRadioBtn as='label' title='오름차순' $active={inputRadioSorted === 'desc'} $hidden={!visibleDelay} tabIndex={0} onKeyDown={handleLabelKeyDown}>
-            <input name='sorted' type='radio' value='desc' onChange={handleSortedRadioChange} />
+            <input name='sorted' type='radio' value='desc' checked={inputRadioSorted === 'desc'} onChange={handleSortedRadioChange} />
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth={1.5}><path d="M4 8h9m-7 5h7m-5 5h5"></path><path strokeLinejoin="round" d="M17 20V4l3 4"></path></g></svg>
           </SortRadioBtn>
           <SortRadioBtn as='label' title='내림차순' $active={inputRadioSorted === 'asc'} $hidden={!visibleDelay} tabIndex={0} onKeyDown={(e) => handleLabelKeyDown(e, true)}>
-            <input name='sorted' type='radio' value='asc' onChange={handleSortedRadioChange} />
+            <input name='sorted' type='radio' value='asc' checked={inputRadioSorted === 'asc'} onChange={handleSortedRadioChange} />
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth={1.5}><path d="M4 16h9m-7-5h7M8 6h5"></path><path strokeLinejoin="round" d="M17 4v16l3-4"></path></g></svg>
           </SortRadioBtn>
         </div>
@@ -149,6 +150,7 @@ const SortBtnTool = styled.div<{ $isVisible: boolean }>`
 `;
 
 const SortRadioBtn = styled(MenuBtn)`
+  position: relative;
   cursor: pointer;
-  & > input {display: none;}
+  & > input {position: absolute; visibility: hidden; opacity: 0;}
 `;
