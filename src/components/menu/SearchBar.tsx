@@ -29,6 +29,7 @@ export default function SearchBar() {
   }
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Tab' && e.shiftKey) setIsFouced(false);
+    if (e.key === 'Enter' && searchResult.length > 0) handleSearchResultBtnClick(searchResult[0].createAt);
   }
   const handleInitSearchValueBtnClick = () => {
     initState();
