@@ -6,7 +6,6 @@ export default function useClickOutOfElement(element: React.RefObject<HTMLDivEle
   
   useEffect(() => {
     const handleClickToFocus = (e: any) => {
-      
       if (element.current && !element.current.contains(e.target)) { setIsOutOfClicked(true); }
       else { setIsOutOfClicked(false); }
     } 

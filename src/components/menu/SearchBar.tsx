@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { Note } from '../../app/types/note';
 import { changeActiveNoteId } from '../../app/actions/note';
-import useClickOutOfElement from '../../hooks/useElementClickOutOfArea';
+import useClickOutOfElement from '../../hooks/useClickOutOfElement';
 
 export default function SearchBar() {
 
