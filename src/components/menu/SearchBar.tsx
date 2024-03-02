@@ -14,19 +14,20 @@ export default function SearchBar() {
   const [ isFouced, setIsFouced ] = useState(false);
   const [ searchResult, setSearchResult ] = useState<Note[]>([]);
 
+  useEffect(() => {
+    setSearchResult(inputValue ? notes.filter(({ title, modifiable }) => modifiable && title.includes(inputValue)) : []);
+  }, [ inputValue, setSearchResult, notes ]);
+  
   const inputRef = useRef<HTMLInputElement | null>(null);
   const searchArea = useRef<HTMLDivElement | null>(null);
 
   const isOutOfClicked = useClickOutOfElement(searchArea);
   useEffect(() => { if (isOutOfClicked) { setIsFouced(false); } }, [ isOutOfClicked, setIsFouced ]);
+  
 
   const initState = () => { setInputValue(''); setSearchResult([]); }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    setInputValue(value);
-    setSearchResult(value ? notes.filter(({ title, modifiable }) => modifiable && title.includes(e.target.value)) : []);
-  }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { setInputValue(e.target.value.trim()); }
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Tab' && e.shiftKey) setIsFouced(false);
     if (e.key === 'Enter' && searchResult.length > 0) handleSearchResultBtnClick(searchResult[0].createAt);
