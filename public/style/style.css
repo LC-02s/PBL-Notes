@@ -151,3 +151,22 @@ body.darkTheme {
 
   --ck-color-link-default: hsl(190, 100%, 75%);
 }
+
+noscript {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #E14B4D;
+  text-align: center;
+  line-height: 1.4;
+}
+noscript > svg {
+  font-size: 36px;
+  margin: 0px 0px 12px;
+}
