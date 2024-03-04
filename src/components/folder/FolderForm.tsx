@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { modalOff } from '../../../app/actions/ui';
-import { addFolder, deleteFolder, modifyFolder } from '../../../app/actions/folder';
-import { THEME_COLOR } from '../../../App.theme';
-import { ColorChip } from '../../../app/types/folder';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { modalOff } from '../../app/actions/ui';
+import { addFolder, deleteFolder, modifyFolder } from '../../app/actions/folder';
+import { THEME_COLOR } from '../../App.theme';
+import { ColorChip } from '../../app/types/folder';
 import styled, { css } from "styled-components";
-import usePathname from '../../../hooks/usePathname';
+import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
-import { overwriteNotesIncluded, deleteNoteToFolder } from '../../../app/actions/note';
+import { overwriteNotesIncluded, deleteNoteToFolder } from '../../app/actions/note';
 
 type FolderFormProps = { isModify: boolean };
 type FolderFormValues = { title: string };

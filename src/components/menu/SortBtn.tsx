@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { MenuBtn } from './Button.style'
 import styled from 'styled-components'
-import { SortType, SortedAt } from '../../../app/types/folder';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { changeSortTypeOfFolder } from '../../../app/actions/folder';
-import useClickOutOfElement from '../../../hooks/useClickOutOfElement';
-import useDelay from '../../../hooks/useDelay';
-import usePathname from '../../../hooks/usePathname';
+import { SortType, SortedAt } from '../../app/types/folder';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { changeSortTypeOfFolder } from '../../app/actions/folder';
+import useClickOutOfElement from '../../hooks/useClickOutOfElement';
+import useDelay from '../../hooks/useDelay';
+import usePathname from '../../hooks/usePathname';
 
 export default function SortBtn() {
 

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { THEME_COLOR } from '../../../App.theme'
+import { THEME_COLOR } from '../../App.theme'
 import styled, { css } from 'styled-components'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { NavLink } from 'react-router-dom';
-import { changeIncluded, resetActiveNote } from '../../../app/actions/note';
-import usePathname from '../../../hooks/usePathname';
+import { changeIncluded, resetActiveNote } from '../../app/actions/note';
+import usePathname from '../../hooks/usePathname';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { changeFolderIndex } from '../../../app/actions/folder';
-import { modalOn } from '../../../app/actions/ui';
+import { changeFolderIndex } from '../../app/actions/folder';
+import { modalOn } from '../../app/actions/ui';
 
 export default function FolderList() {
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { MenuBtn } from './Button.style'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { deleteNote } from '../../../app/actions/note';
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { deleteNote } from '../../app/actions/note';
 
 export default function DeleteBtn() {
 

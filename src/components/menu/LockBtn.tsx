@@ -1,7 +1,7 @@
 import React from 'react'
 import { MenuToggleBtn } from './Button.style'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { changeLockedState } from '../../../app/actions/note';
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { changeLockedState } from '../../app/actions/note';
 
 export default function LockBtn() {
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MenuBtn } from './Button.style';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { changeView } from '../../../app/actions/ui';
-import { resetActiveNote } from '../../../app/actions/note';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { changeView } from '../../app/actions/ui';
+import { resetActiveNote } from '../../app/actions/note';
 
 export default function ViewBtns() {
 

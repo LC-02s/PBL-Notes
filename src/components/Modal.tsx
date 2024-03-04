@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import FolderForm from './SideBar/folder/FolderForm'
+import FolderForm from './folder/FolderForm'
 import { useAppSelector } from '../app/hooks'
 import useDelay from '../hooks/useDelay';
 

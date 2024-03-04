@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { useAppDispatch } from '../../../app/hooks';
-import { changeTheme } from '../../../app/actions/ui';
+import { useAppDispatch } from '../../app/hooks';
+import { changeTheme } from '../../app/actions/ui';
 
 export default function ThemeBtn() {
 
