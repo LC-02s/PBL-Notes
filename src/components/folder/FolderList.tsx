@@ -65,7 +65,7 @@ export default function FolderList() {
                 <Draggable key={id} draggableId={String(id)} index={idx}>
                   {(provided, snapshot) => ( 
                   <FolderListItem key={id} $color={THEME_COLOR[color] ?? 'none'} $isHovering={isDragging && hoveringFolder === idx + 1} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} tabIndex={snapshot.isDragging ? 0 : -1} onDragEnter={(e) => handleFolderDragEnter(e, idx + 1)} onDragOver={handleFolderDragOver} onDrop={(e) => handleFolderDrop(e, idx)}>
-                    <NavLink to={`/folder/${name}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''}>
+                    <NavLink to={`/folder/${encodeURI(name)}`} state='folder' className={({ isActive }) => isActive ? 'active' : ''}>
                       <span>{ name }</span><span>{ notes.filter(({ included, modifiable }) => included === name && modifiable).length }</span>
                     </NavLink>
                   </FolderListItem> )}

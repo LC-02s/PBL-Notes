@@ -27,10 +27,10 @@ export default function SearchBar() {
 
   const initState = () => { setInputValue(''); setSearchResult([]); }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { setInputValue(e.target.value.trim()); }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { setInputValue(e.target.value); }
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Tab' && e.shiftKey) setIsFouced(false);
-    if (e.key === 'Enter' && searchResult.length > 0) handleSearchResultBtnClick(searchResult[0].createAt);
+    // if (e.key === 'Enter' && searchResult.length > 0) handleSearchResultBtnClick(searchResult[0].createAt);
   }
   const handleInitSearchValueBtnClick = () => {
     initState();
@@ -52,7 +52,7 @@ export default function SearchBar() {
   return (
     <SearchContainer ref={searchArea} $isFocused={isFouced}>
       <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fillRule="evenodd" d="M11.5 2.75a8.75 8.75 0 1 0 0 17.5a8.75 8.75 0 0 0 0-17.5M1.25 11.5c0-5.66 4.59-10.25 10.25-10.25S21.75 5.84 21.75 11.5c0 2.56-.939 4.902-2.491 6.698l3.271 3.272a.75.75 0 1 1-1.06 1.06l-3.272-3.271A10.21 10.21 0 0 1 11.5 21.75c-5.66 0-10.25-4.59-10.25-10.25" clipRule="evenodd"></path></svg>
-      <input type='text' placeholder='검색어를 입력해주세요' ref={inputRef} value={inputValue} onChange={handleInputChange} onFocus={() => setIsFouced(true)} onKeyDown={handleInputKeyDown} />
+      <input type='text' placeholder='노트 제목으로 검색하기' ref={inputRef} value={inputValue} onChange={handleInputChange} onFocus={() => setIsFouced(true)} onKeyDown={handleInputKeyDown} />
       <button type='button' disabled={inputValue ? false : true} onClick={handleInitSearchValueBtnClick} onBlur={handleInitSearchValueBtnBlur}>
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M11.142 20c-2.227 0-3.341 0-4.27-.501c-.93-.502-1.52-1.42-2.701-3.259l-.681-1.06C2.497 13.634 2 12.86 2 12c0-.86.497-1.634 1.49-3.18l.68-1.06c1.181-1.838 1.771-2.757 2.701-3.259C7.801 4 8.915 4 11.142 4h2.637c3.875 0 5.813 0 7.017 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.204 6.828C19.592 20 17.654 20 13.78 20z"></path><path strokeLinecap="round" d="m15.5 9.5l-5 5m0-5l5 5"></path></g></svg>
       </button>
