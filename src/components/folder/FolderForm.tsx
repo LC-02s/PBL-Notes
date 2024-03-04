@@ -74,7 +74,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
               required: '폴더명을 입력해주세요',
               maxLength: { value: 12, message: '폴더명은 최대 12자까지 입력할 수 있습니다' },
               validate: {
-                // match: (value) => (/[#%&?=/\\]+/).test(value) ? '사용할 수 없는 문자입니다' : undefined,
+                match: (value) => (/[#%&?=/\\]+/).test(value) ? '사용할 수 없는 문자입니다' : undefined,
                 overlap: (value) => {
                   const errerTxt = '이미 사용중인 폴더명입니다';
                   if (isModify) return folderList.some(({ name }) => name !== targetName && name === value) ? errerTxt : undefined;
