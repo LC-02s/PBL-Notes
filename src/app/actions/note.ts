@@ -63,7 +63,7 @@ const note = createSlice({
         saveDataToDB('notes', state.notes);
       }
     },
-    deleteNote: (state, action) => {
+    deleteNote: (state) => {
       if (state.tempData !== null) {
         if (extractTitle(state.tempData.markdown) === '') {
           state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
@@ -90,14 +90,14 @@ const note = createSlice({
       state.activeNoteId = payload;
       state.activeNoteIndex = targetIndex;
     },
-    changePinnedState: (state, action) => {
+    changePinnedState: (state) => {
       if (state.tempData !== null) {
         state.tempData.isPinned = !state.tempData.isPinned;
         state.notes[state.activeNoteIndex].isPinned = state.tempData.isPinned;
         saveDataToDB('notes', state.notes);
       }
     },
-    changeLockedState: (state, action) => {
+    changeLockedState: (state) => {
       if (state.tempData !== null) {
         state.tempData.isLocked = !state.tempData.isLocked;
         state.notes[state.activeNoteIndex].isLocked = state.tempData.isLocked;
@@ -119,7 +119,7 @@ const note = createSlice({
         }
       }
     },
-    resetActiveNote: (state, action) => { saveTempData(state); },
+    resetActiveNote: (state) => { saveTempData(state); },
     deleteNoteToFolder: (state, { payload }: { payload: string }) => {
       state.notes = state.notes.map((note) => note.included === payload ? { ...note, included: '', modifiable: false } : note);
       saveDataToDB('notes', state.notes);

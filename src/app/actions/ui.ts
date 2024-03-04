@@ -21,7 +21,7 @@ const ui = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    changeTheme: (state, action) => {
+    changeTheme: (state) => {
       const nextTheme = state.theme === 'light' ? 'dark' : 'light';
       state.theme = nextTheme;
       localStorage.setItem('setting', JSON.stringify({ theme: state.theme, view: state.view }));
@@ -30,7 +30,7 @@ const ui = createSlice({
       state.view = payload;
       localStorage.setItem('setting', JSON.stringify({ theme: state.theme, view: state.view }));
     },
-    modalOff: (state, action) => {
+    modalOff: (state) => {
       state.modal.active = false;
     },
     modalOn: (state, { payload }: { payload: ModalType }) => {
