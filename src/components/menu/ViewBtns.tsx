@@ -27,6 +27,7 @@ export default function ViewBtns() {
   )
 }
 
+// styled components
 const ViewBtnContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;

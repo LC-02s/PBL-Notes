@@ -96,6 +96,7 @@ export default function SortBtn() {
   )
 }
 
+// styled components
 const SortBtnContainer = styled.div`
   position: relative;
   display: block;

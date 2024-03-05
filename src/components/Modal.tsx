@@ -31,6 +31,7 @@ export default function Modal() {
   )
 }
 
+// styled components
 const ModalContainer = styled.div`
     position: absolute;
     z-index: 998;

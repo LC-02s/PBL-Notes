@@ -33,6 +33,7 @@ export default function MenuBar() {
   )
 }
 
+// styled components
 const MenuContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;
