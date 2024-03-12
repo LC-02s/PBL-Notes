@@ -2,7 +2,7 @@ import localForage from "localforage";
 import { Note } from "../types/note";
 import { Folder } from "../types/folder";
 
-export type DBKey = 'folders' | 'notes';
+export interface DB { 'folders': Folder[], 'notes': Note[] };
 
 localForage.config({
   driver: localForage.INDEXEDDB,
@@ -12,13 +12,15 @@ localForage.config({
   description: 'my notes database',
 });
 
-export const getDataFromDB = async (key: DBKey) => {
+export const getDataFromDB = async (key: keyof DB) => {
   const initialNotes = await localForage.getItem(key) ?? '[]';
   const data = JSON.parse(String(initialNotes));
   return data;
 }
 
-export const saveDataToDB = async (key: DBKey, data: Note[] | Folder[]) => {
-  localForage.setItem(key, JSON.stringify(data)).catch(console.warn);
+export const saveDataToDB = (key: keyof DB, data: DB[keyof DB]) => {
+  localForage
+    .setItem(key, JSON.stringify(data))
+    .catch(console.warn);
 }
 
