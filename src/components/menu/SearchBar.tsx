@@ -46,7 +46,7 @@ export default function SearchBar() {
   }
   const handleSearchResultBtnKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     if (e.key === 'Tab' && e.shiftKey) return;
-    else if (e.key === 'Tab' && index === searchResult.length - 1) setIsFouced(false);
+    if (e.key === 'Tab' && index === searchResult.length - 1) return setIsFouced(false);
   }
 
   return (

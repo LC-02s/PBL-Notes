@@ -58,11 +58,11 @@ const folder = createSlice({
       if (payload.name === '') {
         state.defaultSort = payload.sort;
         localStorage.setItem('defaultSort', JSON.stringify(state.defaultSort));
-      } else {
-        const targetFolderIndex = state.folderList.findIndex(({ name }) => name === payload.name);
-        state.folderList[targetFolderIndex].sort = payload.sort;
-        saveDataToDB('folders', state.folderList);
+        return;
       }
+      const targetFolderIndex = state.folderList.findIndex(({ name }) => name === payload.name);
+      state.folderList[targetFolderIndex].sort = payload.sort;
+      saveDataToDB('folders', state.folderList);
     },
     changeFolderIndex: (state, { payload }: { payload: { targetIndex: number, destination: number } }) => {
       const { targetIndex, destination } = payload;

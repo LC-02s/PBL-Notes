@@ -38,7 +38,7 @@ const note = createSlice({
     addTempNote: (state, { payload }: { payload: { folder: string, time: number } }) => {
       const { folder, time } = payload;
       saveTempData(state);
-      const newNote:Note = {
+      const newNote: Note = {
         included: folder, title: '', createAt: time, updateAt: time, markdown: '', 
         isPinned: false, isLocked: false, modifiable: true,
       }
@@ -63,17 +63,25 @@ const note = createSlice({
     },
     deleteNote: (state) => {
       if (state.tempData === null) return;
-
       if (extractTitle(state.tempData.markdown) === '') {
+        // 삭제하고자 하는 노트가 제목 또는 내용이 없을 경우
         state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
-      } else if (state.tempData.modifiable) {
-        state.notes[state.activeNoteIndex].modifiable = false;
-      } else {
-        const confirmTxt = '노트 삭제 시 다시는 복구할 수 없습니다. \n삭제하시겠습니까?';
-        if (window.confirm(confirmTxt)) state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
+        saveDataToDB('notes', state.notes);
+        return initActiveNote(state);
       }
-      saveDataToDB('notes', state.notes);
-      initActiveNote(state);
+      if (state.tempData.modifiable) {
+        // 삭제하고자 하는 노트가 수정가능한 상태인 경우
+        state.notes[state.activeNoteIndex].modifiable = false;
+        saveDataToDB('notes', state.notes);
+        return initActiveNote(state);
+      }
+      const confirmTxt = '노트 삭제 시 다시는 복구할 수 없습니다. \n삭제하시겠습니까?';
+      if (window.confirm(confirmTxt)) {
+        // 삭제하고자 하는 노트가 제목 및 내용이 있고 수정 불가능한 상태이며 완전 삭제 의사가 있는 경우
+        state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
+        saveDataToDB('notes', state.notes);
+        return initActiveNote(state);
+      }
     },
     overwriteNotesIncluded: (state, { payload }: { payload: { targetName: string, newName: string } }) => {
       const { targetName, newName } = payload;
@@ -166,14 +174,15 @@ const initActiveNote = (state: NoteState) => {
 }
 
 const saveTempData = (state: NoteState) => {
-  if (state.tempData !== null && state.tempData.modifiable) {
-    if (extractTitle(state.tempData.markdown)) {
-      const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
-      state.notes[targetIndex] = state.tempData;
-    } else {
-      state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
-    }
+  if (state.tempData === null) return initActiveNote(state);
+  if (state.tempData.modifiable === false) return initActiveNote(state);
+  if (extractTitle(state.tempData.markdown) === '') {
+    state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
     saveDataToDB('notes', state.notes);
+    return initActiveNote(state);
   }
-  initActiveNote(state);
+  const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData!.createAt);
+  state.notes[targetIndex] = state.tempData;
+  saveDataToDB('notes', state.notes);
+  return initActiveNote(state);
 }

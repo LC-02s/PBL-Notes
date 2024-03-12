@@ -26,8 +26,8 @@ export default function App() {
     }, [ noteSession, folderSession, dispatch ]);
 
     useEffect(() => {
-      if (currentTheme) document.body.classList.remove('darkTheme'); 
-      else document.body.classList.add('darkTheme');
+      if (currentTheme) return document.body.classList.remove('darkTheme'); 
+      document.body.classList.add('darkTheme');
     }, [currentTheme]);
 
     return (
