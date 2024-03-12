@@ -1,13 +1,15 @@
 import React from 'react'
 import { MenuBtn } from './Button.style'
-import { useAppDispatch } from '../../../app/hooks';
-import { addTempNote } from '../../../app/actions/note';
-import usePathname from '../../../hooks/usePathname';
+import { useAppDispatch } from '../../app/hooks';
+import { addTempNote } from '../../app/actions/note';
+import usePathname from '../../hooks/usePathname';
+import { useLocation } from 'react-router-dom';
 
 export default function WriteBtn() {
 
-  const { targetPath, targetName, isInvalid, isNotFound } = usePathname();
-  const isDisabled = targetPath === 'all' || isInvalid || isNotFound;
+  const { pathname } = useLocation();
+  const { targetName, isInvalid, isNotFound } = usePathname();
+  const isDisabled = isInvalid || isNotFound || pathname === '/notfound';
 
   const dispatch = useAppDispatch();
 

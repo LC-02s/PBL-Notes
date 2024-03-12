@@ -1,6 +1,6 @@
 import React from 'react'
-import FolderList from './folder/FolderList';
-import FolderAddBtn from './folder/FolderAddBtn';
+import FolderList from './FolderList';
+import FolderAddBtn from './FolderAddBtn';
 import styled from 'styled-components';
 
 export default function SideBar() {

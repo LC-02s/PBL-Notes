@@ -4,10 +4,7 @@
 :before {
   border: 0 solid #e5e7eb;
   box-sizing: border-box;
-}
-:after,
-:before {
-  --tw-content: "";
+  -webkit-tap-highlight-color: rgba(180, 190, 200, 0.2) !important;
 }
 :host,
 html {

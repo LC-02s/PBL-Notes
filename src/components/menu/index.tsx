@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import DeleteBtn from './buttons/DeleteBtn';
-import ViewBtns from './buttons/ViewBtns';
-import ThemeBtn from './buttons/ThemeBtn';
-import WriteBtn from './buttons/WriteBtn';
-import LockBtn from './buttons/LockBtn';
-import PinBtn from './buttons/PinBtn';
+import DeleteBtn from './DeleteBtn';
+import ViewBtns from './ViewBtns';
+import ThemeBtn from './ThemeBtn';
+import WriteBtn from './WriteBtn';
+import LockBtn from './LockBtn';
+import PinBtn from './PinBtn';
 import SearchBar from './SearchBar';
-import SortBtn from './buttons/SortBtn';
+import SortBtn from './SortBtn';
 
 export default function MenuBar() {
   return (
@@ -33,6 +33,7 @@ export default function MenuBar() {
   )
 }
 
+// styled components
 const MenuContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;

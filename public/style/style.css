@@ -1,20 +1,25 @@
-body {
-  position: relative;
-  display: block;
+html {
   width: 100vw;
   min-width: 1024px;
   max-width: 100vw;
   height: 100vh;
   min-height: 360px;
   max-height: 100vh;
+}
+body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
   padding: 32px;
+  background-color: #EEF1F3;
   background-image: url('/img/light_theme_bg.jpeg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  transition: background-image 0.3s;
+  transition: background 0.3s;
 }
-body.darkTheme {background-image: url('/img/dark_theme_bg.jpeg');}
+body.darkTheme {background-color: #131517; background-image: url('/img/dark_theme_bg.jpeg');}
 
 body > main {
   position: relative;
@@ -145,4 +150,23 @@ body.darkTheme {
   /* -- Overrides the default colors used by the ckeditor5-link package. ---------------------- */
 
   --ck-color-link-default: hsl(190, 100%, 75%);
+}
+
+noscript {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #E14B4D;
+  text-align: center;
+  line-height: 1.4;
+}
+noscript > svg {
+  font-size: 36px;
+  margin: 0px 0px 12px;
 }

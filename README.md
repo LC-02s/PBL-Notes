@@ -1,54 +1,69 @@
-# goorm PBL Assignment 07
+# PBL Notes
 
-- **topic** : Notes App with React, Redux(RTK), TypeScript
-- **author** : @ChanLee_KR
-- **detail** : [document shortcut](https://www.notion.so/lc02s/07-43ca781297f74c678a6af69d223da4df?pvs=4)
+![intro image](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F7945ce06-31b8-485f-a423-8a34ee0101a2%2Fc5bf3d33-749a-4509-ba8a-594ac95bdee8%2Fpbl-notes-intro.jpg?table=block&id=60ab8fdb-69ed-43ca-8b51-3945572eb65a&spaceId=7945ce06-31b8-485f-a423-8a34ee0101a2&width=2000&userId=9ac6e46f-eb3f-4360-ba9b-d2b06414fced&cache=v2)
 
-![demo image]()
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
+- **배포 URL** : [https://pbl-notes.netlify.app/](https://pbl-notes.netlify.app/)
+- **개발 기간** : 2024.02.08 ~ 2024.02.28 (20일)
+- **기여도** : 100% (개인 프로젝트)
 
 <br>
 
-## Available Scripts
+## 프로젝트 소개
 
-In the project directory, you can run:
+- `PBL` 은 `Problem Based Learning` 의 약자로 구름톤 트레이닝 과정에서 플레이어들이 수행하게 되는 문제 해결 기반 학습을 의미합니다.
+- 해당 프로젝트는 과제에서 주어진 요구사항을 모두 구현하는 것에 그치지 않고, 한 걸음 더 나아가 실사용할 수 있는 웹 기반 노트 앱 서비스를 만들기 위해 시작되었습니다.
+- 서비스를 사용하며 생성되는 모든 데이터들은 서버를 통하지 않고 사용자의 브라우저에 저장됩니다. (PC 저장 공간의 최대 50%까지 사용)
 
-### `npm start`
+<br>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 개발 환경 (Only FE)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-### `npm test`
+### React
+> 브라우저 내에서 불필요한 리로딩을 최소화하여 네이티브 앱과 비슷한 UX를 구현하기 위해 도입하였습니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Redux (RTK)
+> 서비스 특성상 전역 상태 변경이 빈번하게 일어나기에 복잡한 상태들을 조금 더 쉽게 중앙 집중적으로 관리하기 위해 도입하였습니다.
 
-### `npm run build`
+### TypeScript
+> 복잡한 어플리케이션을 구현함에 있어 실수로 인해 예상하지 못한 런타임에러를 최대한 방지하고자 도입하였습니다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### React Router Dom
+> 프로젝트 초기에는 라우터 없이 폴더 기능 구현을 시도했었지만, 폴더와 노트에 대한 여러 상태를 저 혼자 모두 커버하기에는 무리가 있다고 판단되어 도입하였습니다.  
+도입 후 라우터의 도움을 받아 폴더 기능을 구현하여 기존에 사용했던 불필요한 중간 변수들과 액션 함수들을 최소화할 수 있었습니다.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### React Hook Form
+> 폴더 생성 및 수정 시 이름에 대한 유효성 검사를 쉽게 구현할 수 있고, `useRef` 기반으로 동작하여 불필요한 컴포넌트의 리렌더링을 줄여 성능을 개선할 수 있기에 쓰지 않을 이유가 없었습니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Styled Components
+> 유지보수를 고려해서 테마 별 스타일을 편리하게 관리하기 위해 `theme provider` 을 사용하였습니다.  
+서비스 특성상 전역 상태 변경이 다수 발생되어 그에 따른 스타일 변경을 쉽게 조건부로 관리할 수 있다는 것 또한 매력적이었습니다.
 
-### `npm run eject`
+<br>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 시작 가이드
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Requirement
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- [Node.js v18.19.0](https://nodejs.org/en/blog/release/v18.19.0)
+- [Npm v10.2.3](https://nodejs.org/en/blog/release/v18.19.0)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Installation
 
-## Learn More
+```
+$ npm install
+$ npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Build
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+$ npm run build
+```
+
+<br>
+
+> This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.

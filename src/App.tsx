@@ -1,18 +1,29 @@
 import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { useAppSelector } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import { lightTheme, darkTheme } from './App.theme';
-import MenuBar from './components/menu/MenuBar';
-import Modal from './components/Modal';
-import SideBar from './components/SideBar/SideBar';
 import { Route, Routes } from 'react-router-dom';
+import { getNotesFromDB } from './app/actions/note';
+import { getFoldersFromDB } from './app/actions/folder';
+import Folder from './components/folder';
+import Menu from './components/menu';
+import Note from './components/note';
+import Modal from './components/Modal';
 import NotFound from './components/NotFound';
-import NoteView from './components/note/NoteView';
 
 
 export default function App() {
 
     const currentTheme = useAppSelector(({ ui }) => ui.theme) === 'light';
+    const { noteSession } = useAppSelector(({ note }) => note);
+    const { folderSession } = useAppSelector(({ folder }) => folder);
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+      if (!folderSession) dispatch(getFoldersFromDB());
+      if (folderSession && !noteSession) dispatch(getNotesFromDB());
+    }, [ noteSession, folderSession, dispatch ]);
 
     useEffect(() => {
       if (currentTheme) document.body.classList.remove('darkTheme'); 
@@ -21,15 +32,14 @@ export default function App() {
 
     return (
       <ThemeProvider theme={currentTheme ? lightTheme : darkTheme}>
-        <SideBar />
+        <Folder />
         <ContentsWrapper>
-          <section><MenuBar /></section>
+          <section><Menu /></section>
           <section>
             <Routes>
-              <Route path='/' element={<NoteView />} />
-              <Route path='/trash' element={<NoteView />} />
-              <Route path='/folder/:name' element={<NoteView />} />
-              <Route path='/notfound' element={<NotFound />} />
+              <Route path='/' element={<Note />} />
+              <Route path='/trash' element={<Note />} />
+              <Route path='/folder/:name' element={<Note />} />
               <Route path='/*' element={<NotFound />} />
             </Routes>
           </section>

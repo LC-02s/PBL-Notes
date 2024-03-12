@@ -46,6 +46,7 @@ export default function NoteEditor() {
 
 }
 
+// styled components
 const EditorWrapper = styled.div<{ $isDisable: boolean }>`
   position: relative;
   flex: 1;
