@@ -51,7 +51,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
       dispatch(modalOff());
       if (title !== targetName) {
         dispatch(overwriteNotesIncluded({ targetName, newName: title.trim() }));
-        navigate(`/folder/${title.trim()}`);
+        navigate(`/folder/${encodeURI(title.trim())}`);
       }
       return;
     }
