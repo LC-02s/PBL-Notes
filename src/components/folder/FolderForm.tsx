@@ -51,13 +51,13 @@ export default function FolderForm({ isModify }: FolderFormProps) {
       dispatch(modalOff());
       if (title !== targetName) {
         dispatch(overwriteNotesIncluded({ targetName, newName: title.trim() }));
-        navigate(`/folder/${title.trim()}`);
+        navigate(`/folder/${encodeURI(title.trim())}`);
       }
-    } else {
-      const time = Number(new Date().getTime());
-      dispatch(addFolder({ name: title.trim(), time, color: currentColorChip }));
-      dispatch(modalOff());
+      return;
     }
+    const time = Number(new Date().getTime());
+    dispatch(addFolder({ name: title.trim(), time, color: currentColorChip }));
+    dispatch(modalOff());
   }
 
   return (
@@ -78,7 +78,7 @@ export default function FolderForm({ isModify }: FolderFormProps) {
                 overlap: (value) => {
                   const errerTxt = '이미 사용중인 폴더명입니다';
                   if (isModify) return folderList.some(({ name }) => name !== targetName && name === value) ? errerTxt : undefined;
-                  else return folderList.some(({ name }) => name === value) ? errerTxt : undefined;
+                  return folderList.some(({ name }) => name === value) ? errerTxt : undefined;
                 },
               }
             })}

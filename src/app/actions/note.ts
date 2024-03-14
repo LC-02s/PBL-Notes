@@ -38,7 +38,7 @@ const note = createSlice({
     addTempNote: (state, { payload }: { payload: { folder: string, time: number } }) => {
       const { folder, time } = payload;
       saveTempData(state);
-      const newNote:Note = {
+      const newNote: Note = {
         included: folder, title: '', createAt: time, updateAt: time, markdown: '', 
         isPinned: false, isLocked: false, modifiable: true,
       }
@@ -47,35 +47,22 @@ const note = createSlice({
       state.activeNoteId = time;
       state.activeNoteIndex = state.notes.length - 1;
     },
-    modifyTempNote: (state, { payload }: { payload: string }) => {
-      if (state.tempData !== null) {
-        const modifyingNote = { ...state.tempData, markdown: payload, title: extractTitle(payload) };
-        state.tempData = modifyingNote;
-        state.notes[state.activeNoteIndex] = modifyingNote;
-      }
-    },
     modifyTempNoteDone: (state, { payload }: { payload: { data: string, time: number } }) => {
+      if (state.tempData === null) return;
       const { data, time } = payload;
-      if (state.tempData !== null) {
-        const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
-        state.tempData = modifyingNote;
-        state.notes[state.activeNoteIndex] = modifyingNote;
-        saveDataToDB('notes', state.notes);
-      }
+      const modifyingNote = { ...state.tempData, markdown: data, title: extractTitle(data), updateAt: time };
+      state.tempData = modifyingNote;
+      state.notes[state.activeNoteIndex] = modifyingNote;
+      saveDataToDB('notes', state.notes);
     },
     deleteNote: (state) => {
-      if (state.tempData !== null) {
-        if (extractTitle(state.tempData.markdown) === '') {
-          state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
-        } else if (state.tempData.modifiable) {
-          state.notes[state.activeNoteIndex].modifiable = false;
-        } else {
-          const confirmTxt = '노트 삭제 시 다시는 복구할 수 없습니다. \n삭제하시겠습니까?';
-          if (window.confirm(confirmTxt)) state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
-        }
-        saveDataToDB('notes', state.notes);
-        initActiveNote(state);
-      }
+      if (state.tempData === null) return;
+      if (extractTitle(state.tempData.markdown) === '') { deleteNoteCaseOfInvalidNoteContent(state); return }
+      if (state.tempData.modifiable) { deleteNoteCaseOfModifiableNote(state); return }
+      if (window.confirm('노트 삭제 시 다시는 복구할 수 없습니다. \n삭제하시겠습니까?') === false) return;
+      state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
+      saveDataToDB('notes', state.notes);
+      initActiveNote(state);
     },
     overwriteNotesIncluded: (state, { payload }: { payload: { targetName: string, newName: string } }) => {
       const { targetName, newName } = payload;
@@ -91,32 +78,28 @@ const note = createSlice({
       state.activeNoteIndex = targetIndex;
     },
     changePinnedState: (state) => {
-      if (state.tempData !== null) {
-        state.tempData.isPinned = !state.tempData.isPinned;
-        state.notes[state.activeNoteIndex].isPinned = state.tempData.isPinned;
-        saveDataToDB('notes', state.notes);
-      }
+      if (state.tempData === null) return;
+      state.tempData.isPinned = !state.tempData.isPinned;
+      state.notes[state.activeNoteIndex].isPinned = state.tempData.isPinned;
+      saveDataToDB('notes', state.notes);
     },
     changeLockedState: (state) => {
-      if (state.tempData !== null) {
-        state.tempData.isLocked = !state.tempData.isLocked;
-        state.notes[state.activeNoteIndex].isLocked = state.tempData.isLocked;
-        saveDataToDB('notes', state.notes);
-      }
+      if (state.tempData === null) return;
+      state.tempData.isLocked = !state.tempData.isLocked;
+      state.notes[state.activeNoteIndex].isLocked = state.tempData.isLocked;
+      saveDataToDB('notes', state.notes);
     },
     changeIncluded: (state, { payload }: { payload: { noteId: number, newName: string } }) => {
       const { noteId, newName } = payload;
-      if (noteId > 0) {
-        const targetIndex = state.notes.findIndex(({ createAt }) => createAt === noteId);
-        if (targetIndex >= 0) {
-          state.notes[targetIndex].included = newName;
-          state.notes[targetIndex].modifiable = true;
-          if (state.tempData !== null) {
-            state.tempData.included = newName;
-            state.tempData.modifiable = true;
-          }
-          saveDataToDB('notes', state.notes);
+      const targetIndex = state.notes.findIndex(({ createAt }) => createAt === noteId);
+      if (targetIndex >= 0) {
+        state.notes[targetIndex].included = newName;
+        state.notes[targetIndex].modifiable = true;
+        if (state.tempData !== null && state.tempData.createAt === noteId) {
+          state.tempData.included = newName;
+          state.tempData.modifiable = true;
         }
+        saveDataToDB('notes', state.notes);
       }
     },
     resetActiveNote: (state) => { saveTempData(state); },
@@ -144,7 +127,7 @@ const note = createSlice({
   },
 });
 
-export const { addTempNote, modifyTempNote, modifyTempNoteDone, deleteNote, overwriteNotesIncluded, resetActiveNote, changeActiveNoteId, changePinnedState, changeLockedState, changeIncluded, deleteNoteToFolder } = note.actions;
+export const { addTempNote, modifyTempNoteDone, deleteNote, overwriteNotesIncluded, resetActiveNote, changeActiveNoteId, changePinnedState, changeLockedState, changeIncluded, deleteNoteToFolder } = note.actions;
 
 export default note.reducer;
 
@@ -159,7 +142,7 @@ export const noteDataSortCompareFn: { [compareFn: string]: (a: Note, b: Note) =>
 
 export const noteDataSort = (data: Note[], sortType: string) => data.sort(noteDataSortCompareFn[sortType] ?? ((a, b) => a.createAt - b.createAt));
 
-export const extractTitle = (str: string) => {
+const extractTitle = (str: string) => {
   const match = (/# (.*?)\n/g).exec(str);
   return match && match[1] ? match[1] : '';
 }
@@ -171,14 +154,27 @@ const initActiveNote = (state: NoteState) => {
 }
 
 const saveTempData = (state: NoteState) => {
-  if (state.tempData !== null && state.tempData.modifiable) {
-    if (extractTitle(state.tempData.markdown)) {
-      const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData?.createAt);
-      state.notes[targetIndex] = state.tempData;
-    } else {
-      state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData?.createAt);
-    }
+  if (state.tempData === null || state.tempData.modifiable === false) { initActiveNote(state); return }
+  if (extractTitle(state.tempData.markdown) === '') {
+    state.notes = state.notes.filter(({ createAt }) => createAt !== state.tempData!.createAt);
     saveDataToDB('notes', state.notes);
+    initActiveNote(state);
+    return;
   }
+  const targetIndex = state.notes.findIndex(({ createAt }) => createAt === state.tempData!.createAt);
+  state.notes[targetIndex] = state.tempData;
+  saveDataToDB('notes', state.notes);
+  initActiveNote(state);
+}
+
+const deleteNoteCaseOfInvalidNoteContent = (state: NoteState) => {
+  state.notes = state.notes.filter(({ createAt }) => createAt !== state.activeNoteId);
+  saveDataToDB('notes', state.notes);
+  initActiveNote(state);
+}
+
+const deleteNoteCaseOfModifiableNote = (state: NoteState) => {
+  state.notes[state.activeNoteIndex].modifiable = false;
+  saveDataToDB('notes', state.notes);
   initActiveNote(state);
 }

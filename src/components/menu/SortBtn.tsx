@@ -28,13 +28,13 @@ export default function SortBtn() {
     if (targetPath === 'all') {
       setInputRadioType(defaultSort.type);
       setInputRadioSorted(defaultSort.sortedAt);
-    } else {
-      const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
-      if (targetFolderIndex >= 0) {
-        const { type, sortedAt } = folderList[targetFolderIndex].sort;
-        setInputRadioType(type);
-        setInputRadioSorted(sortedAt);
-      }
+      return;
+    }
+    const targetFolderIndex = folderList.findIndex(({ name }) => name === targetName);
+    if (targetFolderIndex >= 0) {
+      const { type, sortedAt } = folderList[targetFolderIndex].sort;
+      setInputRadioType(type);
+      setInputRadioSorted(sortedAt);
     }
   }, [ targetPath, targetName, folderList, defaultSort ]);
 
@@ -55,10 +55,9 @@ export default function SortBtn() {
     dispatch(changeSortTypeOfFolder({ name: targetName, sort: { type: inputRadioType, sortedAt: e.target.value } }));
   }
   const handleLabelKeyDown = (e: React.KeyboardEvent<HTMLLabelElement>, isLast?: boolean) => {
-    if (e.key === 'Enter') e.currentTarget.click();
-    
+    if (e.key === 'Enter') return e.currentTarget.click();
     if (isLast && e.key === 'Tab' && e.shiftKey) return;
-    else if (isLast && e.key === 'Tab') setIsClicked(false);
+    if (isLast && e.key === 'Tab') return setIsClicked(false);
   }
 
   return (

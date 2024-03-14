@@ -3,7 +3,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import CustomEditor from 'ckeditor5-custom-build'
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { modifyTempNote, modifyTempNoteDone } from '../../app/actions/note';
+import { modifyTempNoteDone } from '../../app/actions/note';
 import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
 
 export default function NoteEditor() {
@@ -16,34 +16,30 @@ export default function NoteEditor() {
   const prevData = useRef<string>('');
 
   useEffect(() => {
-    if (editorHandler) {
-      if (isDisabled) editorHandler.enableReadOnlyMode(editorHandler.id);
-      else editorHandler.disableReadOnlyMode(editorHandler.id);
-    }
+    if (editorHandler === null) return;
+    if (isDisabled) { editorHandler.enableReadOnlyMode(editorHandler.id); return }
+    editorHandler.disableReadOnlyMode(editorHandler.id);
   }, [ isDisabled, editorHandler ]);
 
-  if (tempData !== null) {
-    return (
-      <EditorWrapper $isDisable={isDisabled}>
-        <CKEditor
-          editor={ CustomEditor }
-          data={tempData?.markdown ?? ''}
-          onReady={(editor) => { setEditorHandler(editor); }}
-          onFocus={(event, editor) => { prevData.current = tempData.markdown; }}
-          onChange={(event, editor) => { dispatch(modifyTempNote(editor.getData())); }}
-          onBlur={(event, editor) => {
-            const data = editor.getData();
-            if (data !== prevData.current) {
-              const time = Number(new Date().getTime());
-              dispatch(modifyTempNoteDone({ data, time }));
-            }
-            prevData.current = '';
-          }}
-        />
-      </EditorWrapper>
-    )
-  } else return <></>;
-
+  if (tempData === null) return <></>;
+  return (
+    <EditorWrapper $isDisable={isDisabled}>
+      <CKEditor
+        editor={ CustomEditor }
+        data={tempData.markdown}
+        onReady={(editor) => { setEditorHandler(editor); }}
+        onFocus={(event, editor) => { prevData.current = tempData.markdown; }}
+        onBlur={(event, editor) => {
+          const data = editor.getData();
+          if (data !== prevData.current) {
+            const time = Number(new Date().getTime());
+            dispatch(modifyTempNoteDone({ data, time }));
+          }
+          prevData.current = '';
+        }}
+      />
+    </EditorWrapper>
+  )
 }
 
 // styled components
