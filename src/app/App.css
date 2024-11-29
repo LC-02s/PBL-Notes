@@ -215,3 +215,10 @@
     @apply mb-3 text-4xl;
   }
 }
+
+@layer components {
+  .hidden-text {
+    clip: rect(1px 1px 1px 1px);
+    @apply absolute m-0 size-px overflow-hidden whitespace-nowrap border-none p-0 text-[2px] outline-none;
+  }
+}
