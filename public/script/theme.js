@@ -1,9 +1,8 @@
-(function () {
-  const setting = localStorage.getItem("setting") || '{"theme":"light"}';
-  const { theme } = JSON.parse(setting);
+;(function () {
+  const currentTheme = window.localStorage.getItem('theme') || 'light'
 
-  if (theme === "dark") {
-    document.body.classList.add("darkTheme");
-    return;
+  if (currentTheme === 'dark') {
+    document.body.classList.add('dark')
+    return
   }
-})();
+})()
