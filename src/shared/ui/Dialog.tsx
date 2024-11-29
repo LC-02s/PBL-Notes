@@ -31,7 +31,7 @@ function Content({ className, ...props }: JSX.IntrinsicElements['div']) {
   return (
     <div
       className={cn(
-        'block max-h-[100dvh-17.5rem] min-h-12 w-full overflow-y-auto py-1 text-base font-normal leading-relaxed text-gray600 transition-colors',
+        'block max-h-[100dvh-17.5rem] min-h-12 w-full overflow-y-auto text-base font-normal leading-relaxed text-gray600 transition-colors',
         className,
       )}
       {...props}
@@ -42,7 +42,10 @@ function Content({ className, ...props }: JSX.IntrinsicElements['div']) {
 function Footer({ className, ...props }: JSX.IntrinsicElements['div']) {
   return (
     <div
-      className={cn('mt-5 flex w-full items-center justify-end gap-2 pt-4', className)}
+      className={cn(
+        'mt-5 flex w-full items-center justify-end gap-2 border-t border-gray100 pt-4 transition-colors',
+        className,
+      )}
       {...props}
     />
   )
@@ -57,7 +60,7 @@ function Button({
     <button
       type="button"
       className={cn(
-        'block size-auto min-w-20 bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 focus:bg-gray200 active:bg-gray200 disabled:bg-gray100',
+        'block size-auto min-w-20 rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 focus:bg-gray200 active:bg-gray200 disabled:bg-gray100',
         dialogButtonVariable({ variant }),
         className,
       )}
@@ -128,7 +131,7 @@ function Dialog({
           <motion.div
             ref={containerRef}
             className={cn(
-              'absolute left-1/2 top-10 max-h-[100dvh-5rem] w-[100vw-2.5rem] translate-x-1/2 rounded-xl bg-gray000 p-5 transition-colors',
+              'absolute left-1/2 top-4 max-h-[calc(100dvh-2rem)] w-[calc(100vw-1rem)] translate-x-1/2 rounded-xl bg-gray000 p-5 transition-colors',
               dialogVariable({ size }),
             )}
             initial={dialogPositionVariant[position].initial}

@@ -1,30 +1,43 @@
 import React from 'react'
-import { ConfirmDialog } from '../../ui'
+import type { FocusableElement } from '@/shared/types'
+import { ConfirmDialog } from '@/shared/ui'
 import useOverlay from './useOverlay'
 
-export type ConfirmConfig = Pick<
-  React.ComponentProps<typeof ConfirmDialog>,
-  'type' | 'cancelButtonTitle' | 'confirmButtonTitle'
->
+type ConfirmProps = React.ComponentProps<typeof ConfirmDialog>
 
-export default function useConfirm(config?: ConfirmConfig) {
-  const overlay = useOverlay()
+export type ConfirmConfig = {
+  type?: ConfirmProps['type']
+  cancelButtonTitle?: ConfirmProps['cancelButtonTitle']
+  confirmButtonTitle?: ConfirmProps['confirmButtonTitle']
+}
 
-  return (content: string) =>
-    new Promise<boolean>((resolve) => {
-      overlay.open(({ isOpen, close }) => {
-        return (
-          <ConfirmDialog
-            content={content}
-            open={isOpen}
-            type={config?.type}
-            cancelButtonTitle={config?.cancelButtonTitle}
-            confirmButtonTitle={config?.confirmButtonTitle}
-            onClose={close}
-            onCancel={resolve}
-            onConfirm={resolve}
-          />
-        )
-      })
-    })
+export interface DefaultConfirmConfig<E extends FocusableElement> extends ConfirmConfig {
+  startedAt?: React.MutableRefObject<E | null>
+}
+
+export default function useConfirm<E extends FocusableElement>(
+  defaultConfig?: DefaultConfirmConfig<E>,
+) {
+  const { startedAt, open } = useOverlay<E>()
+
+  return {
+    startedAt,
+    confirm: (content: string, config?: ConfirmConfig) =>
+      new Promise<boolean>((resolve) => {
+        open(({ isOpen, close }) => {
+          return (
+            <ConfirmDialog
+              content={content}
+              open={isOpen}
+              type={config?.type || defaultConfig?.type}
+              cancelButtonTitle={config?.cancelButtonTitle || defaultConfig?.cancelButtonTitle}
+              confirmButtonTitle={config?.confirmButtonTitle || defaultConfig?.confirmButtonTitle}
+              onClose={close}
+              onCancel={resolve}
+              onConfirm={resolve}
+            />
+          )
+        })
+      }),
+  }
 }

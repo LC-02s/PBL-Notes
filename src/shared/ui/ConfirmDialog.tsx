@@ -35,14 +35,14 @@ export default function ConfirmDialog({
   }, [onConfirm, onClose])
 
   return (
-    <Dialog open={open} position="top">
+    <Dialog open={open} position="top" size="sm">
       <Dialog.Title />
       <Dialog.Content>
         <p>
           <Break value={content} />
         </p>
       </Dialog.Content>
-      <Dialog.Footer className="border-none">
+      <Dialog.Footer className="border-none p-0">
         <Dialog.Button onClick={cancel}>{cancelButtonTitle || '취소'}</Dialog.Button>
         <Dialog.Button variant={type} onClick={confirm}>
           {confirmButtonTitle || '확인'}

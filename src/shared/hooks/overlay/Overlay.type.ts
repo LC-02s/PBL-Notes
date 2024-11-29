@@ -13,6 +13,7 @@ export interface CreateOverlayElement {
 export interface OverlayControllerProps {
   overlayElement: CreateOverlayElement
   onExit: () => void
+  returnToFocus: (close?: () => void) => void
 }
 
 export interface OverlayControlRef {
