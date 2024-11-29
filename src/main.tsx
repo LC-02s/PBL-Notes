@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import { App } from '@/app'
+import { getMainElement } from '@/shared/utils'
 
-const mainEl = document.getElementById('main') || document.body
+const mainEl = getMainElement()
 const root = createRoot(mainEl)
 
 root.render(<App />)
