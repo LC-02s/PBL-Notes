@@ -38,6 +38,7 @@ export default [
         'react/prop-types': 'off',
         'react/display-name': 'off',
         'react/no-unknown-property': ['error', { ignore: ['css'] }],
+        'react/self-closing-comp': 'warn',
         ...reactHooks.configs.recommended.rules,
         ...jsxA11y.configs.recommended.rules,
         'jsx-a11y/label-has-associated-control': ['error', { some: ['nesting', 'id'] }],
