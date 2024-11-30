@@ -1,6 +1,7 @@
 import { create } from 'zustand'
+import { toast } from 'react-toastify'
 import type { Theme } from '../types'
-import { THEME_KEY } from '../constants'
+import { THEME_KEY, THEME_LABEL } from '../constants'
 
 interface ThemeStore {
   theme: Theme
@@ -9,6 +10,7 @@ interface ThemeStore {
 
 function saveTheme(theme: Theme) {
   localStorage.setItem(THEME_KEY, theme)
+  toast.success(`현재 테마: ${THEME_LABEL[theme]}`)
 
   return { theme }
 }
