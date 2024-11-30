@@ -9,11 +9,17 @@ export default function handleDialogA11y<T extends HTMLElement>(element: T | nul
 
     firstFocusableEl?.addEventListener('keydown', (event) => {
       const e = event as KeyboardEvent
-      if (e.key === 'Tab' && e.shiftKey) e.preventDefault()
+      if (e.key === 'Tab' && e.shiftKey) {
+        e.preventDefault()
+        lastFocusableEl?.focus()
+      }
     })
     lastFocusableEl?.addEventListener('keydown', (event) => {
       const e = event as KeyboardEvent
-      if (e.key === 'Tab' && !e.shiftKey) e.preventDefault()
+      if (e.key === 'Tab' && !e.shiftKey) {
+        e.preventDefault()
+        firstFocusableEl?.focus()
+      }
     })
     firstFocusableEl?.focus()
   }

@@ -29,7 +29,7 @@ export default function useOverlay<E extends FocusableElement>() {
             overlayElement={overlayElement}
             onExit={() => unmount(id)}
             returnToFocus={(close) => {
-              startedAt?.current?.focus()
+              startedAt.current?.focus()
               close?.()
             }}
           />,

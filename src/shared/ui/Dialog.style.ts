@@ -17,12 +17,9 @@ export function dialogVariable({ size = 'md' }: DialogVariable) {
 
 const dialogButtonVariants = {
   variant: {
-    warn: 'bg-warn-light text-warn hover:bg-warn-sub focus:bg-warn-sub active:bg-warn-sub disabled:bg-warn-light',
-    success:
-      'bg-success text-white hover:bg-success focus:bg-success active:bg-success disabled:bg-success-sub disabled:text-success-light',
-    info: 'bg-info text-white hover:bg-info focus:bg-info active:bg-info disabled:bg-info-sub disabled:text-info-light',
-    default:
-      'bg-gray100 text-gray700 hover:bg-gray200 focus:bg-gray200 active:bg-gray200 disabled:bg-gray100',
+    warn: 'bg-warn/10 text-warn hover:bg-warn/20 active:bg-warn/20 dark:bg-warn/20 dark:hover:bg-warn/35 dark:active:bg-warn/35',
+    info: 'bg-info text-white hover:bg-info/75 active:bg-info/75 dark:hover:bg-info/70 dark:active:bg-info/70',
+    default: 'dark:hover:bg-gray300',
   },
 }
 

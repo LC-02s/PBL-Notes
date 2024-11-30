@@ -35,7 +35,7 @@ export default function ConfirmDialog({
   }, [onConfirm, onClose])
 
   return (
-    <Dialog open={open} position="top" size="sm">
+    <Dialog open={open} position="top" size="sm" cancelWithOutsideClick>
       <Dialog.Title />
       <Dialog.Content>
         <p>

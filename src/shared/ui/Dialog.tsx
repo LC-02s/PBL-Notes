@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { type Target, AnimatePresence, motion, useIsomorphicLayoutEffect } from 'motion/react'
 import { useOutsideClick, useStopScroll } from '../hooks'
-import { cn, getMainElement } from '../utils'
+import { cn } from '../utils'
 import Dimmed from './Dimmed'
 import {
   type DialogVariable,
@@ -31,7 +31,7 @@ function Content({ className, ...props }: JSX.IntrinsicElements['div']) {
   return (
     <div
       className={cn(
-        'block max-h-[100dvh-17.5rem] min-h-12 w-full overflow-y-auto text-base font-normal leading-relaxed text-gray600 transition-colors',
+        'block max-h-[calc(100dvh-17.5rem)] min-h-12 w-full text-base font-normal leading-relaxed text-gray600 transition-colors',
         className,
       )}
       {...props}
@@ -43,7 +43,7 @@ function Footer({ className, ...props }: JSX.IntrinsicElements['div']) {
   return (
     <div
       className={cn(
-        'mt-5 flex w-full items-center justify-end gap-2 border-t border-gray100 pt-4 transition-colors',
+        'mt-6 flex w-full items-center justify-end gap-2 border-t border-gray100 pt-4 transition-colors',
         className,
       )}
       {...props}
@@ -51,23 +51,23 @@ function Footer({ className, ...props }: JSX.IntrinsicElements['div']) {
   )
 }
 
-function Button({
-  variant,
-  className,
-  ...props
-}: JSX.IntrinsicElements['button'] & DialogButtonVariable) {
+const Button = React.forwardRef<
+  HTMLButtonElement,
+  JSX.IntrinsicElements['button'] & DialogButtonVariable
+>(({ variant, className, ...props }, ref) => {
   return (
     <button
+      ref={ref}
       type="button"
       className={cn(
-        'block size-auto min-w-20 rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 focus:bg-gray200 active:bg-gray200 disabled:bg-gray100',
+        'block size-auto min-w-20 rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 active:bg-gray200',
         dialogButtonVariable({ variant }),
         className,
       )}
       {...props}
     />
   )
-}
+})
 
 type DialogPosition = 'top' | 'center'
 
@@ -108,7 +108,7 @@ function Dialog({
   size,
   withoutDimmed,
   position = 'center',
-  cancelWithOutsideClick = true,
+  cancelWithOutsideClick = false,
   children,
 }: React.PropsWithChildren<DialogProps>) {
   const containerRef = useOutsideClick<HTMLDivElement>(() => {
@@ -131,7 +131,8 @@ function Dialog({
           <motion.div
             ref={containerRef}
             className={cn(
-              'absolute left-1/2 top-4 max-h-[calc(100dvh-2rem)] w-[calc(100vw-1rem)] translate-x-1/2 rounded-xl bg-gray000 p-5 transition-colors',
+              'absolute left-1/2 max-h-[calc(100dvh-2rem)] w-[calc(100vw-1rem)] translate-x-1/2 rounded-xl bg-gray000 p-5 transition-colors',
+              position === 'center' ? 'top-1/2' : 'top-4',
               dialogVariable({ size }),
             )}
             initial={dialogPositionVariant[position].initial}
@@ -152,7 +153,7 @@ function Dialog({
         </div>
       )}
     </AnimatePresence>,
-    getMainElement(),
+    document.body,
   )
 }
 
