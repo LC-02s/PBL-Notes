@@ -1,10 +1,10 @@
 import React from 'react'
-import { useOverlayMap } from './OverlayContext'
+import { useOverlayElementList } from './OverlayContext'
 
 export default function OverlayViewer() {
-  const overlayMap = useOverlayMap()
+  const overlayElementList = useOverlayElementList()
 
-  return [...overlayMap.entries()].map(([id, element]) => (
+  return overlayElementList.map(([id, element]) => (
     <React.Fragment key={id}>{element}</React.Fragment>
   ))
 }
