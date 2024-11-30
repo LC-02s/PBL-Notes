@@ -21,22 +21,6 @@
     --grsc-800: #232629;
     --grsc-900: #131517;
 
-    --smtc-warn: #e14b4d;
-    --smtc-warn-sub: #fcb8b9;
-    --smtc-warn-light: #ffe8e9;
-
-    --smtc-caution: #ffab01;
-    --smtc-caution-sub: #ffe4af;
-    --smtc-caution-light: #fff3db;
-
-    --smtc-success: #28c28b;
-    --smtc-success-sub: #aaead3;
-    --smtc-success-light: #e1f9f0;
-
-    --smtc-info: #3b84d8;
-    --smtc-info-sub: #c4defc;
-    --smtc-info-light: #e7f2fd;
-
     --dimmed-background: rgba(0, 0, 10, 0.3);
   }
 
@@ -51,7 +35,7 @@
   body.dark {
     --grsc-000: #232629;
     --grsc-100: #323539;
-    --grsc-200: #54595b;
+    --grsc-200: #323539;
     --grsc-300: #54595b;
     --grsc-400: #727e84;
     --grsc-500: #94a1a8;
@@ -60,40 +44,26 @@
     --grsc-800: #eef1f3;
     --grsc-900: #eef1f3;
 
-    --smtc-warn: #db4143;
-    --smtc-warn-sub: #742b2c;
-    --smtc-warn-light: #3d2122;
-
-    --smtc-caution: #eba00a;
-    --smtc-caution-sub: #8c713b;
-    --smtc-caution-light: #4a402d;
-
-    --smtc-success: #28b381;
-    --smtc-success-sub: #3a7862;
-    --smtc-success-light: #2a473c;
-
-    --smtc-info: #307acf;
-    --smtc-info-sub: #36567a;
-    --smtc-info-light: #293748;
-
     --dimmed-background: rgba(250, 250, 255, 0.1);
 
     @apply bg-[#131517] bg-dark;
   }
 
   body > main {
+    @apply relative flex size-full items-stretch justify-between overflow-hidden rounded-xl border;
     border-color: rgba(251, 251, 253, 0.4);
     background-color: rgba(251, 251, 253, 0.6);
+    -webkit-backdrop-filter: saturate(180%) blur(4px);
+    backdrop-filter: saturate(180%) blur(4px);
     box-shadow:
       1.25rem 1.25rem 3.75rem rgba(20, 20, 40, 0.1),
       -1.25rem -1.25rem 3.75rem rgba(20, 20, 40, 0.1);
-    @apply relative flex size-full items-stretch justify-between overflow-hidden rounded-xl border backdrop:blur-sm backdrop:saturate-[180%];
   }
 
   body.dark > main {
     border-color: rgba(40, 40, 60, 0.2);
     background-color: rgba(40, 40, 60, 0.6);
-    @apply shadow-none;
+    box-shadow: none;
   }
 
   body.stop-scroll {
@@ -218,7 +188,7 @@
 
 @layer components {
   .hidden-text {
-    clip: rect(1px 1px 1px 1px);
     @apply absolute m-0 size-px overflow-hidden whitespace-nowrap border-none p-0 text-[2px] outline-none;
+    clip: rect(1px 1px 1px 1px);
   }
 }
