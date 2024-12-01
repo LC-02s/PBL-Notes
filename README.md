@@ -1,6 +1,6 @@
 # PBL Notes
 
-![intro image](https://github.com/LC-02s/PBL-Notes/blob/review/public/img/pbl-notes-ui.jpeg?raw=true)
+![intro image](https://github.com/LC-02s/PBL-Notes/raw/main/public/img/pbl-notes-ui.jpeg?raw=true)
 
 - **배포 URL** : [https://pbl-notes.netlify.app/](https://pbl-notes.netlify.app/)
 - **개발 기간** : 2024.02.08 ~ 2024.02.28 (20일)
