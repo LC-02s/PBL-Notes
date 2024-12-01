@@ -8,7 +8,7 @@ export default function RootNotFound() {
 
   return (
     <NotFound className="bg-gray000 text-xl transition-colors">
-      <div className="mt-8 flex items-center justify-center gap-2">
+      <div className="mt-8 flex items-center justify-center space-x-2">
         <Button title="뒤로가기" className="rounded-lg px-4 py-2" onClick={() => navigate(-1)}>
           뒤로가기
         </Button>

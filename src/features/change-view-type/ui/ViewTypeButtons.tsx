@@ -13,7 +13,7 @@ export default function ViewTypeButtons({ extraButton }: ViewTypeButtonsProps) {
   const isGalleryType = viewType === 'gallery'
 
   return (
-    <p className="flex h-full w-auto items-center justify-start gap-1">
+    <p className="flex h-full w-auto items-center justify-start space-x-1">
       <MenuButton
         active={isListType}
         title="목록형 보기"

@@ -39,7 +39,7 @@ function Footer({ className, ...props }: JSX.IntrinsicElements['div']) {
   return (
     <div
       className={cn(
-        'mt-6 flex w-full items-center justify-end gap-2 border-t border-gray100 pt-4 transition-colors',
+        'mt-6 flex w-full items-center justify-end space-x-2 border-t border-gray100 pt-4 transition-colors',
         className,
       )}
       {...props}
