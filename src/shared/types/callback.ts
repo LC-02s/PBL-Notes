@@ -1,1 +1,1 @@
-export type CallbackOnFailed = (message: string) => void
+export type ReportFn = (message: string) => void
