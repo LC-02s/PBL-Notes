@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { RootNotFound } from '@/shared/ui'
 
 export default function AppRouter({ children }: React.PropsWithChildren) {
   return (
@@ -11,7 +12,7 @@ export default function AppRouter({ children }: React.PropsWithChildren) {
         <Route path="/folder/:folderId/note/:noteId" element={children} />
         <Route path="/trash" element={children} />
         <Route path="/trash/note/:noteId" element={children} />
-        <Route path="/*" element={children} />
+        <Route path="/*" element={<RootNotFound />} />
       </Routes>
     </BrowserRouter>
   )
