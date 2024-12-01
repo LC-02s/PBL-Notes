@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { toast } from 'react-toastify'
 import type { Theme } from '../types'
-import { THEME_KEY, THEME_LABEL } from '../constants'
+import { DEFAULT_THEME, THEME_KEY, THEME_LABEL } from '../constants'
 
 interface ThemeStore {
   theme: Theme
@@ -16,7 +16,7 @@ function saveTheme(theme: Theme) {
 }
 
 const useThemeStore = create<ThemeStore>((set) => ({
-  theme: (localStorage.getItem(THEME_KEY) as Theme | null) || 'light',
+  theme: (localStorage.getItem(THEME_KEY) as Theme | null) || DEFAULT_THEME,
   setTheme: (theme) => set(saveTheme(theme)),
 }))
 
