@@ -1,1 +1,1 @@
-export * from './folder'
+export type * from './folder'

@@ -1,8 +1,4 @@
-export type ColorChip = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'pink' | 'none'
-
-export type SortType = 'create' | 'update' | 'title'
-
-export type SortedAt = 'desc' | 'asc'
+import type { ColorChip, SortedAt, SortType } from '@/shared/types'
 
 export interface Folder {
   id: number
