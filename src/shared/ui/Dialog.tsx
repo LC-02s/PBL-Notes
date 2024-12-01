@@ -5,12 +5,8 @@ import { type Target, AnimatePresence, motion, useIsomorphicLayoutEffect } from 
 import { useOutsideClick, useStopScroll } from '../hooks'
 import { cn } from '../utils'
 import Dimmed from './Dimmed'
-import {
-  type DialogVariable,
-  dialogVariable,
-  type DialogButtonVariable,
-  dialogButtonVariable,
-} from './Dialog.style'
+import { type DialogVariable, dialogVariable } from './Dialog.style'
+import Button from './Button'
 import handleDialogA11y from './Dialog.util'
 
 function Title({ className, ...props }: JSX.IntrinsicElements['h2']) {
@@ -50,24 +46,6 @@ function Footer({ className, ...props }: JSX.IntrinsicElements['div']) {
     />
   )
 }
-
-const Button = React.forwardRef<
-  HTMLButtonElement,
-  JSX.IntrinsicElements['button'] & DialogButtonVariable
->(({ variant, className, ...props }, ref) => {
-  return (
-    <button
-      ref={ref}
-      type="button"
-      className={cn(
-        'block size-auto min-w-20 rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 active:bg-gray200',
-        dialogButtonVariable({ variant }),
-        className,
-      )}
-      {...props}
-    />
-  )
-})
 
 type DialogPosition = 'top' | 'center'
 
