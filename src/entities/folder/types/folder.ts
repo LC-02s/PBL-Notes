@@ -6,3 +6,7 @@ export interface Folder {
   color: ColorChip
   sort: { type: SortType; sortedAt: SortedAt }
 }
+
+export type FolderDB = Map<Folder['id'], Folder>
+
+export type FolderNameMap = Map<Folder['name'], Folder['id']>

@@ -9,9 +9,13 @@ type BaseNote = {
 }
 
 export interface LegacyNote extends BaseNote {
-  included: string // folder name
+  included: string | number
 }
 
 export interface Note extends BaseNote {
-  included: number // folder id
+  included: number
 }
+
+export type NoteDB = Map<Note['createAt'], Note>
+
+export type LegacyNoteDB = Map<LegacyNote['createAt'], LegacyNote>
