@@ -1,7 +1,7 @@
 import type { HeadingTag } from '../types'
 import { cn } from '../utils'
 
-type TextTag = 'span' | 'label' | 'caption' | HeadingTag
+type TextTag = 'span' | 'label' | 'legend' | 'caption' | HeadingTag
 
 type HiddenTextProps<T extends TextTag> = React.PropsWithoutRef<JSX.IntrinsicElements[T]> & {
   as?: T
