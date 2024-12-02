@@ -5,19 +5,17 @@ import useOverlay from './useOverlay'
 
 type ConfirmProps = React.ComponentProps<typeof ConfirmDialog>
 
-type ConfirmConfig = {
+export interface ConfirmConfig {
   type?: ConfirmProps['type']
   cancelButtonTitle?: ConfirmProps['cancelButtonTitle']
   confirmButtonTitle?: ConfirmProps['confirmButtonTitle']
 }
 
-interface DefaultConfirmConfig<E extends FocusableElement> extends ConfirmConfig {
+export interface DefaultConfirmConfig<E extends FocusableElement> extends ConfirmConfig {
   startedAt?: React.MutableRefObject<E | null>
 }
 
-export default function useConfirm<E extends FocusableElement>(
-  defaultConfig?: DefaultConfirmConfig<E>,
-) {
+export function useConfirm<E extends FocusableElement>(defaultConfig?: DefaultConfirmConfig<E>) {
   const { startedAt, open } = useOverlay<E>()
 
   return {
