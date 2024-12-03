@@ -1,12 +1,12 @@
 import React from 'react'
 import Dialog from './Dialog'
-import type { DialogButtonVariable } from './Dialog.style'
+import Button from './Button'
 import Break from './Break'
 
 interface ConfirmDialogProps {
   content: string
   open: boolean
-  type: DialogButtonVariable['variant']
+  type: React.ComponentProps<typeof Button>['variant']
   cancelButtonTitle?: string
   confirmButtonTitle?: string
   onClose: () => void
@@ -17,13 +17,14 @@ interface ConfirmDialogProps {
 export default function ConfirmDialog({
   content,
   open,
-  type = 'info',
+  type = 'warn',
   cancelButtonTitle,
   confirmButtonTitle,
   onClose,
   onCancel,
   onConfirm,
-}: ConfirmDialogProps) {
+  children,
+}: React.PropsWithChildren<ConfirmDialogProps>) {
   const cancel = React.useCallback(() => {
     onCancel?.(false)
     onClose()
@@ -41,11 +42,12 @@ export default function ConfirmDialog({
         <p>
           <Break value={content} />
         </p>
+        {children}
       </Dialog.Content>
       <Dialog.Footer className="border-none p-0">
         <Dialog.Button onClick={cancel}>{cancelButtonTitle || '취소'}</Dialog.Button>
         <Dialog.Button variant={type} onClick={confirm}>
-          {confirmButtonTitle || '확인'}
+          {confirmButtonTitle || '삭제'}
         </Dialog.Button>
       </Dialog.Footer>
     </Dialog>

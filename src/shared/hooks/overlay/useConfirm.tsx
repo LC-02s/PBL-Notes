@@ -9,6 +9,7 @@ export interface ConfirmConfig {
   type?: ConfirmProps['type']
   cancelButtonTitle?: ConfirmProps['cancelButtonTitle']
   confirmButtonTitle?: ConfirmProps['confirmButtonTitle']
+  children?: ConfirmProps['children']
 }
 
 export interface DefaultConfirmConfig<E extends FocusableElement> extends ConfirmConfig {
@@ -33,7 +34,9 @@ export function useConfirm<E extends FocusableElement>(defaultConfig?: DefaultCo
               onClose={close}
               onCancel={resolve}
               onConfirm={resolve}
-            />
+            >
+              {config?.children || defaultConfig?.children}
+            </ConfirmDialog>
           )
         })
       }),
