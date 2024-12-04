@@ -10,3 +10,5 @@ export interface Folder {
 export type FolderDB = Map<Folder['id'], Folder>
 
 export type FolderNameMap = Map<Folder['name'], Folder['id']>
+
+export type FolderFormValues = { name: Folder['name']; color: ColorChip }
