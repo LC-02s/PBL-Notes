@@ -4,10 +4,10 @@ import { useViewType } from '@/shared/hooks'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
 
 interface ViewTypeButtonsProps {
-  extraButton?: (props: { viewType: ViewType }) => React.ReactNode
+  backButton: (props: { viewType: ViewType }) => React.ReactNode
 }
 
-export default function ViewTypeButtons({ extraButton }: ViewTypeButtonsProps) {
+export default function ViewTypeButtons({ backButton: BackButton }: ViewTypeButtonsProps) {
   const { viewType, setViewType } = useViewType()
   const isListType = viewType === 'list'
   const isGalleryType = viewType === 'gallery'
@@ -32,7 +32,7 @@ export default function ViewTypeButtons({ extraButton }: ViewTypeButtonsProps) {
         <Icon.WidgetOutline />
         <HiddenText>갤러리형 보기</HiddenText>
       </MenuButton>
-      {extraButton?.({ viewType })}
+      <BackButton viewType={viewType} />
     </p>
   )
 }
