@@ -9,3 +9,7 @@ export type NotePathKey = typeof NOTE_PATH_KEY
 export type NotePath = `${NotePathKey}/${number}`
 
 export type TrashPath = typeof TRASH_PATH
+
+export type NotePathInFolder = `${FolderPath}${NotePath}`
+
+export type NotePathInTrash = `${TrashPath}${NotePath}`
