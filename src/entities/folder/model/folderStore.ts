@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { DEFAULT_COLOR_CHIP } from '@/shared/constants'
-import { reportOnError, reportOnSuccess } from '@/shared/utils'
+import { getNow, reportOnError, reportOnSuccess } from '@/shared/utils'
 import type { Folder, FolderDB } from '../types'
 import { DEFAULT_NOTE_SORT_TYPE } from '../constants'
 import { convertFolderListToDB } from '../utils'
@@ -12,7 +12,12 @@ interface FolderStore {
   folderSession: boolean
   setFolderSession: (payload: boolean) => void
 
-  addFolder: (payload: Pick<Folder, 'name' | 'color'>) => void
+  addFolder: (
+    payload: Pick<Folder, 'name' | 'color'> & {
+      onSuccess?: (id: Folder['id']) => void
+      onFailed?: (id: Folder['id']) => void
+    },
+  ) => void
   modifyFolder: (payload: Pick<Folder, 'id'> & Partial<Folder>) => void
   deleteFolder: (payload: Pick<Folder, 'id'>) => void
 
@@ -26,15 +31,23 @@ export const useFolderStore = create<FolderStore>((set) => ({
   folderSession: false,
   setFolderSession: (folderSession) => set({ folderSession }),
 
-  addFolder: ({ name, color = DEFAULT_COLOR_CHIP }) =>
+  addFolder: ({ name, color = DEFAULT_COLOR_CHIP, onSuccess, onFailed }) =>
     set((prev) => {
-      const clonedDB = new Map(prev.folderDB)
-      const id = new Date().getTime()
+      const { folderDB } = prev
+      const id = getNow()
 
-      clonedDB.set(id, { id, name, color, sort: DEFAULT_NOTE_SORT_TYPE })
+      if (folderDB.has(id)) {
+        reportOnError('폴더 생성에 실패했어요')
+        onFailed?.(id)
+
+        return prev
+      }
+
+      folderDB.set(id, { id, name, color, sort: DEFAULT_NOTE_SORT_TYPE })
       reportOnSuccess('폴더가 생성되었어요!')
+      onSuccess?.(id)
 
-      return { folderDB: clonedDB }
+      return { folderDB: new Map(folderDB) }
     }),
 
   modifyFolder: ({ id, ...folder }) =>
