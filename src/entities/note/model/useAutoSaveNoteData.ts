@@ -1,5 +1,6 @@
 import React from 'react'
 import { reportOnError } from '@/shared/utils'
+import { useDocumentEvent, useWindowEvent } from '@/shared/hooks'
 import { saveData } from '../utils'
 import useNoteList from './useNoteList'
 import useSettingTempNote from './useSettingTempNote'
@@ -11,10 +12,9 @@ interface UseSaveNoteDataParams {
 
 export default function useAutoSaveNoteData({ onStart, onEnd }: UseSaveNoteDataParams) {
   const noteList = useNoteList()
+  const { note } = useSettingTempNote()
 
-  useSettingTempNote()
-
-  React.useEffect(() => {
+  const save = React.useCallback(() => {
     onStart()
     saveData(noteList)
       .catch((error) => {
@@ -23,4 +23,22 @@ export default function useAutoSaveNoteData({ onStart, onEnd }: UseSaveNoteDataP
       })
       .finally(onEnd)
   }, [noteList, onStart, onEnd])
+
+  React.useEffect(save, [noteList, save])
+
+  useWindowEvent('beforeunload', (e) => {
+    if (!note || !note.modifiable || note.isLocked) return
+
+    save()
+    e.preventDefault()
+    e.returnValue = ''
+  })
+
+  useDocumentEvent('visibilitychange', () => {
+    if (!note || !note.modifiable || note.isLocked) return
+
+    if (document.visibilityState === 'hidden') {
+      save()
+    }
+  })
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useWindowEvent } from '@/shared/hooks'
 import { useSetTempNote } from './noteStore'
 import useActiveNote from './useActiveNote'
 
@@ -9,10 +8,5 @@ export default function useSettingTempNote() {
 
   React.useEffect(() => setTempNote({ createAt: noteId }), [setTempNote, noteId])
 
-  useWindowEvent('beforeunload', (e) => {
-    if (!note || !note.modifiable || note.isLocked) return
-
-    e.preventDefault()
-    e.returnValue = ''
-  })
+  return { note }
 }
