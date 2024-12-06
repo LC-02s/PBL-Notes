@@ -1,9 +1,8 @@
 import React from 'react'
-import { AnimatePresence, motion } from 'motion/react'
-import { useBooleanState, useOutsideClick, useWindowEvent } from '../hooks'
-import { cn } from '../utils'
+import { useDropdown } from '../hooks'
+import DropdownWrapper from './DropdownWrapper'
 
-interface DropdownMenuProps<T> {
+interface DropdownMenuProps<T extends string> {
   defaultValue: T
   className?: string
   renderTrigger: (props: { value: T; toggle: () => void }) => React.ReactNode
@@ -11,44 +10,28 @@ interface DropdownMenuProps<T> {
   children?: (props: { value: T; setValue: (value: T) => void }) => React.ReactNode
 }
 
-export default function DropdownMenu<T>({
+export default function DropdownMenu<T extends string>({
   defaultValue,
   className,
   renderTrigger: Trigger,
   onSubmit,
   children,
 }: DropdownMenuProps<T>) {
-  const [isOpen, { setFalse: close, toggle }] = useBooleanState()
+  const { containerRef, isOpen, close, toggle } = useDropdown<HTMLDivElement>()
+
   const [value, setValue] = React.useState(defaultValue)
-  const containerRef = useOutsideClick<HTMLDivElement>(close)
-
-  React.useEffect(() => onSubmit?.(value), [value, onSubmit])
-
-  React.useEffect(close, [value, close])
-
-  useWindowEvent('keydown', (e) => {
-    if (isOpen && e.key === 'Escape') close()
-  })
+  const setValueOnSubmit = React.useCallback(() => {
+    setValue(value)
+    onSubmit?.(value)
+    close()
+  }, [value, onSubmit, close])
 
   return (
     <div ref={containerRef} className="relative block">
       <Trigger value={value} toggle={toggle} />
-      <AnimatePresence>
-        {isOpen && (
-          <motion.ul
-            className={cn(
-              'absolute -left-3 top-12 rounded-md border border-gray200 bg-gray000 p-1 transition-colors',
-              className,
-            )}
-            initial={{ top: '2rem', scale: 0.9, opacity: 0 }}
-            animate={{ top: '3rem', scale: 1, opacity: 1 }}
-            exit={{ top: '2rem', scale: 0.9, opacity: 0 }}
-            transition={{ ease: 'easeInOut', duration: 0.2 }}
-          >
-            {children?.({ value, setValue })}
-          </motion.ul>
-        )}
-      </AnimatePresence>
+      <DropdownWrapper open={isOpen} className={className}>
+        {children?.({ value, setValue: setValueOnSubmit })}
+      </DropdownWrapper>
     </div>
   )
 }
