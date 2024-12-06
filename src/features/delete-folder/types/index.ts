@@ -2,7 +2,7 @@ import type { Folder } from '@/entities/folder'
 
 export interface UseDeleteFolderParams {
   id: Folder['id']
-  onDelete?: (withNote: boolean) => void
+  onDelete?: () => void
 }
 
 export interface DeleteWithNoteCheckboxProps {

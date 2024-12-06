@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router'
 import { useDeleteFolder } from '@/entities/folder'
 import { useHandleNoteIncluded } from '@/entities/note'
+import { INDEX_PATH, TRASH_PATH } from '@/shared/constants'
 import type { DeleteWithNoteCheckboxProps, UseDeleteFolderParams } from '../types'
 
 export default function useDeleteFolderState({ id, onDelete }: UseDeleteFolderParams) {
@@ -21,11 +23,14 @@ export default function useDeleteFolderState({ id, onDelete }: UseDeleteFolderPa
     return resetIncluded({ included: id })
   }, [softDeleteNotesByIncluded, resetIncluded, id])
 
+  const navigate = useNavigate()
+
   const submitDelete = React.useCallback(() => {
     deleteFolder({ id })
     deleteTargetNotes()
-    onDelete?.(withDeleteNote.current)
-  }, [id, deleteFolder, deleteTargetNotes, onDelete])
+    navigate(withDeleteNote.current ? TRASH_PATH : INDEX_PATH)
+    onDelete?.()
+  }, [id, deleteFolder, deleteTargetNotes, onDelete, navigate])
 
   return { checkboxProps, submitDelete }
 }

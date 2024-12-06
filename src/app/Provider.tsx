@@ -6,8 +6,10 @@ import AppRouter from './AppRouter'
 export default function Provider({ children }: React.PropsWithChildren) {
   return (
     <React.StrictMode>
-      <AppRouter>{children}</AppRouter>
-      <OverlayViewer />
+      <AppRouter>
+        {children}
+        <OverlayViewer />
+      </AppRouter>
       <ToastViewer />
     </React.StrictMode>
   )

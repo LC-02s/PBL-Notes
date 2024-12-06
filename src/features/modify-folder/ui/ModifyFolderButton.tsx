@@ -1,14 +1,14 @@
-import { useNavigate } from 'react-router'
 import { AnimatePresence, motion } from 'motion/react'
 import { useActiveFolder } from '@/entities/folder'
 import { useOverlay } from '@/shared/hooks'
-import { type ModifyFolderButtonProps, withDialogForm } from './withDialogForm'
+import {
+  type ModifyFolderButtonProps,
+  withModifyFolderFormDialog,
+} from './withModifyFolderFormDialog'
 
 export default function ModifyFolderButton({ deleteButton }: ModifyFolderButtonProps) {
   const { startedAt, open } = useOverlay<HTMLButtonElement>()
   const { folder } = useActiveFolder()
-
-  const navigate = useNavigate()
 
   return (
     <AnimatePresence>
@@ -19,7 +19,7 @@ export default function ModifyFolderButton({ deleteButton }: ModifyFolderButtonP
           title="폴더 정보 수정"
           className="block whitespace-nowrap text-sm font-medium text-gray500 transition-colors hover:text-info focus:text-info"
           onClick={() => {
-            open(withDialogForm({ folder, deleteButton, navigate }))
+            open(withModifyFolderFormDialog({ folder, deleteButton }))
           }}
           disabled={!folder}
           initial={{ opacity: 0 }}
