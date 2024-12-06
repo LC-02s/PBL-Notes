@@ -1,1 +1,3 @@
-export type Theme = 'light' | 'dark'
+export type RealTheme = 'light' | 'dark'
+
+export type Theme = RealTheme | 'system'
