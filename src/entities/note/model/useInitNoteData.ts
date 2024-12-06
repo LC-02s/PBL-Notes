@@ -1,6 +1,11 @@
 import React from 'react'
 import { reportOnError } from '@/shared/utils'
-import { convertNoteListToDB, getInitialData, legacyNoteMapper } from '../utils'
+import {
+  convertNoteListToDB,
+  filterDeletedNotesOutOfDate,
+  getInitialData,
+  legacyNoteMapper,
+} from '../utils'
 import { useNoteStore } from './noteStore'
 
 export default function useInitNoteData({
@@ -17,6 +22,7 @@ export default function useInitNoteData({
     setNoteSession(false)
     getInitialData()
       .then((data) => legacyNoteMapper(data, mapper))
+      .then(filterDeletedNotesOutOfDate)
       .then(convertNoteListToDB)
       .then(setNoteDB)
       .then(() => setNoteSession(true))
