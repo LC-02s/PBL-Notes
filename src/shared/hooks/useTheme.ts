@@ -1,3 +1,4 @@
+import React from 'react'
 import { create } from 'zustand'
 import type { Theme, RealTheme } from '../types'
 import { DEFAULT_THEME, THEME_KEY, THEME_LABEL } from '../constants'
@@ -7,9 +8,10 @@ interface ThemeStore {
   theme: Theme
   realTheme: RealTheme
   setTheme: (theme: Theme) => void
+  setRealTheme: (theme: RealTheme) => void
 }
 
-function isDarkTheme(theme: Theme) {
+function checkDarkTheme(theme: Theme) {
   return (
     theme === 'dark' ||
     (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -17,28 +19,44 @@ function isDarkTheme(theme: Theme) {
 }
 
 function saveTheme(theme: Theme): Partial<ThemeStore> {
+  const isDarkTheme = checkDarkTheme(theme)
+
+  document.body.classList.toggle('dark' satisfies RealTheme, isDarkTheme)
   localStorage.setItem(THEME_KEY, theme)
   reportOnSuccess(`${THEME_LABEL[theme]}로 변경되었어요!`)
 
-  if (isDarkTheme(theme)) {
-    document.body.classList.add('dark' satisfies RealTheme)
-
-    return { theme, realTheme: 'dark' }
-  }
-
-  document.body.classList.remove('dark' satisfies RealTheme)
-
-  return { theme, realTheme: 'light' }
+  return { theme, realTheme: isDarkTheme ? 'dark' : 'light' }
 }
 
 const defaultTheme = (localStorage.getItem(THEME_KEY) as Theme | null) || DEFAULT_THEME
 
 const useThemeStore = create<ThemeStore>((set) => ({
   theme: defaultTheme,
-  realTheme: isDarkTheme(defaultTheme) ? 'dark' : 'light',
+  realTheme: checkDarkTheme(defaultTheme) ? 'dark' : 'light',
   setTheme: (theme) => set(saveTheme(theme)),
+  setRealTheme: (realTheme) => set({ realTheme }),
 }))
 
-export default function useTheme() {
+export function useTheme() {
   return useThemeStore()
+}
+
+export function useChangeThemeEvent() {
+  const { theme, setRealTheme } = useTheme()
+
+  React.useEffect(() => {
+    const mediaTheme = window.matchMedia('(prefers-color-scheme: dark)')
+    const listener = (e: MediaQueryListEvent) => {
+      if (theme === 'system') {
+        setRealTheme(e.matches ? 'dark' : 'light')
+        document.body.classList.toggle('dark' satisfies RealTheme, e.matches)
+      }
+    }
+
+    mediaTheme.addEventListener('change', listener)
+
+    return () => {
+      mediaTheme.removeEventListener('change', listener)
+    }
+  }, [theme, setRealTheme])
 }
