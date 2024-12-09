@@ -1,8 +1,8 @@
 import React from 'react'
 import type { FocusableElement } from '@/shared/types'
-import OverlayController from './OverlayController'
-import { useOverlayMount, useOverlayUnmount } from './OverlayContext'
 import type { CreateOverlayElement, OverlayControlRef } from './Overlay.type'
+import { useOverlayMount, useOverlayUnmount } from './OverlayContext'
+import OverlayController from './OverlayController'
 
 let elementId = 1
 

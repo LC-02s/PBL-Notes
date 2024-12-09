@@ -1,7 +1,7 @@
 import React from 'react'
-import Dialog from './Dialog'
-import Button from './Button'
+import type Button from './Button'
 import Break from './Break'
+import Dialog from './Dialog'
 
 interface ConfirmDialogProps {
   content: string

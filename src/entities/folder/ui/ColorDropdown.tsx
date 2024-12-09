@@ -1,8 +1,8 @@
 import { DEFAULT_COLOR_CHIP } from '@/shared/constants'
 import type { ColorChip } from '@/shared/types'
 import { DropdownMenu } from '@/shared/ui'
-import ColorDropdownTrigger from './ColorDropdownTrigger'
 import ColorDropdownItem from './ColorDropdownItem'
+import ColorDropdownTrigger from './ColorDropdownTrigger'
 
 interface ColorDropdownProps {
   defaultValue?: ColorChip

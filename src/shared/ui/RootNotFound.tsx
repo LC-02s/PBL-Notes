@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router'
-import * as Icon from './icon'
-import NotFound from './NotFound'
 import Button from './Button'
+import NotFound from './NotFound'
+import * as Icon from './icon'
 
 export default function RootNotFound() {
   const navigate = useNavigate()

@@ -1,6 +1,6 @@
 import { getNow } from '@/shared/utils'
-import { DELETE_TARGET_MS } from '../constants'
 import type { Note } from '../types'
+import { DELETE_TARGET_MS } from '../constants'
 
 export default function filterDeletedNotesOutOfDate(noteList: Note[]) {
   const now = getNow()

@@ -5,7 +5,7 @@ export default function storageFactor<T>({ key }: { key: string }) {
     async getInitialData() {
       return localforage
         .getItem(key)
-        .then((value) => (value ? String(value) : '[]'))
+        .then((value) => (typeof value === 'string' && value ? value : '[]'))
         .then<T[]>(JSON.parse)
     },
     async saveData(data: T[]) {

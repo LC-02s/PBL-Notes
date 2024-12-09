@@ -1,6 +1,6 @@
 import React from 'react'
-import { reportOnError } from '@/shared/utils'
 import { useDocumentEvent, useWindowEvent } from '@/shared/hooks'
+import { reportOnError } from '@/shared/utils'
 import { saveData } from '../utils'
 import { useNoteSession } from './noteStore'
 import useNoteList from './useNoteList'

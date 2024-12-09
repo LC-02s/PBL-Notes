@@ -7,7 +7,7 @@ type DimmedProps = React.ComponentProps<typeof motion.div>
 const Dimmed = React.forwardRef<HTMLDivElement, DimmedProps>(({ className, ...props }, ref) => (
   <motion.div
     ref={ref}
-    className={cn('bg-dimmed absolute inset-0 -z-[1] m-0 border-none p-0', className)}
+    className={cn('absolute inset-0 -z-[1] m-0 border-none bg-dimmed p-0', className)}
     {...props}
   />
 ))

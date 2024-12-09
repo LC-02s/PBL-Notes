@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
-import type { FolderPath } from '@/shared/types'
 import type { OverlayElementState } from '@/shared/hooks'
+import type { FolderPath } from '@/shared/types'
 import { Dialog } from '@/shared/ui'
 import AddFolderForm from './AddFolderForm'
 

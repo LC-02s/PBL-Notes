@@ -4,10 +4,10 @@ import ReactDOM from 'react-dom'
 import { type Target, AnimatePresence, motion, useIsomorphicLayoutEffect } from 'motion/react'
 import { useOutsideClick, useStopScroll } from '../hooks'
 import { cn } from '../utils'
-import Dimmed from './Dimmed'
-import { type DialogVariable, dialogVariable } from './Dialog.style'
 import Button from './Button'
+import { type DialogVariable, dialogVariable } from './Dialog.style'
 import handleDialogA11y from './Dialog.util'
+import Dimmed from './Dimmed'
 
 function Title({ className, ...props }: JSX.IntrinsicElements['h2']) {
   return (

@@ -1,4 +1,4 @@
-import { FOLDER_PATH_KEY, NOTE_PATH_KEY, TRASH_PATH } from '../constants'
+import type { FOLDER_PATH_KEY, NOTE_PATH_KEY, TRASH_PATH } from '../constants'
 
 export type FolderPathKey = typeof FOLDER_PATH_KEY
 

@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { ToastContainer } from 'react-toastify'
 import { cn } from '../utils'
-import * as Icon from './icon'
 import HiddenText from './HiddenText'
+import * as Icon from './icon'
 
 import 'react-toastify/dist/ReactToastify.css'
 

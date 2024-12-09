@@ -1,7 +1,7 @@
-import { useChangeThemeEvent, useDropdown, useTheme } from '@/shared/hooks'
 import { THEME_LABEL, THEME_VALUES } from '@/shared/constants'
-import { cn } from '@/shared/utils'
+import { useChangeThemeEvent, useDropdown, useTheme } from '@/shared/hooks'
 import { DropdownItem, DropdownWrapper, HiddenText, Icon, MenuButton } from '@/shared/ui'
+import { cn } from '@/shared/utils'
 
 export default function ThemeButton() {
   const { containerRef, isOpen, withClose, toggle } = useDropdown<HTMLDivElement>()

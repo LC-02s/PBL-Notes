@@ -1,6 +1,6 @@
 import React from 'react'
-import useBooleanState from '../useBooleanState'
 import type { OverlayControllerProps, OverlayControlRef } from './Overlay.type'
+import useBooleanState from '../useBooleanState'
 
 const OverlayController = React.forwardRef(function OverlayController(
   { overlayElement: OverlayElement, onExit, returnToFocus }: OverlayControllerProps,

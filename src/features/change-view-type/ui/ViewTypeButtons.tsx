@@ -1,6 +1,6 @@
 import React from 'react'
-import type { ViewType } from '@/shared/types'
 import { useViewType } from '@/shared/hooks'
+import type { ViewType } from '@/shared/types'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
 
 interface ViewTypeButtonsProps {
@@ -13,7 +13,7 @@ export default function ViewTypeButtons({ backButton: BackButton }: ViewTypeButt
   const isGalleryType = viewType === 'gallery'
 
   return (
-    <p className="flex h-full w-auto items-center justify-start space-x-1">
+    <div className="flex h-full w-auto items-center justify-start space-x-1">
       <MenuButton
         active={isListType}
         title="목록형 보기"
@@ -33,6 +33,6 @@ export default function ViewTypeButtons({ backButton: BackButton }: ViewTypeButt
         <HiddenText>갤러리형 보기</HiddenText>
       </MenuButton>
       <BackButton viewType={viewType} />
-    </p>
+    </div>
   )
 }
