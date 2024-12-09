@@ -1,6 +1,6 @@
 import type { ColorChip } from '@/shared/types'
-import { colorChip } from './ColorDropdownTrigger'
 import { cn } from '@/shared/utils'
+import { COLOR_CHIP_STYLE } from '../constants'
 
 interface ColorDropdownItemProps {
   value: ColorChip
@@ -23,7 +23,7 @@ export default function ColorDropdownItem({
     <li
       className={cn(
         'relative before:pointer-events-none before:absolute before:inset-y-0 before:left-3 before:m-auto before:size-3 before:rounded-full before:bg-gray500',
-        colorChip[value],
+        COLOR_CHIP_STYLE[value],
       )}
     >
       <button
