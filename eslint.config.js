@@ -1,5 +1,7 @@
 import js from '@eslint/js'
 import globals from 'globals'
+import typescriptParser from '@typescript-eslint/parser'
+import importPlugin from 'eslint-plugin-import'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import react from 'eslint-plugin-react'
@@ -18,7 +20,9 @@ export default [
       languageOptions: {
         ecmaVersion: 2020,
         globals: globals.browser,
+        parser: typescriptParser,
         parserOptions: {
+          sourceType: 'module',
           project: ['./tsconfig.node.json', './tsconfig.app.json'],
           tsconfigRootDir: import.meta.dirname,
         },
@@ -28,9 +32,62 @@ export default [
         'react-hooks': reactHooks,
         'react-refresh': reactRefresh,
         'jsx-a11y': jsxA11y,
+        import: importPlugin,
         prettier,
       },
       rules: {
+        'import/order': [
+          'warn',
+          {
+            groups: [
+              'builtin',
+              'external',
+              'internal',
+              'type',
+              'parent',
+              'sibling',
+              'index',
+              'unknown',
+            ],
+            pathGroups: [
+              {
+                pattern: 'react*',
+                group: 'external',
+                position: 'before',
+              },
+              {
+                pattern: '@/app*',
+                group: 'internal',
+                position: 'after',
+              },
+              {
+                pattern: '@/widgets/*',
+                group: 'internal',
+                position: 'after',
+              },
+              {
+                pattern: '@/features/*',
+                group: 'internal',
+                position: 'after',
+              },
+              {
+                pattern: '@/entities/*',
+                group: 'internal',
+                position: 'after',
+              },
+              {
+                pattern: '@/shared/*',
+                group: 'internal',
+                position: 'after',
+              },
+            ],
+            pathGroupsExcludedImportTypes: ['react-router', 'react-hook-form', 'react-toastify'],
+            alphabetize: { order: 'asc' },
+          },
+        ],
+        'import/no-unresolved': 'off',
+        '@typescript-eslint/consistent-type-exports': 'error',
+        '@typescript-eslint/consistent-type-imports': 'error',
         ...react.configs.recommended.rules,
         ...react.configs['jsx-runtime'].rules,
         'react/jsx-props-no-spreading': 'off',
