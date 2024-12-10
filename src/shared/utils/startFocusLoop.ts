@@ -1,6 +1,6 @@
-import { getFocusableElementAll } from '../utils'
+import { getFocusableElementAll } from './getFocusableElement'
 
-export default function handleDialogA11y<T extends HTMLElement>(element: T | null) {
+export default function startFocusLoop<T extends HTMLElement>(element: T | null) {
   const focusableEls = getFocusableElementAll(element)
 
   if (focusableEls && focusableEls.length > 0) {

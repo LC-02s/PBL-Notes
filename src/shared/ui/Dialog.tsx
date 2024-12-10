@@ -3,10 +3,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { type Target, AnimatePresence, motion, useIsomorphicLayoutEffect } from 'motion/react'
 import { useOutsideClick, useStopScroll } from '../hooks'
-import { cn } from '../utils'
+import { cn, startFocusLoop } from '../utils'
 import Button from './Button'
-import { type DialogVariable, dialogVariable } from './Dialog.style'
-import handleDialogA11y from './Dialog.util'
 import Dimmed from './Dimmed'
 
 function Title({ className, ...props }: JSX.IntrinsicElements['h2']) {
@@ -47,35 +45,30 @@ function Footer({ className, ...props }: JSX.IntrinsicElements['div']) {
   )
 }
 
-type DialogPosition = 'top' | 'center'
-
-interface DialogProps extends DialogVariable {
+interface DialogProps {
   open?: boolean
   onClose?: () => void
   withoutDimmed?: boolean
   cancelWithOutsideClick?: boolean
-  position?: DialogPosition
+  size?: keyof typeof dialogVariant.size
+  position?: keyof typeof dialogVariant.position
 }
 
-const dialogPositionVariant: Record<DialogPosition, Record<'initial' | 'animate', Target>> = {
-  top: {
-    initial: {
-      transform: 'translate(-50%, -24%) scale(0.9)',
-      opacity: 0.3,
-    },
-    animate: {
-      transform: 'translate(-50%, 0%) scale(1)',
-      opacity: 1,
-    },
+const dialogVariant = {
+  size: {
+    xs: 'max-w-xs',
+    sm: 'max-w-sm',
+    md: 'max-w-lg',
+    lg: 'max-w-3xl',
   },
-  center: {
-    initial: {
-      transform: 'translate(-50%, -42%) scale(0.9)',
-      opacity: 0.3,
+  position: {
+    top: {
+      initial: { x: '-50%', y: '-24%', scale: 0.9, opacity: 0.3 } satisfies Target,
+      animate: { x: '-50%', y: '0%', scale: 1, opacity: 1 } satisfies Target,
     },
-    animate: {
-      transform: 'translate(-50%, -54%) scale(1)',
-      opacity: 1,
+    center: {
+      initial: { x: '-50%', y: '-42%', scale: 0.9, opacity: 0.3 } satisfies Target,
+      animate: { x: '-50%', y: '-54%', scale: 1, opacity: 1 } satisfies Target,
     },
   },
 }
@@ -83,7 +76,7 @@ const dialogPositionVariant: Record<DialogPosition, Record<'initial' | 'animate'
 function Dialog({
   open: isOpen = false,
   onClose,
-  size,
+  size = 'md',
   withoutDimmed,
   position = 'center',
   cancelWithOutsideClick = false,
@@ -98,7 +91,7 @@ function Dialog({
   useIsomorphicLayoutEffect(() => {
     if (isOpen) {
       const containerEl = containerRef.current
-      handleDialogA11y(containerEl)
+      startFocusLoop(containerEl)
     }
   }, [isOpen])
 
@@ -111,11 +104,11 @@ function Dialog({
             className={cn(
               'absolute left-1/2 max-h-[calc(100dvh-2rem)] w-[calc(100vw-1rem)] translate-x-1/2 rounded-xl bg-gray000 p-5 transition-colors',
               position === 'center' ? 'top-1/2' : 'top-4',
-              dialogVariable({ size }),
+              dialogVariant.size[size],
             )}
-            initial={dialogPositionVariant[position].initial}
-            animate={dialogPositionVariant[position].animate}
-            exit={dialogPositionVariant[position].initial}
+            initial={dialogVariant.position[position].initial}
+            animate={dialogVariant.position[position].animate}
+            exit={dialogVariant.position[position].initial}
             transition={{ ease: 'easeInOut', duration: 0.16 }}
           >
             {children}
