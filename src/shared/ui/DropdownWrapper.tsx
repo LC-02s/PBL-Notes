@@ -16,7 +16,7 @@ export default function DropdownWrapper({
       {isOpen && (
         <motion.ul
           className={cn(
-            'absolute -left-3 top-12 rounded-md border border-gray200 bg-gray000 p-1 transition-colors',
+            'absolute -left-3 top-12 z-50 rounded-md border border-gray200 bg-gray000 p-1 transition-colors',
             className,
           )}
           initial={{ top: '2rem', scale: 0.9, opacity: 0 }}

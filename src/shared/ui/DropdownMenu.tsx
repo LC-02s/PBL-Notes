@@ -17,20 +17,21 @@ export default function DropdownMenu<T extends string>({
   onSubmit,
   children,
 }: DropdownMenuProps<T>) {
-  const { containerRef, isOpen, close, toggle } = useDropdown<HTMLDivElement>()
+  const { containerRef, isOpen, withClose, toggle } = useDropdown<HTMLDivElement>()
 
   const [value, setValue] = React.useState(defaultValue)
-  const setValueOnSubmit = React.useCallback(() => {
-    setValue(value)
-    onSubmit?.(value)
-    close()
-  }, [value, onSubmit, close])
+  const setValueOnSubmitWithClose = React.useMemo(() => {
+    return withClose((v: T) => {
+      setValue(v)
+      onSubmit?.(v)
+    })
+  }, [onSubmit, withClose])
 
   return (
     <div ref={containerRef} className="relative block">
       <Trigger value={value} toggle={toggle} />
       <DropdownWrapper open={isOpen} className={className}>
-        {children?.({ value, setValue: setValueOnSubmit })}
+        {children?.({ value, setValue: setValueOnSubmitWithClose })}
       </DropdownWrapper>
     </div>
   )
