@@ -87,7 +87,7 @@ export const useNoteStore = create<NoteStore>((set) => ({
   addNote: ({ createAt, included = DEFAULT_NOTE_VALUE.included, onSuccess }) =>
     set((prev) => {
       const store = tempNoteInterceptor(prev)
-      const { noteDB, tempNote } = store
+      const { noteDB } = store
 
       if (noteDB.has(createAt)) {
         reportOnError('노트 생성에 실패했어요')
@@ -101,11 +101,7 @@ export const useNoteStore = create<NoteStore>((set) => ({
       reportOnSuccess('노트가 생성되었어요!')
       onSuccess?.()
 
-      if (!tempNote) {
-        return { noteDB: new Map(noteDB), tempNote: note }
-      }
-
-      return { noteDB, tempNote: note }
+      return { noteDB: new Map(noteDB), tempNote: note }
     }),
 
   deleteNote: ({ createAt }) =>
