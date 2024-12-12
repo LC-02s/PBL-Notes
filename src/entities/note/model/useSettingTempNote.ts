@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNoteSession, useSetTempNote } from './noteStore'
-import useActiveNote from './useActiveNote'
+import { useActiveNote } from './useActiveNote'
 
 export default function useSettingTempNote() {
   const { note, noteId } = useActiveNote()

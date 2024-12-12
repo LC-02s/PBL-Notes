@@ -2,12 +2,18 @@ import React from 'react'
 import { useParams } from 'react-router'
 import { useNoteDB } from './noteStore'
 
-export default function useActiveNote() {
+export function useActiveNoteId() {
   const { noteId } = useParams()
   const targetId = +(noteId || -1)
 
-  const noteDB = useNoteDB()
-  const note = React.useMemo(() => noteDB.get(targetId) ?? null, [noteDB, targetId])
+  return { noteId: targetId }
+}
 
-  return { note, noteId: targetId }
+export function useActiveNote() {
+  const { noteId } = useActiveNoteId()
+
+  const noteDB = useNoteDB()
+  const note = React.useMemo(() => noteDB.get(noteId) ?? null, [noteDB, noteId])
+
+  return { note, noteId }
 }
