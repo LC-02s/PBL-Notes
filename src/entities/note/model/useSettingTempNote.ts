@@ -1,13 +1,10 @@
 import React from 'react'
-import { useNoteSession, useSetTempNote } from './noteStore'
-import { useActiveNote } from './useActiveNote'
+import { useSetTempNote } from './noteStore'
+import { useActiveNoteId } from './useActiveNote'
 
-export default function useSettingTempNote() {
-  const { note, noteId } = useActiveNote()
-  const noteSession = useNoteSession()
+export default function useSettingTempNote(noteSession: boolean) {
+  const { noteId } = useActiveNoteId()
   const setTempNote = useSetTempNote()
 
   React.useEffect(() => setTempNote({ createAt: noteId }), [setTempNote, noteId, noteSession])
-
-  return { note }
 }

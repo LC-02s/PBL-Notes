@@ -14,7 +14,6 @@ interface UseSaveNoteDataParams {
 export default function useAutoSaveNoteData({ onStart, onEnd }: UseSaveNoteDataParams) {
   const noteList = useNoteList()
   const noteSession = useNoteSession()
-  const { note } = useSettingTempNote()
 
   const save = React.useCallback(() => {
     if (noteSession) {
@@ -30,19 +29,9 @@ export default function useAutoSaveNoteData({ onStart, onEnd }: UseSaveNoteDataP
 
   React.useEffect(save, [noteSession, noteList, save])
 
-  useWindowEvent('beforeunload', (e) => {
-    if (!note || !note.modifiable || note.isLocked) return
+  useSettingTempNote(noteSession)
 
-    save()
-    e.preventDefault()
-    e.returnValue = ''
-  })
+  useWindowEvent('beforeunload', save)
 
-  useDocumentEvent('visibilitychange', () => {
-    if (!note || !note.modifiable || note.isLocked) return
-
-    if (document.visibilityState === 'hidden') {
-      save()
-    }
-  })
+  useDocumentEvent('visibilitychange', save)
 }
