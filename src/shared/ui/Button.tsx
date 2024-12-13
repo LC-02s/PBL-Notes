@@ -8,6 +8,7 @@ const buttonVariants = {
     warn: 'bg-warn text-white hover:bg-warn/75 active:bg-warn/75 dark:hover:bg-warn/70 dark:active:bg-warn/70',
     info: 'bg-info text-white hover:bg-info/75 active:bg-info/75 dark:hover:bg-info/70 dark:active:bg-info/70',
     default: 'dark:hover:bg-gray300',
+    light: 'bg-gray000 hover:bg-gray100 active:bg-gray100',
   },
 }
 
@@ -28,7 +29,7 @@ const Button = React.forwardRef<
       ref={ref}
       type="button"
       className={cn(
-        'block size-auto min-w-20 rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 active:bg-gray200',
+        'flex size-auto min-w-20 items-center justify-center break-keep rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 active:bg-gray200',
         buttonVariable({ variant }),
         className,
       )}
