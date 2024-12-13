@@ -153,6 +153,9 @@
     h1 {
       @apply !mt-3 mb-2 text-lg font-bold;
     }
+    h1.ck-placeholder ~ .ck-placeholder {
+      @apply hidden;
+    }
     ol,
     ul {
       @apply pl-7;

@@ -66,13 +66,13 @@ export const useNoteStore = create<NoteStore>((set) => ({
     set((prev) => {
       const store = tempNoteInterceptor(prev)
       const { noteDB, tempNote } = store
-      const targetNote = noteDB.get(createAt)
+      const targetNote = noteDB.get(createAt) ?? null
 
-      if (!targetNote || (tempNote && tempNote.createAt === createAt)) {
+      if (tempNote && tempNote.createAt === createAt) {
         return store
       }
 
-      if (!tempNote || !!(tempNote.markdown && tempNote.title)) {
+      if (!tempNote || !(!tempNote.markdown && !tempNote.title)) {
         return { noteDB, tempNote: targetNote }
       }
 
@@ -157,9 +157,7 @@ export const useNoteStore = create<NoteStore>((set) => ({
         return prev
       }
 
-      Object.assign(tempNote, { title: extractMarkdownTitle(markdown), markdown })
-
-      return { tempNote: { ...tempNote } }
+      return { tempNote: { ...tempNote, title: extractMarkdownTitle(markdown), markdown } }
     }),
 
   softDeleteNotesByIncluded: ({ included }) =>

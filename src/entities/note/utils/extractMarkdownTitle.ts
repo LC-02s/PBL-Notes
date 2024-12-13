@@ -5,8 +5,8 @@ export default function extractMarkdownTitle(value: string) {
 
   const match = /# (.*?)\n/g.exec(value)
 
-  if (!match || !match[1]) {
-    return ''
+  if (!match || !match[1].trim()) {
+    return value.replace('#', '').trim().split('\n')[0]
   }
 
   return match[1]
