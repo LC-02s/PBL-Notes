@@ -24,7 +24,7 @@ export default function ExportButton() {
             <Icon.FileDownloadOutline />
             <HiddenText>노트 다운로드 방식 선택</HiddenText>
           </MenuButton>
-          <DropdownWrapper open={isOpen} className="-left-12 w-48 space-y-1 p-1.5">
+          <DropdownWrapper open={isOpen} className="-left-24 w-48 space-y-1 p-1.5 xl:-left-9">
             <SaveAsMarkdownButton note={note} onClose={close} />
             <CopyAsMarkdownButton note={note} onClose={close} />
           </DropdownWrapper>
