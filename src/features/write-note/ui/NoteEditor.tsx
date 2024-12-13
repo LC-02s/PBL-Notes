@@ -1,50 +1,57 @@
 import React from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { BalloonEditor } from 'ckeditor5'
-import { type Note, useModifyNote, useSetTempNoteMarkdown, useTempNote } from '@/entities/note'
+import { useModifyNote, useSetTempNoteMarkdown, useTempNote } from '@/entities/note'
 import { EDITOR_CONFIG } from '../constants'
+import NoteEditorWrapper from './NoteEditorWrapper'
 
 import 'ckeditor5/ckeditor5.css'
 
-interface NoteEditorProps {
-  activeNote: Note
-}
-
-export default function NoteEditor({ activeNote }: NoteEditorProps) {
-  const [editor, setEditor] = React.useState<BalloonEditor | null>(null)
+export default function NoteEditor() {
+  const editorRef = React.useRef<BalloonEditor | null>(null)
+  const markdownRef = React.useRef('')
 
   const tempNote = useTempNote()
   const isDisabled = !tempNote || tempNote.isLocked || !tempNote.modifiable
+  const hasTempNote = !!tempNote
 
   const setTempNoteMarkdown = useSetTempNoteMarkdown()
   const modifyNote = useModifyNote()
 
   React.useEffect(() => {
-    editor?.[isDisabled ? 'enableReadOnlyMode' : 'disableReadOnlyMode'](editor.id)
-  }, [editor, isDisabled])
+    const editor = editorRef.current
 
-  if (!tempNote) {
-    return null
-  }
+    if (isDisabled) {
+      editor?.enableReadOnlyMode(editor.id)
+      return
+    }
+
+    editor?.disableReadOnlyMode(editor.id)
+  }, [isDisabled])
 
   return (
-    <div className="editor-wrapper relative block size-full flex-1 overflow-y-auto bg-gray000 px-6 pb-9 pt-4 text-base font-normal text-gray700 transition-colors xl:px-8 xl:pb-12">
-      <CKEditor
-        editor={BalloonEditor}
-        config={EDITOR_CONFIG}
-        data={tempNote.markdown}
-        onReady={setEditor}
-        onChange={(_, e) => {
-          setTempNoteMarkdown({ createAt: tempNote.createAt, markdown: e.getData() })
-        }}
-        onBlur={(_, e) => {
-          const markdown = e.getData()
+    <NoteEditorWrapper mount={hasTempNote}>
+      {hasTempNote && (
+        <div className="editor-wrapper relative block size-full flex-1 overflow-y-auto bg-gray000 px-6 pb-9 pt-4 text-base font-normal text-gray700 transition-colors xl:px-8 xl:pb-12">
+          <CKEditor
+            editor={BalloonEditor}
+            config={EDITOR_CONFIG}
+            data={tempNote.markdown}
+            onReady={(editor) => (editorRef.current = editor)}
+            onChange={(_, editor) => {
+              setTempNoteMarkdown({ createAt: tempNote.createAt, markdown: editor.getData() })
+            }}
+            onFocus={(_, editor) => (markdownRef.current = editor.getData())}
+            onBlur={(_, editor) => {
+              const markdown = editor.getData()
 
-          if (activeNote.markdown !== markdown) {
-            modifyNote({ createAt: tempNote.createAt, markdown })
-          }
-        }}
-      />
-    </div>
+              if (markdownRef.current !== markdown) {
+                modifyNote({ createAt: tempNote.createAt, markdown })
+              }
+            }}
+          />
+        </div>
+      )}
+    </NoteEditorWrapper>
   )
 }
