@@ -7,6 +7,7 @@ import {
   Bold,
   Code,
   CodeBlock,
+  Strikethrough,
   Essentials,
   Italic,
   Link,
@@ -32,6 +33,7 @@ const EDITOR_CONFIG: EditorConfig = {
     Bold,
     Code,
     CodeBlock,
+    Strikethrough,
     Essentials,
     Italic,
     Link,
@@ -50,6 +52,7 @@ const EDITOR_CONFIG: EditorConfig = {
     items: [
       'bold',
       'italic',
+      'strikethrough',
       'code',
       '|',
       'blockQuote',
