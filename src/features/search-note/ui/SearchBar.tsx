@@ -76,7 +76,7 @@ export default function SearchBar() {
         ref={inputRef}
         className="h-8 rounded bg-gray100 pl-8 pr-6 text-sm focus:bg-gray000"
         value={keyword}
-        placeholder="노트 제목으로 검색하기"
+        placeholder="검색어를 입력해주세요"
         onChange={(e) => setKeyword(e.currentTarget.value)}
         onFocus={focus}
       />
