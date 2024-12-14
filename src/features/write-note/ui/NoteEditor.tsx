@@ -8,7 +8,7 @@ import NoteEditorWrapper from './NoteEditorWrapper'
 import 'ckeditor5/ckeditor5.css'
 
 export default function NoteEditor() {
-  const editorRef = React.useRef<BalloonEditor | null>(null)
+  const [editor, setEditor] = React.useState<BalloonEditor | null>(null)
   const markdownRef = React.useRef('')
 
   const tempNote = useTempNote()
@@ -19,15 +19,13 @@ export default function NoteEditor() {
   const modifyNote = useModifyNote()
 
   React.useEffect(() => {
-    const editor = editorRef.current
-
     if (isDisabled) {
       editor?.enableReadOnlyMode(editor.id)
       return
     }
 
     editor?.disableReadOnlyMode(editor.id)
-  }, [isDisabled])
+  }, [editor, isDisabled])
 
   return (
     <NoteEditorWrapper mount={hasTempNote}>
@@ -37,7 +35,7 @@ export default function NoteEditor() {
             editor={BalloonEditor}
             config={EDITOR_CONFIG}
             data={tempNote.markdown}
-            onReady={(editor) => (editorRef.current = editor)}
+            onReady={setEditor}
             onChange={(_, editor) => {
               setTempNoteMarkdown({ createAt: tempNote.createAt, markdown: editor.getData() })
             }}
