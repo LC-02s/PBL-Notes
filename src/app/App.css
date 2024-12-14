@@ -156,12 +156,15 @@
     h1.ck-placeholder ~ .ck-placeholder {
       @apply hidden;
     }
+    a[target='_blank'] {
+      @apply text-gray700 transition-colors hover:text-info hover:underline;
+    }
     ol,
     ul {
       @apply pl-7;
     }
     blockquote {
-      @apply border-gray300 px-4 transition-colors;
+      @apply border-gray300 px-4 text-gray700 transition-colors;
     }
     .ck .ck-widget {
       @apply -outline-offset-2;

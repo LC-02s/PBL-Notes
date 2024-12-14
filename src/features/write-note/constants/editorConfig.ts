@@ -69,6 +69,9 @@ const EDITOR_CONFIG: EditorConfig = {
   list: {
     properties: { styles: false },
   },
+  link: {
+    addTargetToExternalLinks: true,
+  },
   codeBlock: {
     languages: [{ language: 'plaintext', label: '' }],
   },
