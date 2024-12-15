@@ -10,7 +10,7 @@ interface SaveAsMarkdownButtonProps {
 }
 
 export default function SaveAsMarkdownButton({ note, onClose }: SaveAsMarkdownButtonProps) {
-  const save = React.useCallback(async () => {
+  const save = React.useCallback(() => {
     try {
       const name = note.title || formatDate(note.createAt)
       const file = new Blob([note.markdown], { type: 'text/markdown;charset=utf-8' })
