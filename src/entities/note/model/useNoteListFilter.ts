@@ -1,13 +1,14 @@
 import React from 'react'
 import type { Note } from '../types'
-import useNoteList from './useNoteList'
+import { useNoteDB } from './noteStore'
 
 interface NoteFilter {
-  (note: Note, index: number, array: Note[]): unknown
+  (note: Note, index: number): unknown
 }
 
 export default function useNoteListFilter(selector: NoteFilter) {
-  const noteList = useNoteList()
+  const noteDB = useNoteDB()
 
-  return React.useMemo(() => noteList.filter(selector), [noteList, selector])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return React.useMemo(() => [...noteDB.values()].filter(selector), [noteDB])
 }
