@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router'
+import { Link } from 'react-router'
 import type { Note } from '@/entities/note'
 import { TRASH_PATH } from '@/shared/constants'
 import type { FolderPath, NotePath } from '@/shared/types'
@@ -33,7 +33,7 @@ export default function SearchResultItem({
 
   return (
     <li>
-      <NavLink
+      <Link
         ref={anchorRef}
         to={path}
         title={`노트 바로가기: ${note.title}`}
@@ -41,7 +41,7 @@ export default function SearchResultItem({
         onClick={reset}
       >
         {note.title}
-      </NavLink>
+      </Link>
     </li>
   )
 }
