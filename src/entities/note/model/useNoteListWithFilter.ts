@@ -6,9 +6,12 @@ interface NoteFilter {
   (note: Note, index: number): unknown
 }
 
-export default function useNoteListFilter(selector: NoteFilter) {
+export default function useNoteListWithFilter(
+  selector: NoteFilter,
+  deps: React.DependencyList = [],
+) {
   const noteDB = useNoteDB()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  return React.useMemo(() => [...noteDB.values()].filter(selector), [noteDB])
+  return React.useMemo(() => [...noteDB.values()].filter(selector), [noteDB, ...deps])
 }

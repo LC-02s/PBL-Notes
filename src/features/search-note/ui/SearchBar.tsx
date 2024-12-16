@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNoteList } from '@/entities/note'
+import { useNoteListWithFilter } from '@/entities/note'
 import { useBooleanState, useDebounce, useOutsideClick, useWindowEvent } from '@/shared/hooks'
 import { DropdownWrapper, Icon, TextInput } from '@/shared/ui'
 import ResetButton from './ResetButton'
@@ -11,10 +11,10 @@ export default function SearchBar() {
   const hasKeyword = !!keyword
   const reset = React.useCallback(() => setKeyword(''), [])
 
-  const noteList = useNoteList()
-  const resultList = React.useMemo(() => {
-    return noteList.filter((note) => note.markdown.includes(debouncedKeyword))
-  }, [noteList, debouncedKeyword])
+  const resultList = useNoteListWithFilter(
+    (note) => note.markdown.includes(debouncedKeyword),
+    [debouncedKeyword],
+  )
 
   const [isFocus, { setTrue: focus, setFalse: blur }] = useBooleanState()
   const isOpen = isFocus && hasKeyword
