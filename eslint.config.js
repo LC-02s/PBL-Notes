@@ -49,36 +49,12 @@ export default [
             'unknown',
           ],
           pathGroups: [
-            {
-              pattern: 'react*',
-              group: 'external',
-              position: 'before',
-            },
-            {
-              pattern: '@/app*',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/widgets/*',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/features/*',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/entities/*',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/shared/*',
-              group: 'internal',
-              position: 'after',
-            },
+            { pattern: 'react*', group: 'external', position: 'before' },
+            { pattern: '@/app*', group: 'internal', position: 'after' },
+            { pattern: '@/widgets/*', group: 'internal', position: 'after' },
+            { pattern: '@/features/*', group: 'internal', position: 'after' },
+            { pattern: '@/entities/*', group: 'internal', position: 'after' },
+            { pattern: '@/shared/*', group: 'internal', position: 'after' },
           ],
           pathGroupsExcludedImportTypes: ['react-router', 'react-hook-form', 'react-toastify'],
           alphabetize: { order: 'asc' },
