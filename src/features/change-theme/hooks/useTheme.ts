@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { create } from 'zustand'
+import { reportOnSuccess } from '@/shared/utils'
 import type { Theme, RealTheme } from '../types'
 import { DEFAULT_THEME, THEME_KEY, THEME_LABEL } from '../constants'
-import { reportOnSuccess } from '../utils'
 
 interface ThemeStore {
   theme: Theme

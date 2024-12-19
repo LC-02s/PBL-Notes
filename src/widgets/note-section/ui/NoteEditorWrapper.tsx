@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { useViewType } from '@/shared/hooks'
+import { useViewType } from '@/features/change-view-type'
 import Dimmed from '@/shared/ui/Dimmed'
 
 interface NoteEditorWrapperProps {

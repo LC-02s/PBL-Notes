@@ -1,7 +1,7 @@
 import { create } from 'zustand'
+import { reportOnSuccess } from '@/shared/utils'
 import type { ViewType } from '../types'
 import { DEFAULT_VIEW_TYPE, VIEW_TYPE_KEY, VIEW_TYPE_LABEL } from '../constants'
-import { reportOnSuccess } from '../utils'
 
 interface ThemeStore {
   viewType: ViewType

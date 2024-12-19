@@ -1,5 +1,5 @@
-import type { ColorChip } from '@/shared/types'
 import { cn } from '@/shared/utils'
+import type { ColorChip } from '../types'
 import { COLOR_CHIP_STYLE } from '../constants'
 
 interface ColorDropdownTriggerProps {

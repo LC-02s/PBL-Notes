@@ -1,8 +1,8 @@
 import { create } from 'zustand'
-import type { Folder } from '@/entities/folder'
-import { DEFAULT_SORT_TYPE, DEFAULT_SORTED_AT, LEGACY_DEFAULT_SORT_KEY } from '@/shared/constants'
-import type { SortedAt, SortType } from '@/shared/types'
+import type { SortedAt, SortType, Folder } from '@/entities/folder'
+import { DEFAULT_SORT_TYPE, DEFAULT_SORTED_AT } from '@/entities/folder'
 import { reportOnSuccess } from '@/shared/utils'
+import { LEGACY_DEFAULT_SORT_KEY } from '../constants'
 
 interface DefaultSortStore {
   sortType: SortType

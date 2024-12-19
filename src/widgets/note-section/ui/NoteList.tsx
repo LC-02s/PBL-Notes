@@ -1,5 +1,5 @@
+import { useViewType } from '@/features/change-view-type'
 import type { Note } from '@/entities/note'
-import { useViewType } from '@/shared/hooks'
 import { cn } from '@/shared/utils'
 
 function NoteListGrid({ children }: React.PropsWithChildren) {

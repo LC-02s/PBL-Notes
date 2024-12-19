@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import type { ColorChip } from '@/shared/types'
-import type { Folder, FolderFormValues } from '../types'
+import type { Folder, FolderFormValues, ColorChip } from '../types'
 import { MAX_NAME_LENGTH } from '../constants'
 import useCheckDuplicate from './useCheckDuplicate'
 

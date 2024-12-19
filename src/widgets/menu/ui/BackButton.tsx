@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { AnimatePresence, motion } from 'motion/react'
+import type { ViewType } from '@/features/change-view-type'
 import { useActiveFolder } from '@/entities/folder'
 import { useActiveNote } from '@/entities/note'
 import { INDEX_PATH, TRASH_PATH } from '@/shared/constants'
-import type { ViewType } from '@/shared/types'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
 
 interface BackButtonProps {

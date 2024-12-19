@@ -1,7 +1,11 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useActiveFolder, useModifyFolder } from '@/entities/folder'
-import { DEFAULT_SORT_TYPE, DEFAULT_SORTED_AT } from '@/shared/constants'
-import type { SortedAt, SortType } from '@/shared/types'
+import type { SortedAt, SortType } from '@/entities/folder'
+import {
+  useActiveFolder,
+  useModifyFolder,
+  DEFAULT_SORT_TYPE,
+  DEFAULT_SORTED_AT,
+} from '@/entities/folder'
 import { useDefaultSortSetting, useDefaultSortStore } from './defaultSortStore'
 
 export default function useChangeSortTypeState() {

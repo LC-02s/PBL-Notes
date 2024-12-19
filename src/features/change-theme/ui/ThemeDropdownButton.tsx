@@ -1,7 +1,8 @@
-import { THEME_LABEL, THEME_VALUES } from '@/shared/constants'
-import { useChangeThemeEvent, useDropdown, useTheme } from '@/shared/hooks'
+import { useDropdown } from '@/shared/hooks'
 import { DropdownItem, DropdownWrapper, HiddenText, Icon, MenuButton } from '@/shared/ui'
 import { cn } from '@/shared/utils'
+import { THEME_LABEL, THEMES } from '../constants'
+import { useChangeThemeEvent, useTheme } from '../hooks'
 
 export default function ThemeButton() {
   const { containerRef, isOpen, withClose, toggle } = useDropdown<HTMLDivElement>()
@@ -27,7 +28,7 @@ export default function ThemeButton() {
         <HiddenText>테마 변경</HiddenText>
       </MenuButton>
       <DropdownWrapper open={isOpen} className="left-[-7.25rem]">
-        {THEME_VALUES.map((value) => (
+        {THEMES.map((value) => (
           <DropdownItem
             key={value}
             title={THEME_LABEL[value]}

@@ -1,8 +1,7 @@
 import { create } from 'zustand'
-import { DEFAULT_COLOR_CHIP } from '@/shared/constants'
 import { getNow, reportOnError, reportOnSuccess } from '@/shared/utils'
 import type { Folder, FolderDB } from '../types'
-import { DEFAULT_NOTE_SORT_TYPE } from '../constants'
+import { DEFAULT_NOTE_SORT_TYPE, DEFAULT_COLOR_CHIP } from '../constants'
 import { convertFolderListToDB } from '../utils'
 
 interface FolderStore {

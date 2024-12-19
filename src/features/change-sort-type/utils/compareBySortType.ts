@@ -1,7 +1,6 @@
-import type { Folder } from '@/entities/folder'
+import type { SortedAt, SortType, Folder } from '@/entities/folder'
+import { DEFAULT_SORT_TYPE, DEFAULT_SORTED_AT } from '@/entities/folder'
 import type { Note } from '@/entities/note'
-import { DEFAULT_SORT_TYPE, DEFAULT_SORTED_AT } from '@/shared/constants'
-import type { SortType, SortedAt } from '@/shared/types'
 
 type CompareCallbackKey = `${SortType}/${SortedAt}`
 

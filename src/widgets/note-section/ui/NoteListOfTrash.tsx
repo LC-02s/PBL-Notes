@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useDefaultSortSetting, compareBySortType } from '@/features/change-sort-type'
+import { useViewType } from '@/features/change-view-type'
 import { DELETED_NOTES_ARCHIVE_DATE, useNoteListWithFilter } from '@/entities/note'
-import { useViewType } from '@/shared/hooks'
 import { Icon } from '@/shared/ui'
 import NoteList from './NoteList'
 import NoteListItem from './NoteListItem'

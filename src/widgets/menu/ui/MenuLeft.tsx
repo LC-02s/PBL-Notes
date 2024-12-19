@@ -1,6 +1,6 @@
-import { BackButton } from '@/features/back-to-list'
 import { ViewTypeButtons } from '@/features/change-view-type'
 import { DeleteNoteButton } from '@/features/delete-note'
+import BackButton from './BackButton'
 
 export default function MenuLeft() {
   return (
