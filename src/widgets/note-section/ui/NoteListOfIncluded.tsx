@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { compareBySortType } from '@/features/change-sort-type'
 import type { Folder } from '@/entities/folder'
 import { useNoteListWithFilter, useDividePinnedNoteList } from '@/entities/note'
@@ -15,7 +15,7 @@ interface IncludedNoteListProps {
 
 export default function NoteListOfIncluded({ folder, path }: IncludedNoteListProps) {
   const noteList = useNoteListWithFilter((note) => note.modifiable && note.included === folder.id)
-  const sortedList = React.useMemo(() => {
+  const sortedList = useMemo(() => {
     return noteList.sort(compareBySortType(folder.sort))
   }, [folder, noteList])
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import {
   convertFolderListToNameMap,
   useFolderList,
@@ -9,17 +9,17 @@ import { useInitNoteData } from '@/entities/note'
 import { useBooleanState } from '@/shared/hooks'
 
 export default function useLoadData() {
-  const onceRef = React.useRef(false)
+  const onceRef = useRef(false)
   const [isLoading, { setFalse: done }] = useBooleanState(true)
 
   const folderSession = useFolderSession()
   const folderList = useFolderList()
-  const mapper = React.useMemo(() => convertFolderListToNameMap(folderList), [folderList])
+  const mapper = useMemo(() => convertFolderListToNameMap(folderList), [folderList])
   const { init } = useInitNoteData({ mapper, onEnd: done })
 
   useInitFolderData()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (folderSession && !onceRef.current) {
       init()
       onceRef.current = true

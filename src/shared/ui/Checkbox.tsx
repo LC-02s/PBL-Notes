@@ -1,4 +1,4 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import { cn } from '../utils'
 import * as Icon from './icon'
 
@@ -7,7 +7,7 @@ interface CheckboxProps {
   label?: string
 }
 
-const Checkbox = React.forwardRef<HTMLInputElement, JSX.IntrinsicElements['input'] & CheckboxProps>(
+const Checkbox = forwardRef<HTMLInputElement, JSX.IntrinsicElements['input'] & CheckboxProps>(
   ({ label, id, className, ...props }, ref) => (
     <label
       htmlFor={id}

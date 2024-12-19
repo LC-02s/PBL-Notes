@@ -1,4 +1,3 @@
-import React from 'react'
 import { ChangeSortTypeDropdownButton } from '@/features/change-sort-type'
 import { ThemeDropdownButton } from '@/features/change-theme'
 import { CreateNoteButton } from '@/features/create-note'

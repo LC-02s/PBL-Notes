@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Note } from '@/entities/note'
 import { useViewType } from '@/shared/hooks'
 import { cn } from '@/shared/utils'

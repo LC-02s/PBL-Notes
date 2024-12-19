@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import type { FocusableElement } from '@/shared/types'
 import type { CreateOverlayElement, OverlayControlRef } from './Overlay.type'
 import { useOverlayMount, useOverlayUnmount } from './OverlayContext'
@@ -9,15 +9,15 @@ let elementId = 1
 export default function useOverlay<E extends FocusableElement>() {
   const mount = useOverlayMount()
   const unmount = useOverlayUnmount()
-  const [id] = React.useState(() => `overlay-${elementId++}`)
-  const overlayRef = React.useRef<OverlayControlRef | null>(null)
-  const startedAt = React.useRef<E | null>(null)
+  const [id] = useState(() => `overlay-${elementId++}`)
+  const overlayRef = useRef<OverlayControlRef | null>(null)
+  const startedAt = useRef<E | null>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => unmount(id)
   }, [id, unmount])
 
-  return React.useMemo(() => {
+  return useMemo(() => {
     return {
       startedAt,
       open: (overlayElement: CreateOverlayElement) =>

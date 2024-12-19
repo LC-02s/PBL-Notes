@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import type { Note } from '@/entities/note'
 import { Button, Icon } from '@/shared/ui'
 import { copyToClipboard, reportOnError, reportOnSuccess } from '@/shared/utils'
@@ -9,7 +9,7 @@ interface CopyAsMarkdownButtonProps {
 }
 
 export default function CopyAsMarkdownButton({ note, onClose }: CopyAsMarkdownButtonProps) {
-  const copy = React.useCallback(async () => {
+  const copy = useCallback(async () => {
     const status = await copyToClipboard(note.markdown)
 
     if (!status) {

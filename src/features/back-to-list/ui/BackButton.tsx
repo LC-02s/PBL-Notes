@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { AnimatePresence, motion } from 'motion/react'
 import { useActiveFolder } from '@/entities/folder'
@@ -18,7 +18,7 @@ export default function BackButton({ viewType }: BackButtonProps) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  const back = React.useCallback(() => {
+  const back = useCallback(() => {
     const currentPath = pathname.startsWith(TRASH_PATH) ? TRASH_PATH : INDEX_PATH
     const targetPath = path ? path : currentPath
 

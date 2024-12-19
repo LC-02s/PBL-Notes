@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import useBooleanState from './useBooleanState'
 import useOutsideClick from './useOutsideClick'
 import useWindowEvent from './useWindowEvent'
@@ -7,13 +7,12 @@ export default function useDropdown<E extends HTMLElement>() {
   const [isOpen, { setTrue: open, setFalse: close, toggle }] = useBooleanState()
   const containerRef = useOutsideClick<E>(close)
 
-  const withClose = React.useCallback(
-    <T>(setValue: (value: T) => void) => {
-      return (value: T) => {
+  const withClose = useCallback(
+    <T>(setValue: (value: T) => void) =>
+      (value: T) => {
         setValue(value)
         close()
-      }
-    },
+      },
     [close],
   )
 

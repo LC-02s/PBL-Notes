@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import type { Note } from '../types'
 import { useNoteDB } from './noteStore'
 
@@ -13,5 +13,5 @@ export default function useNoteListWithFilter(
   const noteDB = useNoteDB()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  return React.useMemo(() => [...noteDB.values()].filter(selector), [noteDB, ...deps])
+  return useMemo(() => [...noteDB.values()].filter(selector), [noteDB, ...deps])
 }

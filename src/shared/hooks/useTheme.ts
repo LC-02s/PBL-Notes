@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { create } from 'zustand'
 import type { Theme, RealTheme } from '../types'
 import { DEFAULT_THEME, THEME_KEY, THEME_LABEL } from '../constants'
@@ -44,7 +44,7 @@ export function useTheme() {
 export function useChangeThemeEvent() {
   const { theme, setRealTheme } = useTheme()
 
-  React.useEffect(() => {
+  useEffect(() => {
     const mediaTheme = window.matchMedia('(prefers-color-scheme: dark)')
     const listener = (e: MediaQueryListEvent) => {
       if (theme === 'system') {

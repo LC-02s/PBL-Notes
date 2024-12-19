@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { reportOnError } from '@/shared/utils'
 import { saveData } from '../utils'
 import { useFolderSession } from './folderStore'
@@ -13,7 +13,7 @@ export default function useAutoSaveFolderData({ onStart, onEnd }: UseSaveFolderD
   const folderList = useFolderList()
   const folderSession = useFolderSession()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (folderSession) {
       onStart()
       saveData(folderList)

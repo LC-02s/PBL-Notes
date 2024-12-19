@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { BalloonEditor } from 'ckeditor5'
 import { useModifyNote, useSetTempNoteMarkdown, useTempNote } from '@/entities/note'
@@ -8,8 +8,8 @@ import NoteEditorWrapper from './NoteEditorWrapper'
 import 'ckeditor5/ckeditor5.css'
 
 export default function NoteEditor() {
-  const [editor, setEditor] = React.useState<BalloonEditor | null>(null)
-  const markdownRef = React.useRef('')
+  const [editor, setEditor] = useState<BalloonEditor | null>(null)
+  const markdownRef = useRef('')
 
   const tempNote = useTempNote()
   const isDisabled = !tempNote || tempNote.isLocked || !tempNote.modifiable
@@ -18,7 +18,7 @@ export default function NoteEditor() {
   const setTempNoteMarkdown = useSetTempNoteMarkdown()
   const modifyNote = useModifyNote()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isDisabled) {
       editor?.enableReadOnlyMode(editor.id)
       return

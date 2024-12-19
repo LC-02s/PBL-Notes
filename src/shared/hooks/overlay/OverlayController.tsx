@@ -1,18 +1,18 @@
-import React from 'react'
+import { forwardRef, useCallback, useImperativeHandle, useEffect } from 'react'
 import type { OverlayControllerProps, OverlayControlRef } from './Overlay.type'
 import useBooleanState from '../useBooleanState'
 
-const OverlayController = React.forwardRef(function OverlayController(
+const OverlayController = forwardRef(function OverlayController(
   { overlayElement: OverlayElement, onExit, returnToFocus }: OverlayControllerProps,
   ref: React.Ref<OverlayControlRef>,
 ) {
   const [isOpen, { setTrue: open, setFalse: close }] = useBooleanState()
 
-  const closeWithFocus = React.useCallback(() => returnToFocus(close), [close, returnToFocus])
+  const closeWithFocus = useCallback(() => returnToFocus(close), [close, returnToFocus])
 
-  React.useImperativeHandle(ref, () => ({ close: closeWithFocus }), [closeWithFocus])
+  useImperativeHandle(ref, () => ({ close: closeWithFocus }), [closeWithFocus])
 
-  React.useEffect(() => {
+  useEffect(() => {
     requestAnimationFrame(open)
   }, [open])
 

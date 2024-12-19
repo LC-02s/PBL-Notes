@@ -1,12 +1,13 @@
-import React from 'react'
+import { useEffect } from 'react'
 
 export default function useWindowEvent<K extends keyof WindowEventMap>(
   type: K,
   listener: (this: Window, e: WindowEventMap[K]) => void,
   option?: boolean | AddEventListenerOptions,
 ) {
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener(type, listener, option)
+
     return () => {
       window.removeEventListener(type, listener, option)
     }

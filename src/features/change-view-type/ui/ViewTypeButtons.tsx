@@ -1,4 +1,3 @@
-import React from 'react'
 import { useViewType } from '@/shared/hooks'
 import type { ViewType } from '@/shared/types'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'

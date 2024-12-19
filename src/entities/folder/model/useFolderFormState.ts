@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import type { ColorChip } from '@/shared/types'
 import type { Folder, FolderFormValues } from '../types'
@@ -19,7 +19,7 @@ export default function useFolderFormState({ exceptionName }: UseFolderFormState
     handleSubmit,
   } = useForm<FolderFormValues>({ mode: 'onSubmit' })
 
-  const nameProps = React.useMemo(() => {
+  const nameProps = useMemo(() => {
     return register('name', {
       required: '폴더명을 입력해주세요',
       maxLength: {
@@ -34,7 +34,7 @@ export default function useFolderFormState({ exceptionName }: UseFolderFormState
     })
   }, [register, checkDuplicate, exceptionName])
 
-  const setColor = React.useCallback((color: ColorChip) => setValue('color', color), [setValue])
+  const setColor = useCallback((color: ColorChip) => setValue('color', color), [setValue])
 
   return { setColor, handleSubmit, errors, nameProps }
 }

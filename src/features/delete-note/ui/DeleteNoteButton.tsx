@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import { useDeleteNote, useModifyNote, useActiveNote } from '@/entities/note'
 import { TRASH_PATH } from '@/shared/constants'
@@ -21,7 +21,7 @@ export default function DeleteNoteButton() {
 
   const { startedAt, confirm } = useConfirm<HTMLButtonElement>()
 
-  const submitDelete = React.useCallback(async () => {
+  const submitDelete = useCallback(async () => {
     if (!note) return
 
     if (note.modifiable) {

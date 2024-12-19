@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useNoteListWithFilter } from '@/entities/note'
 import { useBooleanState, useDebounce, useOutsideClick, useWindowEvent } from '@/shared/hooks'
 import { DropdownWrapper, Icon, TextInput } from '@/shared/ui'
@@ -6,10 +6,10 @@ import ResetButton from './ResetButton'
 import SearchResult from './SearchResult'
 
 export default function SearchBar() {
-  const [keyword, setKeyword] = React.useState('')
+  const [keyword, setKeyword] = useState('')
   const debouncedKeyword = useDebounce(keyword, 500)
   const hasKeyword = !!keyword
-  const reset = React.useCallback(() => setKeyword(''), [])
+  const reset = useCallback(() => setKeyword(''), [])
 
   const resultList = useNoteListWithFilter(
     (note) => note.markdown.includes(debouncedKeyword),
@@ -19,12 +19,12 @@ export default function SearchBar() {
   const [isFocus, { setTrue: focus, setFalse: blur }] = useBooleanState()
   const isOpen = isFocus && hasKeyword
 
-  const [focusIndex, setFocusIndex] = React.useState(-1)
+  const [focusIndex, setFocusIndex] = useState(-1)
 
-  const inputRef = React.useRef<HTMLInputElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useOutsideClick<HTMLDivElement>(blur)
 
-  const focusPrev = React.useCallback(() => {
+  const focusPrev = useCallback(() => {
     setFocusIndex((prev) => {
       if (prev <= 0) {
         inputRef.current?.focus()
@@ -35,7 +35,7 @@ export default function SearchBar() {
     })
   }, [])
 
-  const focusNext = React.useCallback(() => {
+  const focusNext = useCallback(() => {
     setFocusIndex((prev) => {
       if (prev >= resultList.length - 1) {
         inputRef.current?.focus()
@@ -46,7 +46,7 @@ export default function SearchBar() {
     })
   }, [resultList])
 
-  React.useEffect(() => setFocusIndex(-1), [keyword])
+  useEffect(() => setFocusIndex(-1), [keyword])
 
   useWindowEvent('keydown', (e) => {
     if (!isOpen) return

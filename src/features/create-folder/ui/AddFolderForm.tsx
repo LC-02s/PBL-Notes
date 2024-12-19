@@ -1,4 +1,3 @@
-import React from 'react'
 import { ColorDropdown } from '@/entities/folder'
 import { GuideText, TextInput } from '@/shared/ui'
 import type { AddFolderFormParams } from '../types'

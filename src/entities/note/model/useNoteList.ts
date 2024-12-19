@@ -1,8 +1,8 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { useNoteDB } from './noteStore'
 
 export default function useNoteList() {
   const noteDB = useNoteDB()
 
-  return React.useMemo(() => [...noteDB.values()], [noteDB])
+  return useMemo(() => [...noteDB.values()], [noteDB])
 }

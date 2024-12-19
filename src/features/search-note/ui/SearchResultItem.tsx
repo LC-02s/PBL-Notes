@@ -1,4 +1,4 @@
-import React from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Link } from 'react-router'
 import type { Note } from '@/entities/note'
 import { TRASH_PATH } from '@/shared/constants'
@@ -15,9 +15,9 @@ export default function SearchResultItem({
   focus: isFocusing,
   reset,
 }: SearchResultItemProps) {
-  const anchorRef = React.useRef<HTMLAnchorElement | null>(null)
+  const anchorRef = useRef<HTMLAnchorElement | null>(null)
 
-  const path = React.useMemo(() => {
+  const path = useMemo(() => {
     const withIncluded = !note.included ? '' : (`/folder/${note.included}` satisfies FolderPath)
     const targetPathKey = note.modifiable ? withIncluded : TRASH_PATH
     const notePath = `/note/${note.createAt}` satisfies NotePath
@@ -25,7 +25,7 @@ export default function SearchResultItem({
     return `${targetPathKey}${notePath}`
   }, [note])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isFocusing) {
       anchorRef.current?.focus()
     }

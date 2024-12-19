@@ -1,8 +1,8 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { useFolderDB } from './folderStore'
 
 export default function useFolderList() {
   const folderDB = useFolderDB()
 
-  return React.useMemo(() => [...folderDB.values()], [folderDB])
+  return useMemo(() => [...folderDB.values()], [folderDB])
 }

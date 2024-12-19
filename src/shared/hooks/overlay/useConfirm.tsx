@@ -1,4 +1,3 @@
-import React from 'react'
 import type { FocusableElement } from '@/shared/types'
 import { ConfirmDialog } from '@/shared/ui'
 import useOverlay from './useOverlay'

@@ -1,11 +1,11 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { useAddFolder, useFolderFormState, useFolderList } from '@/entities/folder'
 import type { AddFolderFormParams } from '../types'
 import { findDefaultName } from '../utils'
 
 export default function useAddFolderFormState({ onSuccess, onFailed }: AddFolderFormParams) {
   const folderList = useFolderList()
-  const defaultFolderName = React.useMemo(() => {
+  const defaultFolderName = useMemo(() => {
     return findDefaultName(new Set(folderList.map(({ name }) => name)))
   }, [folderList])
 
@@ -13,7 +13,7 @@ export default function useAddFolderFormState({ onSuccess, onFailed }: AddFolder
 
   const { setColor, handleSubmit, errors, nameProps } = useFolderFormState()
 
-  const onSubmit = React.useMemo(() => {
+  const onSubmit = useMemo(() => {
     return handleSubmit(({ name, color }, e) => {
       e?.preventDefault()
       addFolder({ name: name.trim(), color, onSuccess, onFailed })

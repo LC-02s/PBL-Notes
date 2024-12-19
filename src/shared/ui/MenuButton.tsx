@@ -1,4 +1,4 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'motion/react'
 import { cn } from '@/shared/utils'
 
@@ -6,7 +6,7 @@ interface MenuButtonProps extends React.ComponentProps<typeof motion.button> {
   active?: boolean
 }
 
-const MenuButton = React.forwardRef<HTMLButtonElement, MenuButtonProps>(
+const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ active: isActive = false, className, ...props }, ref) => {
     return (
       <motion.button

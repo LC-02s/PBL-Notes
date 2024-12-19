@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDocumentEvent, useWindowEvent } from '@/shared/hooks'
 import { reportOnError } from '@/shared/utils'
 import { saveData } from '../utils'
@@ -15,7 +15,7 @@ export default function useAutoSaveNoteData({ onStart, onEnd }: UseSaveNoteDataP
   const noteList = useNoteList()
   const noteSession = useNoteSession()
 
-  const save = React.useCallback(() => {
+  const save = useCallback(() => {
     if (noteSession) {
       onStart()
       saveData(noteList)
@@ -27,7 +27,7 @@ export default function useAutoSaveNoteData({ onStart, onEnd }: UseSaveNoteDataP
     }
   }, [noteSession, noteList, onStart, onEnd])
 
-  React.useEffect(save, [noteSession, noteList, save])
+  useEffect(save, [noteSession, noteList, save])
 
   useSettingTempNote(noteSession)
 

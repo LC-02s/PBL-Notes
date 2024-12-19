@@ -1,7 +1,7 @@
-import React from 'react'
+import { useEffect } from 'react'
 
 export default function useStopScroll(stop: boolean) {
-  React.useEffect(() => {
+  useEffect(() => {
     document.body.classList[stop ? 'add' : 'remove']('stop-scroll')
     return () => {
       document.body.classList.remove('stop-scroll')

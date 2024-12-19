@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { reportOnError } from '@/shared/utils'
 import {
   convertNoteListToDB,
@@ -18,7 +18,7 @@ export default function useInitNoteData({
   const setNoteDB = useNoteStore((store) => store.setNoteDB)
   const setNoteSession = useNoteStore((store) => store.setNoteSession)
 
-  const init = React.useCallback(() => {
+  const init = useCallback(() => {
     setNoteSession(false)
     getInitialData()
       .then((data) => legacyNoteMapper(data, mapper))

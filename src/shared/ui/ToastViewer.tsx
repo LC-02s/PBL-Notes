@@ -1,5 +1,4 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import { createPortal } from 'react-dom'
 import { ToastContainer } from 'react-toastify'
 import { cn } from '../utils'
 import HiddenText from './HiddenText'
@@ -55,5 +54,5 @@ function ToastViewer() {
 }
 
 export default function ToastViewerContainer() {
-  return ReactDOM.createPortal(<ToastViewer />, document.body)
+  return createPortal(<ToastViewer />, document.body)
 }

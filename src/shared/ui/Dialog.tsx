@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React from 'react'
+
 import ReactDOM from 'react-dom'
 import { type Target, AnimatePresence, motion, useIsomorphicLayoutEffect } from 'motion/react'
 import { useOutsideClick, useStopScroll } from '../hooks'

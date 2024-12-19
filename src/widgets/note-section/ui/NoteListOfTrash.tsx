@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { useDefaultSortSetting, compareBySortType } from '@/features/change-sort-type'
 import { DELETED_NOTES_ARCHIVE_DATE, useNoteListWithFilter } from '@/entities/note'
 import { useViewType } from '@/shared/hooks'
@@ -24,7 +24,7 @@ function TrashComment() {
 function TrashContainer({ children }: React.PropsWithChildren) {
   const noteList = useNoteListWithFilter((note) => !note.modifiable)
   const defaultSortSetting = useDefaultSortSetting()
-  const sortedList = React.useMemo(() => {
+  const sortedList = useMemo(() => {
     return noteList.sort(compareBySortType(defaultSortSetting))
   }, [noteList, defaultSortSetting])
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { useFolderDB, COLOR_CHIP_STYLE } from '@/entities/folder'
 import { cn } from '@/shared/utils'
 import NoteListItem from './NoteListItem'
@@ -8,7 +8,7 @@ export default function NoteListItemWithFolder({
   index,
 }: Omit<React.ComponentPropsWithoutRef<typeof NoteListItem>, 'included'>) {
   const folderDB = useFolderDB()
-  const targetFolder = React.useMemo(() => folderDB.get(note.included), [note, folderDB])
+  const targetFolder = useMemo(() => folderDB.get(note.included), [note, folderDB])
 
   return (
     <NoteListItem note={note} index={index}>

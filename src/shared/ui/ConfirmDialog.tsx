@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import type Button from './Button'
 import Break from './Break'
 import Dialog from './Dialog'
@@ -25,12 +25,12 @@ export default function ConfirmDialog({
   onConfirm,
   children,
 }: React.PropsWithChildren<ConfirmDialogProps>) {
-  const cancel = React.useCallback(() => {
+  const cancel = useCallback(() => {
     onCancel?.(false)
     onClose()
   }, [onCancel, onClose])
 
-  const confirm = React.useCallback(() => {
+  const confirm = useCallback(() => {
     onConfirm?.(true)
     onClose()
   }, [onConfirm, onClose])

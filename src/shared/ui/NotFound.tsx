@@ -1,9 +1,9 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { cn, reportOnError } from '../utils'
 import { ShieldWarningOutline } from './icon'
 
 export default function NotFound({ className, children, ...props }: JSX.IntrinsicElements['div']) {
-  React.useEffect(() => {
+  useEffect(() => {
     reportOnError('잘못된 접근이에요')
   }, [])
 

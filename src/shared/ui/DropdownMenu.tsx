@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useMemo } from 'react'
 import { useDropdown } from '../hooks'
 import DropdownWrapper from './DropdownWrapper'
 
@@ -19,8 +19,8 @@ export default function DropdownMenu<T extends string>({
 }: DropdownMenuProps<T>) {
   const { containerRef, isOpen, withClose, toggle } = useDropdown<HTMLDivElement>()
 
-  const [value, setValue] = React.useState(defaultValue)
-  const setValueOnSubmitWithClose = React.useMemo(() => {
+  const [value, setValue] = useState(defaultValue)
+  const setValueOnSubmitWithClose = useMemo(() => {
     return withClose((v: T) => {
       setValue(v)
       onSubmit?.(v)

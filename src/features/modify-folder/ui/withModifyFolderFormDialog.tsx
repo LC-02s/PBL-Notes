@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Folder } from '@/entities/folder'
 import type { CreateOverlayElement } from '@/shared/hooks'
 import { Dialog } from '@/shared/ui'

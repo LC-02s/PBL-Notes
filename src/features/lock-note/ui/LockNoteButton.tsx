@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useModifyNote, useActiveNote } from '@/entities/note'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
 import { cn, reportOnError, reportOnSuccess } from '@/shared/utils'
@@ -15,7 +15,7 @@ export default function LockNoteButton() {
   const isLocked = !!note && note.modifiable && note.isLocked
   const isDisabled = !note || !note.modifiable
 
-  const toggle = React.useCallback(() => {
+  const toggle = useCallback(() => {
     if (note) {
       modifyNote({
         createAt: note.createAt,

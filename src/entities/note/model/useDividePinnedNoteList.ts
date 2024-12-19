@@ -1,12 +1,12 @@
-import React from 'react'
+import { useMemo } from 'react'
 import type { Note } from '../types'
 
 export default function useDividePinnedNoteList(noteList: Note[]) {
-  const pinned = React.useMemo(() => {
+  const pinned = useMemo(() => {
     return noteList.filter((note) => note.isPinned)
   }, [noteList])
 
-  const basic = React.useMemo(() => {
+  const basic = useMemo(() => {
     return noteList.filter((note) => !note.isPinned)
   }, [noteList])
 

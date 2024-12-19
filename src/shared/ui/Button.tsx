@@ -1,4 +1,4 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import { cn } from '../utils'
 
 const buttonVariants = {
@@ -20,22 +20,21 @@ function buttonVariable({ variant = 'default' }: ButtonVariable) {
   return buttonVariants.variant[variant]
 }
 
-const Button = React.forwardRef<
-  HTMLButtonElement,
-  JSX.IntrinsicElements['button'] & ButtonVariable
->(({ variant, className, ...props }, ref) => {
-  return (
-    <button
-      ref={ref}
-      type="button"
-      className={cn(
-        'flex size-auto min-w-20 items-center justify-center break-keep rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 active:bg-gray200',
-        buttonVariable({ variant }),
-        className,
-      )}
-      {...props}
-    />
-  )
-})
+const Button = forwardRef<HTMLButtonElement, JSX.IntrinsicElements['button'] & ButtonVariable>(
+  ({ variant, className, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={cn(
+          'flex size-auto min-w-20 items-center justify-center break-keep rounded bg-gray100 p-1 text-base text-gray700 transition-colors hover:bg-gray200 active:bg-gray200',
+          buttonVariable({ variant }),
+          className,
+        )}
+        {...props}
+      />
+    )
+  },
+)
 
 export default Button

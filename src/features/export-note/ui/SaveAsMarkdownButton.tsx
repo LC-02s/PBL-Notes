@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { saveAs } from 'file-saver'
 import type { Note } from '@/entities/note'
 import { Button, Icon } from '@/shared/ui'
@@ -10,7 +10,7 @@ interface SaveAsMarkdownButtonProps {
 }
 
 export default function SaveAsMarkdownButton({ note, onClose }: SaveAsMarkdownButtonProps) {
-  const save = React.useCallback(() => {
+  const save = useCallback(() => {
     try {
       const name = note.title || formatDate(note.createAt)
       const file = new Blob([note.markdown], { type: 'text/markdown;charset=utf-8' })

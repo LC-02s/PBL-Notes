@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, type LinkProps } from 'react-router'
 import { INDEX_PATH } from '@/shared/constants'
 import type { FolderPath, TrashPath } from '@/shared/types'

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import { useActiveFolder } from '@/entities/folder'
 import { useActiveNote, useAddNote, useTempNote } from '@/entities/note'
@@ -12,7 +12,7 @@ export default function CreateNoteButton() {
   const { folder, path } = useActiveFolder()
   const addNote = useAddNote()
 
-  const add = React.useCallback(() => {
+  const add = useCallback(() => {
     const createAt = getNow()
     const targetPath: NotePathInFolder | NotePath = `${path ?? ''}/note/${createAt}`
 

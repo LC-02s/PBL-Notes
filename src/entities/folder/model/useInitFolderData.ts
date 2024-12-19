@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { reportOnError } from '@/shared/utils'
 import { convertFolderListToDB, getInitialData } from '../utils'
 import { useFolderStore } from './folderStore'
@@ -7,7 +7,7 @@ export default function useInitFolderData() {
   const setFolderDB = useFolderStore((store) => store.setFolderDB)
   const setFolderSession = useFolderStore((store) => store.setFolderSession)
 
-  React.useEffect(() => {
+  useEffect(() => {
     getInitialData()
       .then(convertFolderListToDB)
       .then(setFolderDB)

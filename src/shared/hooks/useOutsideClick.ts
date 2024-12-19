@@ -1,10 +1,10 @@
-import React from 'react'
+import { useRef } from 'react'
 import useDocumentEvent from './useDocumentEvent'
 
 export default function useOutsideClick<E extends HTMLElement>(
   callback: (event: MouseEvent) => void,
 ) {
-  const targetAreaRef = React.useRef<E | null>(null)
+  const targetAreaRef = useRef<E | null>(null)
 
   useDocumentEvent('click', (event) => {
     if (!targetAreaRef.current) return

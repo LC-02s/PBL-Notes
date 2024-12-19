@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useActiveFolder, useModifyFolder } from '@/entities/folder'
 import { DEFAULT_SORT_TYPE, DEFAULT_SORTED_AT } from '@/shared/constants'
 import type { SortedAt, SortType } from '@/shared/types'
@@ -11,10 +11,10 @@ export default function useChangeSortTypeState() {
   const defaultSortSetting = useDefaultSortSetting()
   const setDefaultSortSetting = useDefaultSortStore((store) => store.setDefaultSort)
 
-  const [sortType, setSortType] = React.useState(DEFAULT_SORT_TYPE)
-  const [sortedAt, setSortedAt] = React.useState(DEFAULT_SORTED_AT)
+  const [sortType, setSortType] = useState(DEFAULT_SORT_TYPE)
+  const [sortedAt, setSortedAt] = useState(DEFAULT_SORTED_AT)
 
-  const submitSortType = React.useCallback(
+  const submitSortType = useCallback(
     (value: SortType) => {
       setSortType(value)
 
@@ -28,7 +28,7 @@ export default function useChangeSortTypeState() {
     [folder, modifyFolder, sortedAt, setDefaultSortSetting],
   )
 
-  const submitSortedAt = React.useCallback(
+  const submitSortedAt = useCallback(
     (value: SortedAt) => {
       setSortedAt(value)
 
@@ -42,7 +42,7 @@ export default function useChangeSortTypeState() {
     [folder, modifyFolder, sortType, setDefaultSortSetting],
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     const target = !folder ? defaultSortSetting : folder.sort
 
     setSortType(target.type)

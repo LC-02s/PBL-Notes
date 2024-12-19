@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { type Folder, useFolderFormState, useModifyFolder, ColorDropdown } from '@/entities/folder'
 import { GuideText, TextInput } from '@/shared/ui'
 
@@ -18,7 +18,7 @@ export default function ModifyFolderForm({
     exceptionName: folder.name,
   })
 
-  const onSubmit = React.useMemo(() => {
+  const onSubmit = useMemo(() => {
     return handleSubmit(({ name, color }, e) => {
       e?.preventDefault()
       modifyFolder({ id: folder.id, name: name.trim(), color })

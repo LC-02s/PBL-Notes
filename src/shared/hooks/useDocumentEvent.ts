@@ -1,12 +1,13 @@
-import React from 'react'
+import { useEffect } from 'react'
 
 export default function useDocumentEvent<K extends keyof DocumentEventMap>(
   type: K,
   listener: (this: Document, e: DocumentEventMap[K]) => void,
   option?: boolean | AddEventListenerOptions,
 ) {
-  React.useEffect(() => {
+  useEffect(() => {
     document.addEventListener(type, listener, option)
+
     return () => {
       document.removeEventListener(type, listener, option)
     }
