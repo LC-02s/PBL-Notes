@@ -1,14 +1,14 @@
-import { useDropdown } from '@/shared/hooks'
+import { useDropdown } from '@/shared/lib'
+import { cn } from '@/shared/lib'
 import { DropdownItem, DropdownWrapper, HiddenText, Icon, MenuButton } from '@/shared/ui'
-import { cn } from '@/shared/utils'
-import { THEME_LABEL, THEMES } from '../constants'
-import { useChangeThemeEvent, useTheme } from '../hooks'
+import { THEME_LABEL, THEMES } from '../config'
+import { useChangeThemeEvent, useTheme } from '../model'
 
 export default function ThemeButton() {
   const { containerRef, isOpen, withClose, toggle } = useDropdown<HTMLDivElement>()
   const { realTheme, theme, setTheme } = useTheme()
 
-  useChangeThemeEvent()
+  useChangeThemeEvent(theme)
 
   return (
     <div ref={containerRef} className="relative flex items-center justify-center">

@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router'
 import { AnimatePresence, motion } from 'motion/react'
+import { TRASH_PATH } from '@/entities/folder'
 import { useNoteListWithFilter } from '@/entities/note'
-import { TRASH_PATH } from '@/shared/constants'
 import { Icon } from '@/shared/ui'
 import FolderItem from './FolderItem'
 

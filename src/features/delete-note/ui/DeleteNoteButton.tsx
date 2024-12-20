@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router'
+import { TRASH_PATH } from '@/entities/folder'
 import { useDeleteNote, useModifyNote, useActiveNote } from '@/entities/note'
-import { TRASH_PATH } from '@/shared/constants'
-import { useConfirm } from '@/shared/hooks'
+import { useConfirm } from '@/shared/lib'
+import { reportOnError, reportOnSuccess } from '@/shared/lib'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
-import { reportOnError, reportOnSuccess } from '@/shared/utils'
 
 const onSuccess = () => reportOnSuccess('노트가 삭제되었어요!')
 

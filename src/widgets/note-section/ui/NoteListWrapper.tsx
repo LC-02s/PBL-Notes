@@ -1,5 +1,5 @@
 import { useViewType } from '@/features/change-view-type'
-import { cn } from '@/shared/utils'
+import { cn } from '@/shared/lib'
 
 interface NoteListWrapperProps {
   length: number

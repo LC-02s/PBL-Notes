@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { reportOnError } from '@/shared/utils'
-import { saveData } from '../utils'
-import { useFolderSession } from './folderStore'
+import { reportOnError } from '@/shared/lib'
+import { saveData } from '../lib'
+import { useFolderSession } from './store'
 import useFolderList from './useFolderList'
 
 interface UseSaveFolderDataParams {

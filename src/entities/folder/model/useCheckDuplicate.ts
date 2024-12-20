@@ -1,4 +1,4 @@
-import type { Folder } from '../types'
+import type { Folder } from './interface'
 import useFolderList from './useFolderList'
 
 export default function useCheckDuplicate() {

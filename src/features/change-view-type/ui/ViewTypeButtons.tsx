@@ -1,6 +1,6 @@
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
-import type { ViewType } from '../types'
-import { useViewType } from '../hooks'
+import type { ViewType } from '../model'
+import { useViewType } from '../model'
 
 interface ViewTypeButtonsProps {
   backButton: (props: { viewType: ViewType }) => React.ReactNode

@@ -1,7 +1,7 @@
 import { Link, type LinkProps } from 'react-router'
-import { INDEX_PATH } from '@/shared/constants'
-import type { FolderPath, TrashPath } from '@/shared/types'
-import { cn } from '@/shared/utils'
+import type { FolderPath, TrashPath } from '@/entities/folder'
+import { INDEX_PATH } from '@/entities/folder'
+import { cn } from '@/shared/lib'
 
 interface FolderItemProps extends Omit<LinkProps, 'to'> {
   to?: FolderPath | TrashPath

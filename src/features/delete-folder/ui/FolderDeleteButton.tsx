@@ -1,7 +1,7 @@
-import { useConfirm } from '@/shared/hooks'
+import { useConfirm } from '@/shared/lib'
 import { Button } from '@/shared/ui'
-import type { UseDeleteFolderParams } from '../types'
-import { useDeleteFolderState } from '../hooks'
+import type { UseDeleteFolderParams } from '../model'
+import { useDeleteFolderState } from '../model'
 import DeleteWithNoteCheckbox from './DeleteWithNoteCheckbox'
 
 export default function FolderDeleteButton({ id, onDelete }: UseDeleteFolderParams) {

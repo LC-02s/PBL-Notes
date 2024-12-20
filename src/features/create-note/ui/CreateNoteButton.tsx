@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router'
-import { useActiveFolder } from '@/entities/folder'
+import { type FolderPath, useActiveFolder } from '@/entities/folder'
+import type { IncludedNotePath, NotePath } from '@/entities/note'
 import { useActiveNote, useAddNote, useTempNote } from '@/entities/note'
-import type { NotePath, NotePathInFolder } from '@/shared/types'
+import { getNow } from '@/shared/lib'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
-import { getNow } from '@/shared/utils'
 
 export default function CreateNoteButton() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function CreateNoteButton() {
 
   const add = useCallback(() => {
     const createAt = getNow()
-    const targetPath: NotePathInFolder | NotePath = `${path ?? ''}/note/${createAt}`
+    const targetPath: IncludedNotePath<FolderPath> | NotePath = `${path ?? ''}/note/${createAt}`
 
     addNote({ createAt, included: folder?.id, onSuccess: () => navigate(targetPath) })
   }, [addNote, navigate, folder, path])

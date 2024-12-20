@@ -1,4 +1,4 @@
-import { cn } from '../utils'
+import { cn } from '../lib'
 import * as Icon from './icon'
 
 interface DropdownItemProps<T extends string> {

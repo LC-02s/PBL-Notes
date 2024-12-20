@@ -1,7 +1,7 @@
 import localForage from 'localforage'
 import { createRoot } from 'react-dom/client'
 import { App } from '@/app'
-import { getMainElement } from '@/shared/utils'
+import { getMainElement } from '@/shared/lib'
 
 localForage.config({
   driver: localForage.INDEXEDDB,

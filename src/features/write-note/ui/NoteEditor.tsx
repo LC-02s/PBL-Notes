@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { BalloonEditor } from 'ckeditor5'
 import { type Note, useModifyNote, useSetTempNoteMarkdown } from '@/entities/note'
-import { EDITOR_CONFIG } from '../constants'
+import { EDITOR_CONFIG } from '../config'
 
 import 'ckeditor5/ckeditor5.css'
 

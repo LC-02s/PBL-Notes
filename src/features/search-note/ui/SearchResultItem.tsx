@@ -1,8 +1,7 @@
 import { useRef, useMemo, useEffect } from 'react'
 import { Link } from 'react-router'
-import type { Note } from '@/entities/note'
-import { TRASH_PATH } from '@/shared/constants'
-import type { FolderPath, NotePath } from '@/shared/types'
+import { type FolderPath, TRASH_PATH } from '@/entities/folder'
+import type { Note, NotePath } from '@/entities/note'
 
 interface SearchResultItemProps {
   note: Note

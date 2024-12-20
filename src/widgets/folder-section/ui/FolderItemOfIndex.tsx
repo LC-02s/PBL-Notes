@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router'
-import { useNoteListWithFilter } from '@/entities/note'
-import { INDEX_PATH, NOTE_PATH_KEY } from '@/shared/constants'
+import { INDEX_PATH } from '@/entities/folder'
+import { useNoteListWithFilter, NOTE_PATH_KEY } from '@/entities/note'
 import { Icon } from '@/shared/ui'
 import FolderItem from './FolderItem'
 

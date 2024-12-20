@@ -1,3 +1,4 @@
+export type * from './interface'
 export {
   useNoteDB,
   useTempNote,

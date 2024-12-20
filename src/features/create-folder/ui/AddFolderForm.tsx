@@ -1,7 +1,8 @@
 import { ColorDropdown } from '@/entities/folder'
 import { GuideText, TextInput } from '@/shared/ui'
-import type { AddFolderFormParams } from '../types'
-import { useAddFolderFormState } from '../hooks'
+import { useAddFolderFormState } from '../model'
+
+type AddFolderFormParams = Parameters<typeof useAddFolderFormState>[number]
 
 export default function AddFolderForm({
   onSuccess,

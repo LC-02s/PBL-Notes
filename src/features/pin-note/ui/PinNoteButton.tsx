@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useModifyNote, useActiveNote } from '@/entities/note'
+import { cn, reportOnError, reportOnSuccess } from '@/shared/lib'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
-import { cn, reportOnError, reportOnSuccess } from '@/shared/utils'
 
 const onSuccess = (isPinned: boolean) =>
   reportOnSuccess(isPinned ? '노트 고정이 해제되었어요!' : '노트가 고정되었어요!')

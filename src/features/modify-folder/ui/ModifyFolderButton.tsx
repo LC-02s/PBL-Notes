@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useActiveFolder } from '@/entities/folder'
-import { useOverlay } from '@/shared/hooks'
+import { useOverlay } from '@/shared/lib'
 import {
   type ModifyFolderButtonProps,
   withModifyFolderFormDialog,

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { cn, reportOnError } from '../utils'
+import { cn, reportOnError } from '../lib'
 import { ShieldWarningOutline } from './icon'
 
 export default function NotFound({ className, children, ...props }: JSX.IntrinsicElements['div']) {

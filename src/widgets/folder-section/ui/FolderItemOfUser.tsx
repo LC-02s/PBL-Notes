@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router'
+import type { FolderPath } from '@/entities/folder'
 import { type Folder, COLOR_CHIP_STYLE } from '@/entities/folder'
 import { useNoteListWithFilter } from '@/entities/note'
-import type { FolderPath } from '@/shared/types'
-import { cn } from '@/shared/utils'
+import { cn } from '@/shared/lib'
 import FolderItem from './FolderItem'
 
 interface UserFolderItemProps {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useFolderDB, COLOR_CHIP_STYLE } from '@/entities/folder'
-import { cn } from '@/shared/utils'
+import { cn } from '@/shared/lib'
 import NoteListItem from './NoteListItem'
 
 export default function NoteListItemWithFolder({

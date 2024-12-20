@@ -1,8 +1,8 @@
 import { useSaveFolderData } from '@/entities/folder'
 import { useAutoSaveNoteData } from '@/entities/note'
-import { useBooleanState } from '@/shared/hooks'
+import { useBooleanState } from '@/shared/lib'
 import { Icon } from '@/shared/ui'
-import { useLoadData } from '../hooks'
+import { useLoadData } from '../model'
 
 export default function DataLoader() {
   const { isLoading } = useLoadData()

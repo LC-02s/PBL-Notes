@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router'
-import type { FolderPath } from '@/shared/types'
-import { useFolderDB } from './folderStore'
+import type { FolderPath } from './interface'
+import { useFolderDB } from './store'
 
 export default function useActiveFolder() {
   const { folderId } = useParams()

@@ -1,6 +1,6 @@
-import { cn } from '@/shared/utils'
-import type { ColorChip } from '../types'
-import { COLOR_CHIP_STYLE } from '../constants'
+import { cn } from '@/shared/lib'
+import type { ColorChip } from '../model'
+import { COLOR_CHIP_STYLE } from '../config'
 
 interface ColorDropdownItemProps {
   value: ColorChip

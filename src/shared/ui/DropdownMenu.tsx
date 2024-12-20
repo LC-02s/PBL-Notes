@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useDropdown } from '../hooks'
+import { useDropdown } from '../lib'
 import DropdownWrapper from './DropdownWrapper'
 
 interface DropdownMenuProps<T extends string> {

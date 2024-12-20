@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { reportOnError } from '@/shared/utils'
+import { reportOnError } from '@/shared/lib'
 import {
   convertNoteListToDB,
   filterDeletedNotesOutOfDate,
   getInitialData,
   legacyNoteMapper,
-} from '../utils'
+} from '../lib'
 import { useNoteStore } from './noteStore'
 
 export default function useInitNoteData({

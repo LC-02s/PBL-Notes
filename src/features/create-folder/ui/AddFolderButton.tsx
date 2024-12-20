@@ -1,4 +1,4 @@
-import { useOverlay } from '@/shared/hooks'
+import { useOverlay } from '@/shared/lib'
 import { Icon } from '@/shared/ui'
 import AddFolderFormDialog from './AddFolderFormDialog'
 

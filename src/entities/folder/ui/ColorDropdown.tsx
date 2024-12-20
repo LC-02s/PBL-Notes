@@ -1,6 +1,6 @@
 import { DropdownMenu } from '@/shared/ui'
-import type { ColorChip } from '../types'
-import { DEFAULT_COLOR_CHIP } from '../constants'
+import type { ColorChip } from '../model'
+import { DEFAULT_COLOR_CHIP } from '../config'
 import ColorDropdownItem from './ColorDropdownItem'
 import ColorDropdownTrigger from './ColorDropdownTrigger'
 

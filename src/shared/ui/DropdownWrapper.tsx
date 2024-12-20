@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { cn } from '../utils'
+import { cn } from '../lib'
 
 interface DropdownWrapperProps {
   open?: boolean

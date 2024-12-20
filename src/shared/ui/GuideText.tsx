@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { cn } from '../utils'
+import { cn } from '../lib'
 import * as Icon from './icon'
 
 const guideType = {

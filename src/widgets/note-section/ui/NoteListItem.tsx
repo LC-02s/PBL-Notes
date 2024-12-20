@@ -1,16 +1,11 @@
 import { Link } from 'react-router'
 import { motion } from 'motion/react'
-import { type Note, useActiveNoteId, useTempNote } from '@/entities/note'
-import type {
-  NotePathInFolder,
-  NotePathInTrash,
-  NotePath,
-  FolderPath,
-  TrashPath,
-} from '@/shared/types'
+import type { FolderPath, TrashPath } from '@/entities/folder'
+import type { IncludedNotePath, NotePath, Note } from '@/entities/note'
+import { useActiveNoteId, useTempNote } from '@/entities/note'
+import { cn, formatDateFromNow } from '@/shared/lib'
 import { Icon } from '@/shared/ui'
-import { cn, formatDateFromNow } from '@/shared/utils'
-import { DEFAULT_NOTE_TITLE } from '../constants'
+import { DEFAULT_NOTE_TITLE } from '../config'
 
 interface NoteListItemTitleProps {
   defaultTitle: string
@@ -45,7 +40,7 @@ function NoteListItemWrapper({
   )
 }
 
-type TargetNotePath = NotePathInFolder | NotePathInTrash | NotePath
+type TargetNotePath = IncludedNotePath<FolderPath | TrashPath> | NotePath
 
 interface NoteListItemProps extends NoteListItemWrapperProps {
   includedPath?: FolderPath | TrashPath

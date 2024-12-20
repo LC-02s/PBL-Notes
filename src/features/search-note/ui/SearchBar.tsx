@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useNoteListWithFilter } from '@/entities/note'
-import { useBooleanState, useDebounce, useOutsideClick, useWindowEvent } from '@/shared/hooks'
+import { useBooleanState, useDebounce, useOutsideClick, useWindowEvent } from '@/shared/lib'
 import { DropdownWrapper, Icon, TextInput } from '@/shared/ui'
 import ResetButton from './ResetButton'
 import SearchResult from './SearchResult'

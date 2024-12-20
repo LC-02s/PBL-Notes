@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom'
 import { ToastContainer } from 'react-toastify'
-import { cn } from '../utils'
+import { cn } from '../lib'
 import HiddenText from './HiddenText'
 import * as Icon from './icon'
 

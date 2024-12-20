@@ -1,5 +1,5 @@
 import { Checkbox } from '@/shared/ui'
-import type { DeleteWithNoteCheckboxProps } from '../types'
+import type { DeleteWithNoteCheckboxProps } from '../model'
 
 export default function DeleteWithNoteCheckbox({
   getDefaultValue,

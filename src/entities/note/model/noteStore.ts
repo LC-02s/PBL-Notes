@@ -1,8 +1,8 @@
 import { create } from 'zustand'
-import { getNow, reportOnError, reportOnSuccess } from '@/shared/utils'
-import type { Note, NoteDB } from '../types'
-import { DEFAULT_NOTE_VALUE } from '../constants'
-import { convertNoteListToDB, extractMarkdownTitle } from '../utils'
+import { getNow, reportOnError, reportOnSuccess } from '@/shared/lib'
+import type { Note, NoteDB } from './interface'
+import { DEFAULT_NOTE_VALUE } from '../config'
+import { convertNoteListToDB, extractMarkdownTitle } from '../lib'
 
 type OnSuccessParams = { onSuccess?: () => void }
 type OnFailedParams = { onFailed?: () => void }

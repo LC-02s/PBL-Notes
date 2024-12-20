@@ -2,8 +2,7 @@
 
 import ReactDOM from 'react-dom'
 import { type Target, AnimatePresence, motion, useIsomorphicLayoutEffect } from 'motion/react'
-import { useOutsideClick, useStopScroll } from '../hooks'
-import { cn, startFocusLoop } from '../utils'
+import { useOutsideClick, useStopScroll, cn, startFocusLoop } from '../lib'
 import Button from './Button'
 import Dimmed from './Dimmed'
 

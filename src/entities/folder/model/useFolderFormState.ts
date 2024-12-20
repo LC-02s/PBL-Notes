@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import type { Folder, FolderFormValues, ColorChip } from '../types'
-import { MAX_NAME_LENGTH } from '../constants'
+import type { Folder, FolderFormValues, ColorChip } from './interface'
+import { MAX_NAME_LENGTH } from '../config'
 import useCheckDuplicate from './useCheckDuplicate'
 
 interface UseFolderFormStateParams {

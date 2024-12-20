@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import type { Note } from '@/entities/note'
+import { copyToClipboard, reportOnError, reportOnSuccess } from '@/shared/lib'
 import { Button, Icon } from '@/shared/ui'
-import { copyToClipboard, reportOnError, reportOnSuccess } from '@/shared/utils'
 
 interface CopyAsMarkdownButtonProps {
   note: Note

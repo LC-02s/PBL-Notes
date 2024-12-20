@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { cn } from '../utils'
+import { cn } from '../lib'
 
 const buttonVariants = {
   variant: {

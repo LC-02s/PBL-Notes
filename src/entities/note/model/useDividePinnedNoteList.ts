@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { Note } from '../types'
+import type { Note } from './interface'
 
 export default function useDividePinnedNoteList(noteList: Note[]) {
   const pinned = useMemo(() => {

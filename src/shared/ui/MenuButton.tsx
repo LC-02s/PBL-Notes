@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { motion } from 'motion/react'
-import { cn } from '@/shared/utils'
+import { cn } from '../lib'
 
 interface MenuButtonProps extends React.ComponentProps<typeof motion.button> {
   active?: boolean

@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { motion } from 'motion/react'
-import { cn } from '../utils'
+import { cn } from '../lib'
 
 type DimmedProps = React.ComponentProps<typeof motion.div>
 

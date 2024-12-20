@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import { OverlayViewer } from '@/shared/hooks'
+import { OverlayViewer } from '@/shared/lib'
 import { ToastViewer } from '@/shared/ui'
 import AppRouter from './AppRouter'
 

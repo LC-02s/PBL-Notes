@@ -1,6 +1,6 @@
-import { useDropdown } from '@/shared/hooks'
+import { useDropdown } from '@/shared/lib'
 import { DropdownItem, DropdownWrapper, HiddenText, Icon, MenuButton } from '@/shared/ui'
-import { useChangeSortTypeState } from '../hooks'
+import { useChangeSortTypeState } from '../model'
 
 export default function ChangeSortTypeDropdownButton() {
   const { containerRef, isOpen, withClose, toggle } = useDropdown<HTMLDivElement>()

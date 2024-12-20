@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useModifyNote, useActiveNote } from '@/entities/note'
+import { cn, reportOnError, reportOnSuccess } from '@/shared/lib'
 import { HiddenText, Icon, MenuButton } from '@/shared/ui'
-import { cn, reportOnError, reportOnSuccess } from '@/shared/utils'
 
 const onSuccess = (isLocked: boolean) =>
   reportOnSuccess(isLocked ? '노트 잠금이 해제되었어요!' : '노트가 잠겼어요!')

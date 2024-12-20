@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { reportOnError } from '@/shared/utils'
-import { convertFolderListToDB, getInitialData } from '../utils'
-import { useFolderStore } from './folderStore'
+import { reportOnError } from '@/shared/lib'
+import { convertFolderListToDB, getInitialData } from '../lib'
+import { useFolderStore } from './store'
 
 export default function useInitFolderData() {
   const setFolderDB = useFolderStore((store) => store.setFolderDB)

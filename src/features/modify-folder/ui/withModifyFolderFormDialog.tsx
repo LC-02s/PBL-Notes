@@ -1,5 +1,5 @@
 import type { Folder } from '@/entities/folder'
-import type { CreateOverlayElement } from '@/shared/hooks'
+import type { CreateOverlayElement } from '@/shared/lib'
 import { Dialog } from '@/shared/ui'
 import ModifyFolderForm from './ModifyFolderForm'
 

@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router'
-import { useActiveFolder } from '@/entities/folder'
-import { TRASH_PATH } from '@/shared/constants'
+import { TRASH_PATH, useActiveFolder } from '@/entities/folder'
 import NoteListOfIncluded from './NoteListOfIncluded'
 import NoteListOfIndex from './NoteListOfIndex'
 import NoteListOfTrash from './NoteListOfTrash'

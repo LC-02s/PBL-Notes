@@ -1,3 +1,4 @@
+export type * from './interface'
 export {
   useFolderDB,
   useFolderSession,
@@ -5,7 +6,7 @@ export {
   useModifyFolder,
   useDeleteFolder,
   useChangeFolderIndex,
-} from './folderStore'
+} from './store'
 export { default as useFolderList } from './useFolderList'
 export { default as useCheckDuplicate } from './useCheckDuplicate'
 export { default as useInitFolderData } from './useInitFolderData'

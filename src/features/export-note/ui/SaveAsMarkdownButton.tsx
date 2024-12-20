@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { saveAs } from 'file-saver'
 import type { Note } from '@/entities/note'
+import { formatDate, reportOnError, reportOnSuccess } from '@/shared/lib'
 import { Button, Icon } from '@/shared/ui'
-import { formatDate, reportOnError, reportOnSuccess } from '@/shared/utils'
 
 interface SaveAsMarkdownButtonProps {
   note: Note

@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useActiveNote } from '@/entities/note'
-import { useDropdown } from '@/shared/hooks'
+import { useDropdown } from '@/shared/lib'
 import { DropdownWrapper, HiddenText, Icon, MenuButton } from '@/shared/ui'
 import CopyAsMarkdownButton from './CopyAsMarkdownButton'
 import SaveAsMarkdownButton from './SaveAsMarkdownButton'
