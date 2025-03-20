@@ -13,7 +13,10 @@ interface IncludedNoteListProps {
 }
 
 export default function NoteListOfIncluded({ folder, path }: IncludedNoteListProps) {
-  const noteList = useNoteListWithFilter((note) => note.modifiable && note.included === folder.id)
+  const noteList = useNoteListWithFilter(
+    (note) => note.modifiable && note.included === folder.id,
+    [folder.id],
+  )
   const sortedList = useMemo(() => {
     return noteList.sort(compareBySortType(folder.sort))
   }, [folder, noteList])
