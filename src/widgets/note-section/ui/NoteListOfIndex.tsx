@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useDefaultSortSetting, compareBySortType } from '@/features/change-sort-type'
-import { useNoteListWithFilter, useDividePinnedNoteList } from '@/entities/note'
+import { useNoteListWithFilter, dividePinnedNoteList } from '@/entities/note'
 import NoteList from './NoteList'
 import NoteListItemWithFolder from './NoteListItemWithFolder'
 import NoteListWithLabel from './NoteListWithLabel'
@@ -13,7 +13,7 @@ export default function NoteListOfIndex() {
     return noteList.sort(compareBySortType({ sortedAt, type }))
   }, [noteList, sortedAt, type])
 
-  const { pinned, basic } = useDividePinnedNoteList(sortedList)
+  const { pinned, basic } = dividePinnedNoteList(sortedList)
 
   return (
     <NoteListWrapper length={noteList.length}>

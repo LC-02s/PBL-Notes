@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { compareBySortType } from '@/features/change-sort-type'
 import type { Folder, FolderPath } from '@/entities/folder'
-import { useNoteListWithFilter, useDividePinnedNoteList } from '@/entities/note'
+import { useNoteListWithFilter, dividePinnedNoteList } from '@/entities/note'
 import NoteList from './NoteList'
 import NoteListItem from './NoteListItem'
 import NoteListWithLabel from './NoteListWithLabel'
@@ -22,7 +22,7 @@ export default function NoteListOfIncluded({ folder, path }: IncludedNoteListPro
     return noteList.sort(compareBySortType({ sortedAt, type }))
   }, [sortedAt, type, noteList])
 
-  const { pinned, basic } = useDividePinnedNoteList(sortedList)
+  const { pinned, basic } = dividePinnedNoteList(sortedList)
 
   return (
     <NoteListWrapper length={noteList.length}>

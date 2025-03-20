@@ -1,6 +1,6 @@
-import type { Note } from './interface'
+import type { Note } from '../model'
 
-export default function useDividePinnedNoteList(noteList: Note[]) {
+export default function dividePinnedNoteList(noteList: Note[]) {
   const pinned = noteList.filter((note) => note.isPinned)
   const basic = noteList.filter((note) => !note.isPinned)
 
