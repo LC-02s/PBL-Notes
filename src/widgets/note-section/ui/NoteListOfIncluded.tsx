@@ -17,9 +17,10 @@ export default function NoteListOfIncluded({ folder, path }: IncludedNoteListPro
     (note) => note.modifiable && note.included === folder.id,
     [folder.id],
   )
+  const { sortedAt, type } = folder.sort
   const sortedList = useMemo(() => {
-    return noteList.sort(compareBySortType(folder.sort))
-  }, [folder, noteList])
+    return noteList.sort(compareBySortType({ sortedAt, type }))
+  }, [sortedAt, type, noteList])
 
   const { pinned, basic } = useDividePinnedNoteList(sortedList)
 

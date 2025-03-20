@@ -23,10 +23,10 @@ function TrashComment() {
 
 function TrashContainer({ children }: React.PropsWithChildren) {
   const noteList = useNoteListWithFilter((note) => !note.modifiable)
-  const defaultSortSetting = useDefaultSortSetting()
+  const { sortedAt, type } = useDefaultSortSetting()
   const sortedList = useMemo(() => {
-    return noteList.sort(compareBySortType(defaultSortSetting))
-  }, [noteList, defaultSortSetting])
+    return noteList.sort(compareBySortType({ sortedAt, type }))
+  }, [noteList, sortedAt, type])
 
   return (
     <NoteListWrapper length={noteList.length}>

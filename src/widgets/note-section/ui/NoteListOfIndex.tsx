@@ -8,10 +8,10 @@ import NoteListWrapper from './NoteListWrapper'
 
 export default function NoteListOfIndex() {
   const noteList = useNoteListWithFilter((note) => note.modifiable)
-  const defaultSortSetting = useDefaultSortSetting()
+  const { sortedAt, type } = useDefaultSortSetting()
   const sortedList = useMemo(() => {
-    return noteList.sort(compareBySortType(defaultSortSetting))
-  }, [noteList, defaultSortSetting])
+    return noteList.sort(compareBySortType({ sortedAt, type }))
+  }, [noteList, sortedAt, type])
 
   const { pinned, basic } = useDividePinnedNoteList(sortedList)
 
